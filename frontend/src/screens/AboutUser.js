@@ -3,7 +3,7 @@ import React from 'react'
 function AboutUser() {
     return (
         <div class="container mt-4">
-        <h1 class="bg-info rounded-3 text-white p-2">&nbsp;Person Name</h1>
+        <h1 class="bg-info rounded-3 text-white p-2">Person Name</h1>
         <div class="px-2">
           <h4 class="mt-4">About</h4>
           <p>

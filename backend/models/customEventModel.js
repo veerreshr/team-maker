@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const customOrgSchema = mongoose.Schema(
     {
-        orgName: {
+        eventName: {
             type: String,
             required: true
         },
-        orgDesc: {
+        eventDesc: {
             type: String,
             trim: true,
             required: true

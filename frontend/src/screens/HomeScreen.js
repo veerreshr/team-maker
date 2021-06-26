@@ -22,12 +22,12 @@ history.push('/createTeam')
       <div className="container">
       <div className="row mt-5">
         <div className="col-md-6">
-          <button className="btn btn-primary w-100 p-3" type="button" onClick={createTeamHandler}>
+          <button className="btn btn-primary w-100 p-3 my-1" type="button" onClick={createTeamHandler}>
             Create a team
           </button>
         </div>
         <div className="col-md-6">
-          <button className="btn btn-primary w-100 p-3" type="button" onClick={joinTeamHandler}>
+          <button className="btn btn-primary w-100 p-3 my-1" type="button" onClick={joinTeamHandler}>
             Join a Team
           </button>
         </div>

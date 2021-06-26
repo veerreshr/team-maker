@@ -10,6 +10,7 @@ import AboutUser from './screens/AboutUser';
 import FilteredTeamList from './screens/FilteredTeamList';
 import AboutTeam from './screens/AboutTeam';
 import MyTeams from './screens/MyTeams';
+import AddEvent from './screens/AddEvent';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/filteredteamlist" component={FilteredTeamList} exact />
           <Route path="/aboutteam/:id" component={AboutTeam} exact />
           <Route path="/myteams" component={MyTeams} exact />
+          <Route path="/addevent" component={AddEvent} exact />
         </Router>
   );
 }

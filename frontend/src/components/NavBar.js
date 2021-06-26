@@ -26,7 +26,7 @@ function NavBar() {
             className="navbar-toggler"
             data-bs-target="#navcol-1"
           >
-            <span className="visually-hidden">Toggle navigation</span ><span className="navbar-toggler-icon"></span>
+            <span className="visually-hidden"></span ><span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navcol-1">
             <ul className="navbar-nav ml-auto">
