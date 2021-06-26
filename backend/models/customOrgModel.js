@@ -4,19 +4,16 @@ const customOrgSchema = mongoose.Schema(
     {
         orgName: {
             type: String,
-            minlength: 8,
-            required: true;
+            required: true
         },
         orgDesc: {
             type: String,
-            minlength: 32,
-            maxlength: 280,
             trim: true,
             required: true
         },
         startDate: {
             type: Date,
-            required: true;
+            required: true
         }
     },
     {timestamps: true}
