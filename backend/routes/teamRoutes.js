@@ -4,16 +4,6 @@ import {
 
 } from "../controllers/team.js";
 
-import {
-  deleteUser,
-  getUserProfile,
-  getUsers,
-  updateUserProfile,
-  getUserById,
-  getUser,
-  updateUser,
-} from "../controllers/user.js";
-
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 

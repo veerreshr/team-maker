@@ -1,6 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { addEventReducer } from "./reducers/eventReducers";
+import { createTeamReducer } from './reducers/teamReducers';
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -19,6 +21,8 @@ const reducer = combineReducers({
   userList: userListReducer,
   userDelete: userDeleteReducer,
   userUpdate: userUpdateReducer,
+  addEventReducer:addEventReducer,
+  createTeamReducer:createTeamReducer
 });
 
 
