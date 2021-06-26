@@ -5,7 +5,7 @@ import Message from "./../components/Message";
 import Loader from "./../components/Loader";
 import { register } from "./../actions/userActions";
 
-function RegisterScreen() {
+function RegisterScreen({ location, history }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [about, setAbout] = useState("");
