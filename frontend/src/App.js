@@ -1,32 +1,32 @@
-// import Header from "./components/Header";
-import { Container } from "react-bootstrap";
 import HomeScreen from "./screens/HomeScreen";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from './screens/RegisterScreen';
-
+import NavBar from './components/NavBar';
+import CreateTeam from './screens/CreateTeam';
+import JoinTeam from './screens/JoinTeam';
+import TeamView from './screens/TeamView';
+import AboutUser from './screens/AboutUser';
+import FilteredTeamList from './screens/FilteredTeamList';
+import AboutTeam from './screens/AboutTeam';
+import MyTeams from './screens/MyTeams';
 
 function App() {
   return (
+    
     <Router>
-      {/* <Header /> */}
-      
-
+          <NavBar/>
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
-
-
-          {/* <Route path="/search/:keyword" component={HomeScreen} exact />
-          <Route path="/page/:pageNumber" component={HomeScreen} exact />
-          <Route
-            path="/search/:keyword/page/:pageNumber"
-            component={HomeScreen}
-            exact
-          />
-          <Route path="/" component={HomeScreen} exact /> */}
-          {/* <HomeScreen/> */}
-      
-    </Router>
+          <Route path="/" component={HomeScreen} exact />
+          <Route path="/createTeam" component={CreateTeam} exact />
+          <Route path="/joinTeam" component={JoinTeam} exact />
+          <Route path="/teamview/:id" component={TeamView} exact />
+          <Route path="/aboutuser/:id" component={AboutUser} exact />
+          <Route path="/filteredteamlist" component={FilteredTeamList} exact />
+          <Route path="/aboutteam/:id" component={AboutTeam} exact />
+          <Route path="/myteams" component={MyTeams} exact />
+        </Router>
   );
 }
 
