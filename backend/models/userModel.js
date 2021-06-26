@@ -21,8 +21,42 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    languages:{
+      type:Array,
+      default:[],
+      required: true,
+
   },
-  { timestamps: true }
+    skills:{
+        type:Array,
+        default:[],
+        required: true,
+
+    },
+    about:{
+    type:Array,
+    default:[],
+    required: true,
+  },
+  gender: {
+    type: String,
+    required: false,
+  },
+  college: {
+    type: String,
+    required: false,
+  },
+  location: {
+    type: String,
+    required: false,
+  },
+  certification: {
+    type: String,
+    required: false,
+  }
+
+  },
+  { timestamps: true }//Gender,College,Location,
 );
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
