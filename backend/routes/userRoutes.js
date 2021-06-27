@@ -9,27 +9,33 @@ import {
 import {
   deleteUser,
   getUserProfile,
-  getUsers,
+  getAllUsers,
   updateUserProfile,
   getUserById,
   getUser,
   updateUser,
+  getTeamById,
 } from "../controllers/user.js";
 
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
-router.route("/").post(registerUser).get(protect, admin, getUsers);
+// router.route("/").post(registerUser).get(protect, admin, getUsers);
+
+
+// Get data about the User's Team 
+router.get("/getteams",protect,getTeamById);
 
 router.post("/login", login);
 router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
-router
-  .route("/:id")
-  .delete(protect, admin, deleteUser)
-  .get(protect, admin, getUserById)
-  .put(protect, admin, updateUser);
+// router
+//   .route("/:id")
+//   .delete(protect, admin, deleteUser)
+//   .get(protect, admin, getUserById)
+//   .put(protect, admin, updateUser);
+
 
 //Register Route
 router.post('/register',registerUser)
@@ -42,9 +48,9 @@ router.get  ('/logout',logout)
 router.param('UserId', getUserById)
 
 // route to trigger the capture
-router.get('/user/:UserId', getUser)
+router.get('/:UserId', getUser)
 
-router.put('/user/:UserId', updateUser)
+router.put('/:UserId', updateUser)
 // router.get('/users',getAllUsers)
 
 

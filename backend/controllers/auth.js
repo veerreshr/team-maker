@@ -6,6 +6,7 @@ import generateToken from "./../utils/generateToken.js";
 // @route   POST /api/users/login
 // @access  Public
 const login = expressAsyncHandler(async (req, res) => {
+
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -59,6 +60,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
       location:user.location,
       college:user.college,
       certification:user.certification,
+      teams: user.teams,
     });
   } else {
     res.status(400);
