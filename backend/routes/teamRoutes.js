@@ -1,17 +1,8 @@
 import express from "express";
 import {
-    createTeam, filterByDetails, getMyRequestedTeams, requestToJoinATeam, getMyTeams
+    createTeam, filterByDetails, getMyRequestedTeams, requestToJoinATeam, getMyTeams,getTeamByID,getTeam
 } from "../controllers/team.js";
 
-import {
-  deleteUser,
-  getUserProfile,
-  getAllUsers,
-  updateUserProfile,
-  getUserById,
-  // getUser,
-  updateUser,
-} from "../controllers/user.js";
 
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
