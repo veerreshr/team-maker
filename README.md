@@ -16,6 +16,8 @@ Video Demos :
 [Video 1](https://youtu.be/yC2Pjm22Iz4)
 [Video 2](https://www.youtube.com/watch?v=0KMcfUrVJfk)
 
+PPT : https://drive.google.com/file/d/1QIaX_xpiCdr9anEzRmRq-1OXlX5BjwHF/view?usp=sharing
+
 Live link :
 https://connect-team.herokuapp.com/
 
