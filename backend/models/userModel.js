@@ -53,9 +53,9 @@ const userSchema = mongoose.Schema(
   certification: {
     type: String,
     required: false,
-  },
-  teams: [{ type : mongoose.Schema.Types.ObjectId, ref: 'Team', }]
 
+  teams:[{ type : mongoose.Schema.Types.ObjectId, ref: 'Team', }],
+  requests:[{ type : mongoose.Schema.Types.ObjectId, ref: 'Team', }]
   },
   { timestamps: true }//Gender,College,Location,
 );
