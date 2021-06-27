@@ -1,7 +1,16 @@
 import React from 'react'
 import { Link } from "react-router-dom";
+import { useEffect } from 'react';
+import { axios } from 'axios';
+import { myTeams } from '../actions/teamActions';
+import { useDispatch ,useSelector} from "react-redux";
 
-function MyTeams() {
+function MyTeams({history}) {
+  const dispatch = useDispatch();
+  const myteams= useSelector((state) => state.myteams.teams);
+  useEffect(()=>{
+    dispatch(myTeams());
+  },[myteams])
     return (
         <div class="container">
         <h2>My Teams</h2>

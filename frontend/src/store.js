@@ -12,6 +12,7 @@ import {
   userDeleteReducer,
   userUpdateReducer,
 } from "./reducers/userReducers";
+import { myTeams } from "./actions/teamActions";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -22,7 +23,8 @@ const reducer = combineReducers({
   userDelete: userDeleteReducer,
   userUpdate: userUpdateReducer,
   addEventReducer:addEventReducer,
-  createTeamReducer:createTeamReducer
+  createTeamReducer:createTeamReducer,
+  myteams:myTeams
 });
 
 

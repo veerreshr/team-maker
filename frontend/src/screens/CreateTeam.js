@@ -11,8 +11,9 @@ function CreateTeam({history}) {
   const [skills,setSkills]=useState("")
     const createTeamHandler=(e)=>{
       e.preventDefault();
-      dispatch(createTeamAction(eventName, teamName,teamDesc,languages,skills));
+      dispatch(createTeamAction(eventName, teamName,teamDesc,languages,skills,history));
       // history.push('/teamview/124567899')
+      history.push('/myteams')
     }
     return (
         <div className="container mt-5">
