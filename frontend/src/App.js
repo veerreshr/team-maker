@@ -11,10 +11,11 @@ import FilteredTeamList from './screens/FilteredTeamList';
 import AboutTeam from './screens/AboutTeam';
 import MyTeams from './screens/MyTeams';
 import AddEvent from './screens/AddEvent';
+import HOC from './HOC';
 
 function App() {
   return (
-    
+    // <HOC/>
     <Router>
           <NavBar/>
           <Route path="/login" component={LoginScreen} />

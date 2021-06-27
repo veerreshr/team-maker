@@ -1,10 +1,7 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import React,{ useState ,useEffect} from 'react'
+import { useSelector ,useDispatch} from 'react-redux';
 import { logout } from '../actions/userActions';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useState } from 'react';
 
 function NavBar() {
     const userLogin = useSelector((state) => state.userLogin);
