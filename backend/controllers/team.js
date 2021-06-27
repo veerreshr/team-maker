@@ -72,7 +72,7 @@ const createTeam = expressAsyncHandler(async (req, res) => {
       const skills = req.body.skills;
       const languages = req.body.languages;
       const user = await User.findById(userid);
-      const teams = await Team.find({"eventname": eventname}, {'preferences.skills': {$all : skills}}, {'preferences.languages': {$all : languages}});
+      const teams = await Team.find({"eventname": eventname});
       // {"_id" : {$nin : [...user.requests,...user.teams]}}
       // 'preferences.skills': { $all: user.skills }}, { 'preferences.languages': { $all: user.languages }}
       res.json(teams);
