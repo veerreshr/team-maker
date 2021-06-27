@@ -61,7 +61,6 @@ const createTeam = expressAsyncHandler(async (req, res) => {
     }
   });
 
-
   const requestToJoinATeam=expressAsyncHandler(async (req, res) => {
     try {
       const userid = req.user._id;

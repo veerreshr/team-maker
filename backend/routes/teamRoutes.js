@@ -7,10 +7,10 @@ import {
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-router.param('TeamId', getTeamByID)
+// router.param('TeamId', getTeamByID)
 
 // route to trigger the capture
-router.get('/:TeamId', getTeam)
+// router.get('/:TeamId', getTeam)
 
 //createTeam Route
 router.post('/createteam',protect,createTeam); 
