@@ -11,7 +11,6 @@ import FilteredTeamList from './screens/FilteredTeamList';
 import AboutTeam from './screens/AboutTeam';
 import MyTeams from './screens/MyTeams';
 import AddEvent from './screens/AddEvent';
-import HOC from './HOC';
 
 function App() {
   return (
@@ -29,6 +28,7 @@ function App() {
           <Route path="/aboutteam/:id" component={AboutTeam} exact />
           <Route path="/myteams" component={MyTeams} exact />
           <Route path="/addevent" component={AddEvent} exact />
+          {/* <Route path="/chat" component={Chat} exact /> */}
         </Router>
   );
 }
