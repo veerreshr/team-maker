@@ -1,6 +1,6 @@
 import express from "express";
 import {
-    createTeam, filterByDetails, getMyRequestedTeams, requestToJoinATeam,
+    createTeam, filterByDetails, getMyRequestedTeams, requestToJoinATeam, getMyTeams
 
 } from "../controllers/team.js";
 
@@ -12,8 +12,8 @@ const router = express.Router();
 router.post('/createteam',protect,createTeam); 
 router.post('/jointeam',protect,requestToJoinATeam); 
 router.post('/filterbydetails',protect,filterByDetails); 
-router.post('/getmyrequestedteams',protect,getMyRequestedTeams); 
-
+router.get('/getmyrequestedteams',protect,getMyRequestedTeams); 
+router.get('/getmyteams',protect,getMyTeams);
 
 
 
