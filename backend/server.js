@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
+import customEventRoutes from './routes/customEventRoutes.js';
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import path from "path";
 import morgan from "morgan";
@@ -21,7 +22,10 @@ app.use(express.json());
 
 // Custom Routes
 app.use("/api/users", userRoutes);
+
 app.use("/api/teams", teamRoutes);
+
+app.use("/api/customEvents", customEventRoutes);
 
 
 
