@@ -9,7 +9,7 @@ import {
 import {
   deleteUser,
   getUserProfile,
-  getUsers,
+  getAllUsers,
   updateUserProfile,
   getUserById,
   getUser,
@@ -30,11 +30,11 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
-router
-  .route("/:id")
-  .delete(protect, admin, deleteUser)
-  .get(protect, admin, getUserById)
-  .put(protect, admin, updateUser);
+// router
+//   .route("/:id")
+//   .delete(protect, admin, deleteUser)
+//   .get(protect, admin, getUserById)
+//   .put(protect, admin, updateUser);
 
 
 //Register Route
@@ -48,9 +48,9 @@ router.get  ('/logout',logout)
 router.param('UserId', getUserById)
 
 // route to trigger the capture
-router.get('/user/:UserId', getUser)
+router.get('/:UserId', getUser)
 
-router.put('/user/:UserId', updateUser)
+router.put('/:UserId', updateUser)
 // router.get('/users',getAllUsers)
 
 
