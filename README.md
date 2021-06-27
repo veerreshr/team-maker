@@ -13,8 +13,9 @@ A platform to find and connect with  team members  for your next Big Project .
   
 ## Demo
 Video Demos : 
-[Video 1](https://youtu.be/yC2Pjm22Iz4)
-[Video 2](https://www.youtube.com/watch?v=0KMcfUrVJfk)
+[Video 1](https://youtu.be/MoachkHIS8Q)
+[Video 2](https://youtu.be/yC2Pjm22Iz4)
+[Video 3](https://www.youtube.com/watch?v=0KMcfUrVJfk)
 
 PPT : https://drive.google.com/file/d/1QIaX_xpiCdr9anEzRmRq-1OXlX5BjwHF/view?usp=sharing
 
