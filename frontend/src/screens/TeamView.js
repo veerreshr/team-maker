@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import Chat from './../components/Chat';
 
 function TeamView() {
     return (
@@ -102,10 +103,10 @@ function TeamView() {
               </div>
             </div>
             <div class="tab-pane" role="tabpanel" id="tab-2">
-              <p>Content for tab 2.</p>
+              <Chat/>
             </div>
             <div class="tab-pane" role="tabpanel" id="tab-3">
-              <p>Content for tab 3.</p>
+              <p>Yet to do</p>
             </div>
           </div>
         </div>
