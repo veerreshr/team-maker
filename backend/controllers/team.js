@@ -31,14 +31,7 @@ const createTeam = expressAsyncHandler(async (req, res) => {
     )
     
     if (team) {
-      res.status(201).json({
-        _id: team._id,
-        desc: team.desc,
-        leader: team.leader,
-        members: team.members,
-        requests: team.requests,
-        preferences: team.preferences,
-      });
+      res.status(201).json(team);
     } else {
       res.status(400);
       throw new Error("Invalid team data");
@@ -46,6 +39,37 @@ const createTeam = expressAsyncHandler(async (req, res) => {
   });
 
 
+  const requestToJoinATeam=expressAsyncHandler(async (req, res) => {
+    try {
+      //team id  ,user => user.token  ==> teamId already present in teams , if present throw an error saying already in the team else append in to that list of requests
+      //append it into requests in team model => +userID
+    } catch (error) {
+      res.status(400);
+      throw new Error("Something went wrong : "+error);
+    }
+  })
+
+
+  const filterByDetails=expressAsyncHandler(async (req, res) => {
+    try {
+      //event name , languages, skills ,user => user.token filter=> filter + member , requests list
+    } catch (error) {
+      res.status(400);
+      throw new Error("Something went wrong : "+error);
+    }
+  })
+
+
+const getMyRequestedTeams=expressAsyncHandler(async (req, res) => {
+  try {
+    //user.requests => teamsid => [...teaminfo]
+  } catch (error) {
+    res.status(400);
+      throw new Error("Something went wrong : "+error);
+  }
+})
+
+
   export {
-    createTeam,
+    createTeam,requestToJoinATeam,filterByDetails,getMyRequestedTeams
   }

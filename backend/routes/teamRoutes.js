@@ -1,6 +1,6 @@
 import express from "express";
 import {
-    createTeam,
+    createTeam, filterByDetails, getMyRequestedTeams, requestToJoinATeam,
 
 } from "../controllers/team.js";
 
@@ -9,7 +9,12 @@ const router = express.Router();
 
 
 //createTeam Route
-router.post('/createteam',protect,createTeam);
+router.post('/createteam',protect,createTeam); 
+router.post('/jointeam',protect,requestToJoinATeam); 
+router.post('/filterbydetails',protect,filterByDetails); 
+router.post('/getmyrequestedteams',protect,getMyRequestedTeams); 
+
+
 
 
 export default router;
