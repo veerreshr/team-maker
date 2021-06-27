@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import Chat from './../components/Chat';
+import Whiteboard from './../components/Whiteboard';
 
 function TeamView() {
     return (
@@ -106,7 +107,7 @@ function TeamView() {
               <Chat/>
             </div>
             <div class="tab-pane" role="tabpanel" id="tab-3">
-              <p>Yet to do</p>
+              <Whiteboard/>
             </div>
           </div>
         </div>

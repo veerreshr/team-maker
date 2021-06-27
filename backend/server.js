@@ -60,9 +60,10 @@ app.use(errorHandler);
 // });
 io.on('connection', socket => {
   socket.on('message', ({ name, message }) => {
-    console.log(name,message)
+    // console.log(name,message)
     io.emit('message', { name, message })
   })
+  socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
 })
 
 
