@@ -19,6 +19,7 @@ const login = expressAsyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      teams: user.teams,
     });
   } else {
     res.status(401);
@@ -54,6 +55,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
       location:user.location,
       college:user.college,
       certification:user.certification,
+      teams: user.teams,
     });
   } else {
     res.status(400);

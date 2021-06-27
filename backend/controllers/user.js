@@ -1,6 +1,9 @@
 import expressAsyncHandler from "express-async-handler";
 import User from "./../models/userModel.js";
 import generateToken from "./../utils/generateToken.js";
+import Team from "./../models/teamModel.js";
+import mongoose from "mongoose";
+
 
 // @desc    Get user profile
 // @route   Get /api/users/profile
@@ -92,19 +95,13 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
               error:"No user found in the DB!"
           })
       }
-      req.profile=user // req.profile is populated here
+      req.profile=user // req.profile is populated here// Note:May be Used later
       next();
   })
   });
   
   const getUser = (req,res)=>{
-    // //Hide senstive infomration from user browser (salt,encry_password)
-    // req.profile.salt=undefined;
-    // req.profile.encry_password=undefined;
-    // req.profile.createdAt=undefined;
-    // req.profile.updatedAt=undefined;
-    // //Note: We are not making them undefined in the database, we are just making them undefined in the User's profile
-  
+
     return res.json(req.profile)
   
   
@@ -135,6 +132,53 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
     }
   });
 
+
+  /*
+API/USERS/GetTeams
+
+
+get user info => from auth middleware
+user.teams => getData[]
+team_data[]=> res.json([team_name, team_id])
+  */
+
+
+const getTeamById = expressAsyncHandler(async (req, res,next) => {
+  
+  try{
+    await User.findById(req.user._id).exec(async(err,user)=>{
+      if(err||!user){
+          return res.status(400).json({
+              error:"No user found in the DB!"
+          })
+      }else{     const teamIdArray =user.teams;
+      let obj_ids = teamIdArray.map(function(id) { return mongoose.Schema.Types.ObjectId(id); });
+      
+      Team.find({"_id": mongoose.Types.ObjectId("60d77cc94502d9129ca4fe61")}, function (err, record) {
+        // Do stuff
+        if(err){
+          console.log(err)
+        }
+        else{
+          console.log(record);
+          res.json(record);
+        }
+        });
+
+      //return res.json(result);}
+  }})
+      // const result = await Team.find({"_id":{"$in":[ObjectId("60d77cc94502d9129ca4fe61")]} });
+      
+      // console.log(result);
+      // console.log("2"+teamIdArray);
+        
+  }catch(err){
+    console.log(err)
+  }
+
+  });
+
+
   export {
     getUserProfile,
     updateUserProfile,
@@ -143,5 +187,6 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
     getUserById,
     getUser,
     updateUser,
+    getTeamById,
   };
   

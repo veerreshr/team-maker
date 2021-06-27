@@ -14,11 +14,16 @@ import {
   getUserById,
   getUser,
   updateUser,
+  getTeamById,
 } from "../controllers/user.js";
 
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
-router.route("/").post(registerUser).get(protect, admin, getUsers);
+// router.route("/").post(registerUser).get(protect, admin, getUsers);
+
+
+// Get data about the User's Team 
+router.get("/getteams",protect,getTeamById);
 
 router.post("/login", login);
 router
@@ -30,6 +35,7 @@ router
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserById)
   .put(protect, admin, updateUser);
+
 
 //Register Route
 router.post('/register',registerUser)

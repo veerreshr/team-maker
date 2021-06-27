@@ -46,6 +46,29 @@ const createTeam = expressAsyncHandler(async (req, res) => {
   });
 
 
+  //@middleware to getTeamByID
+  //@userToutes.js
+  //@Expects TeamId to be Searched
+const getTeamByID = (req,res,next,id)=>{
+  Team.findById(id).exec((err,team)=>{
+      if(err||!team){
+          return res.status(400).json({
+              error:"No user found in the DB!"
+          })
+      }
+      req.teamProfile=team // req.profile is populated here
+      next();
+  })
+}
+
+//@Controller to return team id details , fetched from  (getTeamByID ~ Middleware)
+const getTeam = (req,res)=>{
+  return res.json(req.teamProfile)
+}
+
+
   export {
     createTeam,
+    getTeamByID,
+    getTeam,
   }
