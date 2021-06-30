@@ -2,7 +2,12 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { addEventReducer } from "./reducers/eventReducers";
-import { createTeamReducer } from './reducers/teamReducers';
+import {
+  createTeamReducer,
+  filterTeamsReducer,
+  myTeamsReducer,
+  teamViewReducer,
+} from "./reducers/teamReducers";
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -12,27 +17,25 @@ import {
   userDeleteReducer,
   userUpdateReducer,
 } from "./reducers/userReducers";
-import { myTeams } from "./actions/teamActions";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
-  userUpdateProfile: userUpdateProfileReducer,
-  userList: userListReducer,
-  userDelete: userDeleteReducer,
-  userUpdate: userUpdateReducer,
-  addEventReducer:addEventReducer,
-  createTeamReducer:createTeamReducer,
-  myteams:myTeams
+  // userUpdateProfile: userUpdateProfileReducer,
+  // userList: userListReducer,
+  // userDelete: userDeleteReducer,
+  // userUpdate: userUpdateReducer,
+  addEventReducer: addEventReducer,
+  createTeamReducer: createTeamReducer,
+  myteams: myTeamsReducer,
+  teamview: teamViewReducer,
+  filteredteams: filterTeamsReducer,
 });
-
-
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
-
 
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },

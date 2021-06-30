@@ -34,28 +34,28 @@ function RegisterScreen({ location, history }) {
       setMessage("Passwords do not match");
     } else {
       setMessage(null);
-      dispatch(register(name, email,about,skills,languages, password));
+      dispatch(register(name, email, about, skills, languages, password));
     }
   };
   return (
-          <div className="contact-clean">
-                  {message && <Message variant="danger">{message}</Message>}
+    <div className="register">
+      {message && <Message variant="danger">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       <form method="post">
-        <h2 className="text-center">Register</h2>
-        <div className="mb-3">
-          <label className="form-label">Name</label
-          ><input
-            className="form-control"
+        <h2>Register Form</h2>
+        <div class="form-floating mb-3">
+          <input
             type="text"
+            class="form-control"
+            id="floatingName"
             name="name"
             placeholder="First Name + Last Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+          <label for="floatingInput">Name</label>
         </div>
-        <div className="mb-3">
-          <label className="form-label">Email</label>
+        <div className="form-floating mb-3">
           <input
             className="form-control"
             type="email"
@@ -64,22 +64,21 @@ function RegisterScreen({ location, history }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          <label className="form-label">Email</label>
         </div>
-        <div className="mb-3">
-          <label className="form-label">About</label
-          ><textarea
+        <div className="form-floating mb-3">
+          <textarea
             className="form-control"
             name="about"
             placeholder="Describe yourself. This is the first thing everyone sees."
-            rows="14"
+            rows="5"
             value={about}
             onChange={(e) => setAbout(e.target.value)}
           ></textarea>
+          <label className="form-label">About</label>
         </div>
-        <div className="mb-3">
-          <label className="form-label"
-            >Skills - <em>Enter comma separated skills</em></label
-          ><input
+        <div className="form-floating mb-3">
+          <input
             className="form-control"
             type="text"
             placeholder="eg. javascript, python, html"
@@ -87,11 +86,12 @@ function RegisterScreen({ location, history }) {
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
           />
+          <label className="form-label">
+            Skills - Enter comma separated values{" "}
+          </label>
         </div>
-        <div className="mb-3">
-          <label className="form-label"
-            >Languages- <em>Enter comma separated languages</em></label
-          ><input
+        <div className="form-floating mb-3">
+          <input
             className="form-control"
             type="text"
             placeholder="eg. English, Hindi"
@@ -99,10 +99,12 @@ function RegisterScreen({ location, history }) {
             value={languages}
             onChange={(e) => setLanguages(e.target.value)}
           />
+          <label className="form-label">
+            Languages- Enter comma separated values
+          </label>
         </div>
-        <div className="mb-3">
-          <label className="form-label">Password</label
-          ><input
+        <div className="form-floating mb-3">
+          <input
             className="form-control"
             type="password"
             placeholder="Enter a strong password"
@@ -110,10 +112,10 @@ function RegisterScreen({ location, history }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <label className="form-label">Password</label>
         </div>
-        <div className="mb-3">
-          <label className="form-label">Confirm Password</label
-          ><input
+        <div className="form-floating mb-3">
+          <input
             className="form-control"
             type="password"
             placeholder="confirm password"
@@ -121,15 +123,23 @@ function RegisterScreen({ location, history }) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          <label className="form-label">Confirm Password</label>
         </div>
         <div className="mb-3">
-          <button className="btn btn-primary" onClick={submitHandler}>Register</button>
+          <button
+            className="btn btn-primary d-block w-100"
+            onClick={submitHandler}
+          >
+            Register
+          </button>
         </div>
+        Already have an Account ?&nbsp;&nbsp;
         <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
-        Have an Account ?  Login         </Link>
+          Login{" "}
+        </Link>
       </form>
     </div>
-  )
+  );
 }
 
-export default RegisterScreen
+export default RegisterScreen;

@@ -1,31 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useEffect } from 'react';
-import { axios } from 'axios';
-import { myTeams } from '../actions/teamActions';
-import { useDispatch ,useSelector} from "react-redux";
+import { myTeamsAction } from "../actions/teamActions";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "./../components/Loader";
 
-function MyTeams({history}) {
+function MyTeams({ history }) {
   const dispatch = useDispatch();
-  const myteams= useSelector((state) => state.myteams.teams);
-  useEffect(()=>{
-    dispatch(myTeams());
-  },[myteams])
-    return (
-        <div class="container">
-        <h2>My Teams</h2>
-        <div class="card my-3">
-          <div class="card-body">
-            <Link to="/teamview/123456789"><h4 class="card-title">Title</h4></Link>
-            <p class="card-text">
-              Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo
-              odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non
-              mi porta gravida at eget metus.
-            </p>
+  const { loading, teams } = useSelector((state) => state.myteams);
+  useEffect(() => {
+    dispatch(myTeamsAction());
+  }, []);
+  return (
+    <div class="container">
+      <h2 className="my-2">My Teams</h2>
+      {loading && <Loader />}
+      {teams &&
+        teams.map((t) => (
+          <div class="card my-3">
+            <div class="card-body">
+              <Link to={`/teams/${t._id}`}>
+                <h4 class="card-title">{t.name}</h4>
+              </Link>
+              <p class="text-muted card-subtitle">
+                <strong>Event Name</strong>: {t.eventname}
+              </p>
+              <p class="card-text d-inline-block text-truncate">{t.desc}</p>
+            </div>
           </div>
-        </div>
-      </div>
-    )
+        ))}
+    </div>
+  );
 }
 
-export default MyTeams
+export default MyTeams;
