@@ -10,6 +10,7 @@ function NavBar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const logoutHandler = () => {
     dispatch(logout());
+    setLoggedIn(false);
   };
   useEffect(() => {
     if (userInfo) setLoggedIn(true);
