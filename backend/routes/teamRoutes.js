@@ -1,8 +1,12 @@
 import express from "express";
 import {
-    createTeam, filterByDetails, getMyRequestedTeams, requestToJoinATeam, getMyTeams,getTeamByID,getTeam
+  createTeam,
+  filterByDetails,
+  getMyRequestedTeams,
+  requestToJoinATeam,
+  getMyTeams,
+  getTeamByID,
 } from "../controllers/team.js";
-
 
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
@@ -13,14 +17,13 @@ const router = express.Router();
 // router.get('/:TeamId', getTeam)
 
 //createTeam Route
-router.post('/createteam',protect,createTeam); 
-router.post('/jointeam',protect,requestToJoinATeam); 
-router.post('/filterbydetails',protect,filterByDetails); 
-router.get('/getmyrequestedteams',protect,getMyRequestedTeams); 
-router.get('/getmyteams',protect,getMyTeams);
-
+router.post("/createteam", protect, createTeam);
+router.post("/jointeam", protect, requestToJoinATeam);
+router.post("/filterbydetails", protect, filterByDetails);
+router.get("/getmyrequestedteams", protect, getMyRequestedTeams);
+router.get("/getmyteams", protect, getMyTeams);
 
 //getTeamDetails Route
-router.post('/teamdetails',protect,createTeam);
+router.get("/:id", protect, getTeamByID);
 
 export default router;
