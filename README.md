@@ -1,9 +1,6 @@
-> ### **!!! NOTE : WE ARE UNDER CONSTRUCTION !!!**
+💡💡 **We are refactoring the design and way of implementation** 💡💡
 
-![Logo](https://res.cloudinary.com/dcgefz04y/image/upload/v1624785883/Black_and_White_Lines_Architectural_Logo_irb3v9.png)
-
-    
-# Team Maker
+<h1><img src="https://user-images.githubusercontent.com/59141533/131732817-23a34498-10d3-4024-9519-d064a67a8482.png" width=50px height=50px />Team Maker</h1> 
 
 A platform to find and connect with  team members  for your next Big Project .
 
@@ -68,56 +65,54 @@ To run this project, you will need to add the following environment variables to
 Clone the project
 
 ```bash
-  git clone https://github.com/veerreshr/team-maker.git
+git clone https://github.com/veerreshr/team-maker.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd team-maker
+cd team-maker
 ```
 
 Install dependencies
 
 ```bash
-  npm install
+npm install
 ```
 Go to the fronend directory
 ```bash
-  cd frontend
+cd frontend
 ```
 
 Install dependencies
 
 ```bash
-  npm install
+npm install
 ```
 Go to the root directory
 ```bash
-  cd ..
+cd ..
 ```
 
 Start the server
 
 ```bash
-  npm run dev
+npm run dev
 ```
-
-  
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
   
 ## Roadmap
 
-- Landing Page
+- [ ] Add ESLint
+- [ ] User Profile
+- [ ] Event Section
+- [ ] Chat Implementation
+- [ ] Kanban Boards
+- [ ] Team Filtering
+- [ ] Landing Page
+- [ ] Dockerize the application
+- [ ] Implement Testing 
+- [ ] Voice/Video call Implementation(Optional)
 
-- Chat Implementation
-
-- Voice/Video call Implementation
-
-- Finetune UI
 
   
 ## Authors
@@ -133,4 +128,9 @@ Start the server
 ## Support
 
 For support, Please email us at veerreshr@gmail.com
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
   
