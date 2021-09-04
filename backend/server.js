@@ -11,6 +11,8 @@ import morgan from "morgan";
 // const http = require('http')
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import {limiter } from './middleware/rateLimiter.js';
+
 config();
 
 connectDB();
@@ -18,6 +20,9 @@ connectDB();
 const app = express();
 const server = createServer(app); 
 const io = new Server(server);
+
+// apply rate limiter to all requests
+app.use(limiter);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
