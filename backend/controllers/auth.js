@@ -37,30 +37,21 @@ const login = expressAsyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = expressAsyncHandler(async (req, res) => {
-  // const { name, email, password,skills,languages,about } = req.body;
-  const {email}= req.body;
-  const userExists = await User.findOne({email});
+  const {email, username, password, name} = req.body;
+  const userExists = await User.findOne({$or: [ { email : email}, { username: username }]});
   if (userExists) {
     res.status(400);
-    throw new Error("User already exists");
+    throw new Error("Username or Email already exists");
   }
-  // const user = await User.create({ name, email, password,skills,languages,about });
-  const user = await User.create(req.body);
+
+  const user = await User.create({email : email, name : name, username : username, password : password});
 
   if (user) {
     res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id),
-      skills:user.skills,
-      languages:user.languages,
-      gender:user.gender,
-      location:user.location,
-      college:user.college,
-      certification:user.certification,
-      teams: user.teams,
+      username : user.username,
+      name : user.name,
+      email : user.email,
+      token : generateToken(user._id)
     });
   } else {
     res.status(400);
