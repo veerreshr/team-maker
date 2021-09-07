@@ -1,32 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const educationSchema = mongoose.Schema({
-      schoolName: {
-        type: String,
-        required: true
-      },
-      location: {
-        type: String
-      },
-      degree: {
-        type: String
-      },
-      fieldOfStudy: {
-        type: String
-      },
-      startDate: {
-        type: Date,
-        required: true
-      },
-      endDate: {
-        type: Date
-      },
-      description: {
-        type: String
-      }
-    });
-
 const userSchema = mongoose.Schema(
   {
     photo: {
@@ -124,7 +98,29 @@ const userSchema = mongoose.Schema(
       }
     }],
     education: [{
-      type : educationSchema
+      schoolName: {
+        type: String,
+        required: true
+      },
+      location: {
+        type: String
+      },
+      degree: {
+        type: String
+      },
+      fieldOfStudy: {
+        type: String
+      },
+      startDate: {
+        type: Date,
+        required: true
+      },
+      endDate: {
+        type: Date
+      },
+      description: {
+        type: String
+      }
     }],
     certifications: [{
       name: {
