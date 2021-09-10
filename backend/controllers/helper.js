@@ -1,14 +1,29 @@
-// Copyright 2021 Eakanath
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-//     http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+import expressAsyncHandler from "express-async-handler";
+import axios from 'axios';
 
+const getArticles = expressAsyncHandler(async (req, res) => {
+    try {
+        let link = "https://api.rss2json.com/v1/api.json?rss_url=https://"+req.params[0];
+        const response = await axios.get(link);
+        const items = response.data.items;
+        let data = [];
+        items.forEach((item) => {
+            let temp = {};
+            temp["thumbnail"] = item.thumbnail;
+            temp["title"] = item.title;
+            temp["categories"] = item.categories;
+            temp["pubDate"] = item.pubDate;
+            temp["link"] = item.link;
+            data.push(temp);
+        });
+        res.json(data);
+    }
+    catch (err) {
+        res.status(400);
+        throw new Error(err);
+    }
+});
+
+export {
+    getArticles
+};
