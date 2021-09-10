@@ -5,6 +5,6 @@ import {
 
 const router = express.Router();
 
-router.get("/getarticles/*", getArticles);
+router.get("/getarticles", getArticles);
 
 export default router;

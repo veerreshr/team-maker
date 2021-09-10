@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const getArticles = expressAsyncHandler(async (req, res) => {
     try {
-        let link = "https://api.rss2json.com/v1/api.json?rss_url=https://"+req.params[0];
+        let link = "https://api.rss2json.com/v1/api.json?rss_url="+req.query.url;
         const response = await axios.get(link);
         const items = response.data.items;
         let data = [];
