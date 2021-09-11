@@ -1,0 +1,31 @@
+version: "3.7"
+
+networks: 
+  team-maker:
+    driver: bridge
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./
+    ports:
+      - 5000:5000
+    expose: 
+      - 5000
+    networks:
+      - team-maker
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    links: 
+      - backend
+    expose: 
+      - 3000
+    networks:
+      - team-maker
