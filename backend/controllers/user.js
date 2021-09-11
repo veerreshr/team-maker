@@ -65,11 +65,10 @@ const updateUserProfile = expressAsyncHandler(async (req, res) => {
         User.findByIdAndUpdate(
           { _id: user._id }, { $set: user}, {new: true}, (err, userRes) => {
             if (err) {
-            return res.status(400).res.json({
-              error: "Update Unsuccessful",
-            });
-          }
-          res.json(userRes);
+              res.status(400);
+              throw new Error("Update Unsuccessful");
+            }
+            res.json(userRes);
           });
     } else {
     res.status(404);
