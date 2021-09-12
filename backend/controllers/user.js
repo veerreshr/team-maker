@@ -11,10 +11,20 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
     res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+      photo : user.photo,
+      name : user.name,
+      email : user.email,
+      username : user.username,
+      workTitle : user.workTitle,
+      bio : user.bio,
+      toolsAndTech : user.toolsAndTech,
+      socialLinks : user.socialLinks,
+      languages : user.languages,
+      experience : user.experience,
+      education : user.education,
+      certifications : user.certifications,
+      achievements : user.achievements,
+      projects : user.projects
     });
   } else {
     res.status(404);
@@ -27,21 +37,40 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
 // @access  Private
 const updateUserProfile = expressAsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-  if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
-    const updatedUser = await user.save();
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      token: generateToken(updatedUser._id),
-    });
-  } else {
+    if (user) {
+        user.photo = req.body.photo || user.photo;
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.username = req.body.username || user.username;
+        user.workTitle = req.body.workTitle || user.workTitle;
+        user.bio = req.body.bio || user.bio;
+        user.toolsAndTech = req.body.toolsAndTech || user.toolsAndTech;
+        if(req.body.socialLinks) {
+          user.socialLinks.linkedIn = req.body.socialLinks.linkedIn || user.socialLinks.linkedIn;
+          user.socialLinks.twitter = req.body.socialLinks.twitter || user.socialLinks.twitter;
+          user.socialLinks.github = req.body.socialLinks.github || user.socialLinks.github;
+          user.socialLinks.medium = req.body.socialLinks.medium || user.socialLinks.medium;
+          user.socialLinks.devTo = req.body.socialLinks.devTo || user.socialLinks.devTo;
+          user.socialLinks.hashnode = req.body.socialLinks.hashnode || user.socialLinks.hashnode;
+          user.socialLinks.leetCode = req.body.socialLinks.leetCode || user.socialLinks.leetCode;
+          user.socialLinks.hackerRank = req.body.socialLinks.hackerRank || user.socialLinks.hackerRank;
+          user.socialLinks.other = req.body.socialLinks.other || user.socialLinks.other;
+        }
+        user.languages = req.body.languages || user.languages;
+        user.experience = req.body.experience || user.experience;
+        user.education = req.body.education || user.education;
+        user.certifications = req.body.certifications || user.certifications;
+        user.achievements = req.body.achievements || user.achievements;
+        user.projects = req.body.projects || user.projects;
+        User.findByIdAndUpdate(
+          { _id: user._id }, { $set: user}, {new: true}, (err, userRes) => {
+            if (err) {
+              res.status(400);
+              throw new Error("Update Unsuccessful");
+            }
+            res.json(userRes);
+          });
+    } else {
     res.status(404);
     throw new Error("User not found");
   }
