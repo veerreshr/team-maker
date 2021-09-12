@@ -33,7 +33,7 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Update user profile
-// @route   PUT /api/userprofile
+// @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = expressAsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -73,7 +73,7 @@ const updateUserProfile = expressAsyncHandler(async (req, res) => {
     } else {
     res.status(404);
     throw new Error("User not found");
-    }
+  }
 });
 
 // @desc    Get all users
@@ -152,6 +152,29 @@ const getUser = (req, res) => {
 //   }
 // });
 
+//update User
+const updateUser = (req, res) => {
+  //Model.findOneAndReplace({ _id: id }, update, options, callback).
+  User.findByIdAndUpdate(
+    { _id: req.profile._id },
+    { $set: req.body },
+    { new: true, UseFindAndModify: false },
+    (err, user) => {
+      if (err) {
+        return resp.status(400).res.json({
+          error: "You are not authorized to update",
+        });
+      }
+      //Hide senstive infomration from user browser (salt,encry_password)
+      // user.salt=undefined;
+      // user.encry_password=undefined;
+      // user.createdAt=undefined;
+      // user.updatedAt=undefined;
+      res.json(user);
+    }
+  );
+};
+
 /*
 API/USERS/GetTeams
 
@@ -206,5 +229,6 @@ export {
   deleteUser,
   getUserById,
   getUser,
+  updateUser,
   getTeamById,
 };
