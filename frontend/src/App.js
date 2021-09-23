@@ -12,23 +12,21 @@ import AboutTeam from "./screens/AboutTeam";
 import MyTeams from "./screens/MyTeams";
 import AddEvent from "./screens/AddEvent";
 import ProtectedRoute from "./ProtectedRoute";
-import { createTheme } from "@material-ui/core/styles";
-import white from "@material-ui/core/colors/green";
-import { ThemeProvider } from "@material-ui/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LandingScreen from "./screens/LandingScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import PageNotFound from "./components/PageNotFound";
 
 function App() {
   const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#a6d4fa",
-      },
-      secondary: {
-        main: white[100],
-      },
-    },
+    // palette: {
+    //   primary: {
+    //     main: "#a6d4fa",
+    //   },
+    //   secondary: {
+    //     main: "#fff",
+    //   },
+    // },
   });
   return (
     <ThemeProvider theme={theme}>
