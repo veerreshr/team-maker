@@ -1,17 +1,15 @@
 import React from "react";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const Loader = () => {
+const Loader = ({ loading = false }) => {
   return (
-    <div class="spinner-border" role="status"
-      style={{
-        width: "100px",
-        height: "100px",
-        margin: "auto",
-        display: "block",
-      }}
+    <Backdrop
+      sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={loading}
     >
-      <span className="sr-only">Loading...</span>
-    </div>
+      <CircularProgress color="inherit" />
+    </Backdrop>
   );
 };
 
