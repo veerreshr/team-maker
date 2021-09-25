@@ -1,7 +1,8 @@
 import React from "react";
+import Alert from "@mui/material/Alert";
 
 const Message = ({ variant, children }) => {
-  return <div class={`alert alert-${variant}`} role="alert">{children}</div>;
+  return <Alert severity={variant}>{children}</Alert>;
 };
 
 Message.defaultProps = {

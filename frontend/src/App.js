@@ -1,7 +1,7 @@
 import HomeScreen from "./screens/HomeScreen";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/Register";
+import RegisterScreen from "./screens/RegisterScreen";
 import NavBar from "./components/NavBar";
 import CreateTeam from "./screens/CreateTeam";
 import JoinTeam from "./screens/JoinTeam";
