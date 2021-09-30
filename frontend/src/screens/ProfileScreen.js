@@ -26,6 +26,8 @@ import AwardsAndAchievements from "./../components/AwardsAndAchievements";
 import Projects from "../components/Projects";
 import ArticleCard from "../components/Articles";
 import ComingSoon from "./../components/ComingSoon";
+import EditIcon from "@mui/icons-material/Edit";
+import Button from "@mui/material/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,12 +91,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfileScreen() {
+function ProfileScreen({ history }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const handleEditProfile = () => {
+    history.push("/editprofile");
   };
   return (
     <div style={{ margin: "3em 2em" }}>
@@ -123,6 +128,22 @@ function ProfileScreen() {
           </Typography>
         </Grid>
         <Grid item xs={12} md={3} style={{ textAlign: "end" }}>
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={<EditIcon />}
+            sx={{
+              width: {
+                xs: "100%", // theme.breakpoints.up('xs')
+                md: "auto", // theme.breakpoints.up('md')
+              },
+            }}
+            onClick={handleEditProfile}
+          >
+            Edit Profile
+          </Button>
+          <br />
+          <br />
           <div className={classes.location}>
             <LocationOnIcon fontSize="small" />
             <Typography variant="caption" component="span">
@@ -257,7 +278,7 @@ function ProfileScreen() {
           </div>
         </CardContent>
       </Card>
-      <Paper style={{ margin: "1em 0" }}>
+      <Paper style={{ margin: "1em 0" }} elevation={2}>
         <Tabs
           value={value}
           onChange={handleChange}
