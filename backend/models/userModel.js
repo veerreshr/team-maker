@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema(
     photo: {
       type: String,
       required: true,
-      default: "https://png.pngtree.com/png-vector/20210129/ourmid/pngtree-upload-avatar-by-default-png-image_2854358.jpg"
+      default: "https://avatars.dicebear.com/api/bottts/.svg",
     },
     name: {
       type: String,
@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema(
     },
     username: {
       type: String,
-      unique : true,
+      unique: true,
       required: true,
     },
     email: {
@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     workTitle: {
-      type: String
+      type: String,
     },
     bio: {
       type: String,
@@ -46,140 +46,150 @@ const userSchema = mongoose.Schema(
     toolsAndTech: [{ type: String }],
     socialLinks: {
       linkedIn: {
-        type: String
+        type: String,
       },
       twitter: {
-        type: String
+        type: String,
       },
       github: {
-        type: String
+        type: String,
       },
       medium: {
-        type: String
+        type: String,
       },
       devTo: {
-        type: String
+        type: String,
       },
       hashnode: {
-        type: String
+        type: String,
       },
       leetCode: {
-        type: String
+        type: String,
       },
       hackerRank: {
-        type: String
+        type: String,
       },
       other: {
-        type: String
-      }
+        type: String,
+      },
     },
     languages: [{ type: String }],
-    experience: [{
-      title: {
-        type: String,
-        required: true
+    experience: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        company: {
+          type: String,
+          required: true,
+        },
+        location: {
+          type: String,
+        },
+        startDate: {
+          type: Date,
+          required: true,
+        },
+        endDate: {
+          type: Date,
+        },
+        description: {
+          type: String,
+        },
       },
-      company: {
-        type: String,
-        required: true
+    ],
+    education: [
+      {
+        schoolName: {
+          type: String,
+          required: true,
+        },
+        location: {
+          type: String,
+        },
+        degree: {
+          type: String,
+        },
+        fieldOfStudy: {
+          type: String,
+        },
+        startDate: {
+          type: Date,
+          required: true,
+        },
+        endDate: {
+          type: Date,
+        },
+        description: {
+          type: String,
+        },
       },
-      location: {
-        type: String
+    ],
+    certifications: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        issuingOrg: {
+          type: String,
+          required: true,
+        },
+        issueDate: {
+          type: Date,
+          required: true,
+        },
+        expiryDate: {
+          type: Date,
+        },
+        credentialId: {
+          type: String,
+        },
+        credentialUrl: {
+          type: String,
+        },
       },
-      startDate: {
-        type: Date,
-        required: true
+    ],
+    achievements: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        desc: {
+          type: String,
+        },
+        link: {
+          type: String,
+        },
       },
-      endDate: {
-        type: Date
+    ],
+    projects: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        startDate: {
+          type: Date,
+          required: true,
+        },
+        endDate: {
+          type: Date,
+        },
+        desc: {
+          type: String,
+        },
+        link: {
+          type: String,
+        },
       },
-      description: {
-        type: String
-      }
-    }],
-    education: [{
-      schoolName: {
-        type: String,
-        required: true
-      },
-      location: {
-        type: String
-      },
-      degree: {
-        type: String
-      },
-      fieldOfStudy: {
-        type: String
-      },
-      startDate: {
-        type: Date,
-        required: true
-      },
-      endDate: {
-        type: Date
-      },
-      description: {
-        type: String
-      }
-    }],
-    certifications: [{
-      name: {
-        type: String,
-        required: true
-      },
-      issuingOrg: {
-        type: String,
-        required: true
-      },
-      issueDate: {
-        type: Date,
-        required: true
-      },
-      expiryDate: {
-        type: Date
-      },
-      credentialId: {
-        type: String
-      },
-      credentialUrl: {
-        type: String
-      }
-    }],
-    achievements: [{
-      title: {
-        type: String,
-        required: true
-      },
-      desc: {
-        type: String
-      },
-      link: {
-        type: String
-      }
-    }],
-    projects: [{
-      title: {
-        type: String,
-        required: true
-      },
-      startDate: {
-        type: Date,
-        required: true
-      },
-      endDate: {
-        type: Date
-      },
-      desc: {
-        type: String
-      },
-      link: {
-        type: String
-      }
-    }],
-    teams:[{ type : mongoose.Schema.Types.ObjectId, ref: 'Team', }],
-    requests:[{ type : mongoose.Schema.Types.ObjectId, ref: 'Team', }]
+    ],
+    teams: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
+    requests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
   },
-  { timestamps: true }//Gender,College,Location,
+  { timestamps: true } //Gender,College,Location,
 );
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
@@ -193,7 +203,6 @@ userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
-
 
 const User = mongoose.model("User", userSchema);
 export default User;
