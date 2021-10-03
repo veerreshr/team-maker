@@ -15,6 +15,9 @@ node_modules
 # production
 /frontend/build
 
+# extras
+/.vscode
+
 # misc
 .DS_Store
 .env
