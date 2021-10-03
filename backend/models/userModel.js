@@ -36,12 +36,17 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
-    workTitle: {
-      type: String
+    tagLine: {
+      type: String,
+      maxlength: 50
     },
     bio: {
       type: String,
       maxlength: 250,
+    },
+    location: {
+      type: String,
+      maxlength: 50
     },
     toolsAndTech: [{ type: String }],
     socialLinks: {

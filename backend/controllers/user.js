@@ -5,17 +5,17 @@ import Team from "./../models/teamModel.js";
 import mongoose from "mongoose";
 
 // @desc    Get user profile
-// @route   Get /api/users/profile
-// @access  Private
+// @route   Get /api/users/profile?_id=123456
+// @access  Public
 const getUserProfile = expressAsyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(`${req.query._id}`);
   if (user) {
     res.json({
       photo : user.photo,
       name : user.name,
       email : user.email,
       username : user.username,
-      workTitle : user.workTitle,
+      tagLine : user.tagLine,
       bio : user.bio,
       toolsAndTech : user.toolsAndTech,
       socialLinks : user.socialLinks,
@@ -32,49 +32,498 @@ const getUserProfile = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
-const updateUserProfile = expressAsyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-    if (user) {
-        user.photo = req.body.photo || user.photo;
-        user.name = req.body.name || user.name;
-        user.email = req.body.email || user.email;
-        user.username = req.body.username || user.username;
-        user.workTitle = req.body.workTitle || user.workTitle;
-        user.bio = req.body.bio || user.bio;
-        user.toolsAndTech = req.body.toolsAndTech || user.toolsAndTech;
-        if(req.body.socialLinks) {
-          user.socialLinks.linkedIn = req.body.socialLinks.linkedIn || user.socialLinks.linkedIn;
-          user.socialLinks.twitter = req.body.socialLinks.twitter || user.socialLinks.twitter;
-          user.socialLinks.github = req.body.socialLinks.github || user.socialLinks.github;
-          user.socialLinks.medium = req.body.socialLinks.medium || user.socialLinks.medium;
-          user.socialLinks.devTo = req.body.socialLinks.devTo || user.socialLinks.devTo;
-          user.socialLinks.hashnode = req.body.socialLinks.hashnode || user.socialLinks.hashnode;
-          user.socialLinks.leetCode = req.body.socialLinks.leetCode || user.socialLinks.leetCode;
-          user.socialLinks.hackerRank = req.body.socialLinks.hackerRank || user.socialLinks.hackerRank;
-          user.socialLinks.other = req.body.socialLinks.other || user.socialLinks.other;
-        }
-        user.languages = req.body.languages || user.languages;
-        user.experience = req.body.experience || user.experience;
-        user.education = req.body.education || user.education;
-        user.certifications = req.body.certifications || user.certifications;
-        user.achievements = req.body.achievements || user.achievements;
-        user.projects = req.body.projects || user.projects;
-        User.findByIdAndUpdate(
-          { _id: user._id }, { $set: user}, {new: true}, (err, userRes) => {
-            if (err) {
-              res.status(400);
-              throw new Error("Update Unsuccessful");
-            }
-            res.json(userRes);
-          });
-    } else {
+// @desc    Get user basic information
+// @route   GET /api/users/profile/basicinformation?_id=123456
+// @access  Public
+
+const getBasicInformation = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json({
+      photo : user.photo,
+      name : user.name,
+      tagLine : user.tagLine,
+      bio: user.bio,
+      location :user.location,
+      socialLinks : user.socialLinks
+    });
+  } else {
     res.status(404);
     throw new Error("User not found");
   }
 });
+
+// @desc    Update user basic information
+// @route   PUT /api/users/profile/basicinformation
+// @access  Private
+
+const updateBasicInformation = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.photo = req.body.photo || user.photo;
+    user.name = req.body.name || user.name;
+    user.tagLine = req.body.tagLine || user.tagLine;
+    user.bio = req.body.bio || user.bio;
+    user.location = req.body.location || user.location;
+    if(req.body.socialLinks) {
+      user.socialLinks.linkedIn = req.body.socialLinks.linkedIn || user.socialLinks.linkedIn;
+      user.socialLinks.twitter = req.body.socialLinks.twitter || user.socialLinks.twitter;
+      user.socialLinks.github = req.body.socialLinks.github || user.socialLinks.github;
+      user.socialLinks.medium = req.body.socialLinks.medium || user.socialLinks.medium;
+      user.socialLinks.devTo = req.body.socialLinks.devTo || user.socialLinks.devTo;
+      user.socialLinks.hashnode = req.body.socialLinks.hashnode || user.socialLinks.hashnode;
+      user.socialLinks.leetCode = req.body.socialLinks.leetCode || user.socialLinks.leetCode;
+      user.socialLinks.hackerRank = req.body.socialLinks.hackerRank || user.socialLinks.hackerRank;
+      user.socialLinks.other = req.body.socialLinks.other || user.socialLinks.other;
+    }
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json({
+          photo: userRes.photo,
+          name : userRes.name,
+          tagLine : userRes.tagLine,
+          bio: userRes.bio,
+          location :userRes.location,
+          socialLinks: userRes.socialLinks
+        });
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Get user skills
+// @route   GET /api/users/profile/skills?_id=123456
+// @access  Public
+
+const getSkills = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json(user.toolsAndTech);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user skills
+// @route   PUT /api/users/profile/skills
+// @access  Private
+
+const updateSkills = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.toolsAndTech = req.body.toolsAndTech || user.toolsAndTech;
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json(userRes.toolsAndTech);
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Get user languages
+// @route   GET /api/users/profile/languages?_id=123456
+// @access  Public
+
+const getLanguages = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json(user.languages);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user languages
+// @route   PUT /api/users/profile/languages
+// @access  Private
+
+const updateLanguages = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.languages = req.body.languages || user.languages;
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json(userRes.languages);
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Get user education
+// @route   GET /api/users/profile/education?_id=123456
+// @access  Public
+
+const getEducation = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json(user.education);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user education
+// @route   PUT /api/users/profile/education
+// @access  Private
+
+const updateEducation = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    if (req.body.education) {
+      if (req.body.education.schoolName && req.body.education.startDate) {
+        let found = false;
+        if (req.body.education._id) {
+          user.education.forEach((pos, idx) => {
+            if (pos._id == req.body.education._id) {
+              found = true;
+              user.education[idx] = req.body.education;
+            }
+          });
+        }
+        if (!found) {
+          user.education.push(req.body.education);
+        }
+      }
+    }
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json(userRes.education);
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Delete user education
+// @route   DELETE /api/users/profile/education
+// @access  Private
+
+const deleteEducation = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    User.findByIdAndUpdate({ _id: user._id }, { $pull: { education: { _id: req.body.education._id } } }, { new: true }, (err, userRes) => {
+      if (err) {
+        res.status(400);
+        throw new Error("Update Unsuccessful");
+      }
+      res.json(userRes.education);
+    });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to delete");
+  }
+});
+
+// @desc    Get user experience
+// @route   GET /api/users/profile/experience?_id=123456
+// @access  Public
+
+const getExperience = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json(user.experience);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user experience
+// @route   PUT /api/users/profile/experience
+// @access  Private
+
+const updateExperience = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    if (req.body.experience) {
+      if (req.body.experience.title && req.body.experience.company && req.body.experience.startDate) {
+        let found = false;
+        if (req.body.experience._id) {
+          user.experience.forEach((pos, idx) => {
+            if (pos._id == req.body.experience._id) {
+              found = true;
+              user.experience[idx] = req.body.experience;
+            }
+          });
+        }
+        if (!found) {
+          user.experience.push(req.body.experience);
+        }
+      }
+    }
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json(userRes.experience);
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Delete user experience
+// @route   DELETE /api/users/profile/experience
+// @access  Private
+
+const deleteExperience = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    User.findByIdAndUpdate({ _id: user._id }, { $pull: { experience: { _id: req.body.experience._id } } }, { new: true }, (err, userRes) => {
+      if (err) {
+        res.status(400);
+        throw new Error("Update Unsuccessful");
+      }
+      res.json(userRes.experience);
+    });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to delete");
+  }
+});
+
+// @desc    Get user certifications
+// @route   GET /api/users/profile/certification?_id=123456
+// @access  Public
+
+const getCertifications = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json(user.certifications);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user certification
+// @route   PUT /api/users/profile/certification
+// @access  Private
+
+const updateCertifications = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    if (req.body.certifications) {
+      if (req.body.certifications.name && req.body.certifications.issuingOrg && req.body.certifications.issueDate) {
+        let found = false;
+        if (req.body.certifications._id) {
+          user.certifications.forEach((pos, idx) => {
+            if (pos._id == req.body.certifications._id) {
+              found = true;
+              user.certifications[idx] = req.body.certifications;
+            }
+          });
+        }
+        if (!found) {
+          user.certifications.push(req.body.certifications);
+        }
+      }
+    }
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json(userRes.certifications);
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Delete user certification
+// @route   DELETE /api/users/profile/certification
+// @access  Private
+
+const deleteCertifications = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    User.findByIdAndUpdate({ _id: user._id }, { $pull: { certifications: { _id: req.body.certifications._id } } }, { new: true }, (err, userRes) => {
+      if (err) {
+        res.status(400);
+        throw new Error("Update Unsuccessful");
+      }
+      res.json(userRes.certifications);
+    });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to delete");
+  }
+});
+
+// @desc    Get user's awards & achievements
+// @route   GET /api/users/profile/awardsandachievements?_id=123456
+// @access  Public
+
+const getAchievements = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json(user.achievements);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user's awards & achievements
+// @route   PUT /api/users/profile/awardsandachievements
+// @access  Private
+
+const updateAchievements = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    if (req.body.achievements) {
+      if (req.body.achievements.title) {
+        let found = false;
+        if (req.body.achievements._id) {
+          user.achievements.forEach((pos, idx) => {
+            if (pos._id == req.body.achievements._id) {
+              found = true;
+              user.achievements[idx] = req.body.achievements;
+            }
+          });
+        }
+        if (!found) {
+          user.achievements.push(req.body.achievements);
+        }
+      }
+    }
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json(userRes.achievements);
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Delete user's awards & achievements
+// @route   DELETE /api/users/profile/awardsandachievements
+// @access  Private
+
+const deleteAchievements = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    User.findByIdAndUpdate({ _id: user._id }, { $pull: { achievements: { _id: req.body.achievements._id } } }, { new: true }, (err, userRes) => {
+      if (err) {
+        res.status(400);
+        throw new Error("Update Unsuccessful");
+      }
+      res.json(userRes.achievements);
+    });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to delete");
+  }
+});
+
+// @desc    Get user's projects
+// @route   GET /api/users/profile/projects?_id=123456
+// @access  Public
+
+const getProjects = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(`${req.query._id}`);
+  if (user) {
+    res.json(user.projects);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Update user's projects
+// @route   PUT /api/users/profile/projects
+// @access  Private
+
+const updateProjects = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    if (req.body.projects) {
+      if (req.body.projects.title && req.body.projects.startDate) {
+        let found = false;
+        if (req.body.projects._id) {
+          user.projects.forEach((pos, idx) => {
+            if (pos._id == req.body.projects._id) {
+              found = true;
+              user.projects[idx] = req.body.projects;
+            }
+          });
+        }
+        if (!found) {
+          user.projects.push(req.body.projects);
+        }
+      }
+    }
+    User.findByIdAndUpdate(
+      { _id: user._id }, { $set: user }, { new: true }, (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json(userRes.projects);
+      });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to update");
+  }
+});
+
+// @desc    Delete user's projects
+// @route   DELETE /api/users/profile/projects
+// @access  Private
+
+const deleteProjects = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    User.findByIdAndUpdate({ _id: user._id }, { $pull: { projects: { _id: req.body.projects._id } } }, { new: true }, (err, userRes) => {
+      if (err) {
+        res.status(400);
+        throw new Error("Update Unsuccessful");
+      }
+      res.json(userRes.projects);
+    });
+  } else {
+    res.status(404);
+    throw new Error("Not authorized to delete");
+  }
+});
+
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -224,8 +673,28 @@ const getTeamById = expressAsyncHandler(async (req, res, next) => {
 
 export {
   getUserProfile,
-  updateUserProfile,
   getAllUsers,
+  getBasicInformation,
+  updateBasicInformation,
+  getSkills,
+  updateSkills,
+  getLanguages,
+  updateLanguages,
+  getEducation,
+  updateEducation,
+  deleteEducation,
+  getExperience,
+  updateExperience,
+  deleteExperience,
+  getCertifications,
+  updateCertifications,
+  deleteCertifications,
+  getAchievements,
+  updateAchievements,
+  deleteAchievements,
+  getProjects,
+  updateProjects,
+  deleteProjects,
   deleteUser,
   getUserById,
   getUser,
