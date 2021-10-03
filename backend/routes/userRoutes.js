@@ -7,8 +7,6 @@ import {
 } from "../controllers/auth.js";
 
 import {
-  deleteUser,
-  getUserProfile,
   getAllUsers,
   getBasicInformation,
   updateBasicInformation,
@@ -31,8 +29,8 @@ import {
   getProjects,
   updateProjects,
   deleteProjects,
-  getUserById,
-  getUser,
+  deleteUser,
+  getUserProfileByUsername,
   updateUser,
   getTeamById,
 } from "../controllers/user.js";
@@ -48,7 +46,7 @@ router.get("/getteams",protect,getTeamById);
 router.post("/login", login);
 router
   .route("/profile/")
-  .get(getUserProfile);
+  .get(getUserProfileByUsername);
 
 // router
 //   .route("/:id")
@@ -105,14 +103,6 @@ router
 router.post('/register',registerUser)
 //Logout Route
 router.get  ('/logout',logout)
-
-
-// PARAMS FOR USER ROUTES
-
-router.param('UserId', getUserById)
-
-// route to trigger the capture
-router.get('/:UserId', getUser)
 
 router.put('/:UserId', updateUser)
 // router.get('/users',getAllUsers)

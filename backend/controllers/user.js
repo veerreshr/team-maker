@@ -4,34 +4,6 @@ import generateToken from "./../utils/generateToken.js";
 import Team from "./../models/teamModel.js";
 import mongoose from "mongoose";
 
-// @desc    Get user profile
-// @route   Get /api/users/profile?_id=123456
-// @access  Public
-const getUserProfile = expressAsyncHandler(async (req, res) => {
-  const user = await User.findById(`${req.query._id}`);
-  if (user) {
-    res.json({
-      photo : user.photo,
-      name : user.name,
-      email : user.email,
-      username : user.username,
-      tagLine : user.tagLine,
-      bio : user.bio,
-      toolsAndTech : user.toolsAndTech,
-      socialLinks : user.socialLinks,
-      languages : user.languages,
-      experience : user.experience,
-      education : user.education,
-      certifications : user.certifications,
-      achievements : user.achievements,
-      projects : user.projects
-    });
-  } else {
-    res.status(404);
-    throw new Error("User not found");
-  }
-});
-
 // @desc    Get user basic information
 // @route   GET /api/users/profile/basicinformation?_id=123456
 // @access  Public
@@ -552,54 +524,35 @@ const deleteUser = expressAsyncHandler(async (req, res) => {
 // @route   GET /api/users/:id
 // @access  Public
 //middleware
-const getUserById = (req, res, next, id) => {
-  User.findById(id, {
-    name: 1,
-    skills: 1,
-    languages: 1,
-    about: 1,
-    email: 1,
-  }).exec((err, user) => {
+const getUserProfileByUsername = (req, res) => {
+  User.find(
+    { username: `${req.query.username}` },
+    {
+      photo: 1,
+      name: 1,
+      email: 1,
+      username: 1,
+      workTitle: 1,
+      bio: 1,
+      toolsAndTech: 1,
+      about: 1,
+      socialLinks: 1,
+      languages: 1,
+      experience: 1,
+      education: 1,
+      certifications: 1,
+      achievements: 1,
+      projects: 1,
+    }
+  ).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "No user found in the DB!",
+        error: "User Profile not found",
       });
     }
-    req.profile = user; // req.profile is populated here
-    next();
+    res.json(user);
   });
 };
-//Uses getUserById Middleware to show data:
-const getUser = (req, res) => {
-  return res.json(req.profile);
-};
-
-//----
-
-// @desc    Update user
-// @route   PUT /api/users/:id
-// @access  Private/Admin
-// const updateUser = expressAsyncHandler(async (req, res) => {
-//   const user = await User.findById(req.params.id);
-
-//   if (user) {
-//     user.name = req.body.name || user.name;
-//     user.email = req.body.email || user.email;
-//     user.isAdmin = req.body.isAdmin;
-
-//     const updatedUser = await user.save();
-
-//     res.json({
-//       _id: updatedUser._id,
-//       name: updatedUser.name,
-//       email: updatedUser.email,
-//       isAdmin: updatedUser.isAdmin,
-//     });
-//   } else {
-//     res.status(404);
-//     throw new Error("User not found");
-//   }
-// });
 
 //update User
 const updateUser = (req, res) => {
@@ -672,7 +625,6 @@ const getTeamById = expressAsyncHandler(async (req, res, next) => {
 });
 
 export {
-  getUserProfile,
   getAllUsers,
   getBasicInformation,
   updateBasicInformation,
@@ -696,8 +648,7 @@ export {
   updateProjects,
   deleteProjects,
   deleteUser,
-  getUserById,
-  getUser,
+  getUserProfileByUsername,
   updateUser,
   getTeamById,
 };
