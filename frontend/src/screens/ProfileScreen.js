@@ -236,27 +236,8 @@ function ProfileScreen({ history }) {
           </Typography>
         </AccordionSummary>
         <AccordionDetails style={{ flexWrap: "wrap" }}>
-          {[
-            "React",
-            "Web",
-            "React",
-            "Web",
-            "React",
-            "Web",
-            "React",
-            "Web",
-            "React",
-            "Web",
-            "React",
-            "Web",
-            "React",
-            "Web",
-            "React",
-            "Web",
-            "React",
-            "Web",
-          ].map((val) => (
-            <Chip label={val} style={{ margin: "3px 2px" }} />
+          {["React", "Web"].map((val) => (
+            <Chip label={val} key={val} style={{ margin: "3px 2px" }} />
           ))}
         </AccordionDetails>
       </Accordion>
@@ -271,7 +252,11 @@ function ProfileScreen({ history }) {
             }}
           >
             {["English", "Telugu", "Kannada", "Hindi"].map((language) => (
-              <Typography variant="body2" style={{ margin: "2px" }}>
+              <Typography
+                key={language}
+                variant="body2"
+                style={{ margin: "2px" }}
+              >
                 &bull; {language}&nbsp;{" "}
               </Typography>
             ))}
@@ -301,7 +286,7 @@ function ProfileScreen({ history }) {
         </TabPanel>
         <TabPanel value={value} index={2}>
           <ComingSoon />
-          <ArticleCard rss="https://blog.veereshr.me/rss.xml" />
+          {/* <ArticleCard rss="https://blog.veereshr.me/rss.xml" /> */}
         </TabPanel>
       </Paper>
     </div>
