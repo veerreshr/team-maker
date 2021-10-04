@@ -1,9 +1,9 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 
 // set up rate limiter: maximum of five requests per minute
 export const limiter = new rateLimit({
-  windowMs: 1*60*1000, // 1 minute
-  max: 5,
-  message: 'You have exceeded the 5 requests in 1 minute limit!', 
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 15,
+  message: "You have exceeded the 5 requests in 1 minute limit!",
   headers: true,
 });
