@@ -29,24 +29,20 @@ import {
   updateUser,
   getTeamById,
 } from "../controllers/user.js";
-
 import { admin, protect } from "../middleware/authMiddleware.js";
 import { buildCheckFunction } from "express-validator";
+
 const checkQuery = buildCheckFunction(["query"]);
 const router = express.Router();
-// router.route("/").post(registerUser).get(protect, admin, getUsers);
 
 // Get data about the User's Team
 router.get("/getteams", protect, getTeamById);
 
 router.post("/login", login);
-router.get("/profile", getUserProfileByUsername);
+router.post("/register", registerUser);
+router.get("/logout", logout);
 
-// router
-//   .route("/:id")
-//   .delete(protect, admin, deleteUser)
-//   .get(protect, admin, getUserById)
-//   .put(protect, admin, updateUser);
+router.get("/profile", getUserProfileByUsername);
 
 router
   .route("/profile/basicinformation")
@@ -90,12 +86,6 @@ router
   .put(protect, updateProjects)
   .delete(protect, deleteProjects);
 
-//Register Route
-router.post("/register", registerUser);
-//Logout Route
-router.get("/logout", logout);
-
 router.put("/:UserId", updateUser);
-// router.get('/users',getAllUsers)
 
 export default router;

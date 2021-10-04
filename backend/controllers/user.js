@@ -595,7 +595,6 @@ const deleteUser = expressAsyncHandler(async (req, res) => {
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Public
-//middleware
 const getUserProfileByUsername = (req, res) => {
   User.find(
     { username: `${req.query.username}` },
@@ -622,7 +621,7 @@ const getUserProfileByUsername = (req, res) => {
         error: "User Profile not found",
       });
     }
-    res.json(user);
+    res.json(user[0]);
   });
 };
 
