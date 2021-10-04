@@ -6,7 +6,6 @@ import NavBar from "./components/NavBar";
 import CreateTeam from "./screens/CreateTeam";
 import JoinTeam from "./screens/JoinTeam";
 import TeamView from "./screens/TeamView";
-import AboutUser from "./screens/AboutUser";
 import FilteredTeamList from "./screens/FilteredTeamList";
 import AboutTeam from "./screens/AboutTeam";
 import MyTeams from "./screens/MyTeams";
@@ -35,7 +34,7 @@ function App() {
         {/* <NavBar /> */}
         <Route path="/*" component={NavBar} />
         <Switch>
-          <Route path="/profile" component={ProfileScreen} />
+          <Route path="/u/:username" component={ProfileScreen} exact />
           <Route path="/landing" component={LandingScreen} />
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
@@ -44,7 +43,6 @@ function App() {
           <ProtectedRoute path="/createTeam" component={CreateTeam} exact />
           <ProtectedRoute path="/joinTeam" component={JoinTeam} exact />
           <ProtectedRoute path="/teams/:id" component={TeamView} exact />
-          <ProtectedRoute path="/profile/:id" component={AboutUser} exact />
           <ProtectedRoute
             path="/filteredteamlist"
             component={FilteredTeamList}

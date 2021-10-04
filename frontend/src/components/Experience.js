@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Experience() {
+function Experience({ experiences }) {
   const classes = useStyles();
 
   return (
@@ -28,74 +28,32 @@ function Experience() {
         Experience
       </Typography>
       <Timeline align={`left`}>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Software Engineer II
-                </Typography>
-                <Typography color="textSecondary">Amazon, India</Typography>
-                <Typography variant="body2" component="p">
-                  Description about your work here. some random description some
-                  random description
-                </Typography>
-              </CardContent>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Software Engineer II
-                </Typography>
-                <Typography color="textSecondary">Amazon, India</Typography>
-                <Typography variant="body2" component="p">
-                  Description about your work here. some random description some
-                  random description
-                </Typography>
-              </CardContent>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Software Engineer II
-                </Typography>
-                <Typography color="textSecondary">Amazon, India</Typography>
-                <Typography variant="body2" component="p">
-                  Description about your work here. some random description some
-                  random description
-                </Typography>
-              </CardContent>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
+        {experiences.length === 0 && "No Information Available"}
+        {experiences.length > 0 &&
+          experiences.map((e) => (
+            <TimelineItem className={classes.timelineItem}>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography variant="overline" gutterBottom>
+                      {e.startDate} - {`${e.endDate ? e.endDate : "present"}`}
+                    </Typography>
+                    <Typography variant="h5" component="h5">
+                      {e.title}
+                    </Typography>
+                    <Typography color="textSecondary">Amazon, India</Typography>
+                    <Typography variant="body2" component="p">
+                      {e.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </TimelineContent>
+            </TimelineItem>
+          ))}
       </Timeline>
     </div>
   );

@@ -85,7 +85,7 @@ export default function PrimarySearchAppBar({ history }) {
     setLoggedIn(false);
   };
   const handleProfileClick = () => {
-    history.push(`/profile/${userInfo._id}`);
+    history.push(`/u/${userInfo.username}`);
   };
   const handleLogin = () => {
     history.push("/login");
@@ -203,7 +203,11 @@ export default function PrimarySearchAppBar({ history }) {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>
+          {loggedIn && userInfo.name.length > 16
+            ? `${userInfo?.name.substring(0, 16)}...`
+            : userInfo?.name}
+        </p>
       </MenuItem>
     </Menu>
   );
