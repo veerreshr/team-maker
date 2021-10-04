@@ -40,7 +40,7 @@ const router = express.Router();
 router.get("/getteams", protect, getTeamById);
 
 router.post("/login", login);
-router.route("/profile/").get(getUserProfileByUsername);
+router.get("/profile", getUserProfileByUsername);
 
 // router
 //   .route("/:id")
