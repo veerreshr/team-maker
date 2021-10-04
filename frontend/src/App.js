@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LandingScreen from "./screens/LandingScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import PageNotFound from "./components/PageNotFound";
+import EditProfile from "./screens/EditProfile";
 
 function App() {
   const theme = createTheme({
@@ -39,6 +40,7 @@ function App() {
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
           <ProtectedRoute path="/" component={HomeScreen} exact />
+          <ProtectedRoute path="/editprofile" component={EditProfile} exact />
           <ProtectedRoute path="/createTeam" component={CreateTeam} exact />
           <ProtectedRoute path="/joinTeam" component={JoinTeam} exact />
           <ProtectedRoute path="/teams/:id" component={TeamView} exact />
