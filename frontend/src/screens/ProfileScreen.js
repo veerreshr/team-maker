@@ -31,7 +31,6 @@ import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfileDetails } from "../actions/userActions";
 import Message from "./../components/Message";
-import Loader from "./../components/Loader";
 import EmailIcon from "@mui/icons-material/Email";
 import SvgIcon from "@mui/material/SvgIcon";
 
@@ -110,7 +109,7 @@ function ProfileScreen({
 
   const userProfile = useSelector((state) => state.userProfile);
 
-  const { loading, error, profile } = userProfile;
+  const { error, profile } = userProfile;
 
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -126,7 +125,6 @@ function ProfileScreen({
   }, [dispatch, history, username]);
   return (
     <div style={{ margin: "3em 2em" }}>
-      <Loader loading={loading} />
       {error && <Message variant="error">{error}</Message>}
       {profile && (
         <>
@@ -220,7 +218,7 @@ function ProfileScreen({
             </AccordionSummary>
             <AccordionDetails style={{ flexWrap: "wrap" }}>
               {profile.toolsAndTech.length > 0
-                ? profile.toolsAndTech.map.map((val) => (
+                ? profile.toolsAndTech.map((val) => (
                     <Chip label={val} key={val} style={{ margin: "3px 2px" }} />
                   ))
                 : "No Information Available"}
@@ -237,7 +235,7 @@ function ProfileScreen({
                 }}
               >
                 {profile.languages.length > 0
-                  ? profile.languages.map.map((language) => (
+                  ? profile.languages.map((language) => (
                       <Typography
                         key={language}
                         variant="body2"
