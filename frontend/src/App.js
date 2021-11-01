@@ -16,8 +16,6 @@ import LandingScreen from "./screens/LandingScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import PageNotFound from "./components/PageNotFound";
 import EditProfile from "./screens/EditProfile";
-import LoadingComponent from "./components/LoadingComponent";
-import SnackBarComponent from "./components/SnackBarComponent";
 
 function App() {
   const theme = createTheme({
@@ -35,8 +33,6 @@ function App() {
       <Router>
         {/* <NavBar /> */}
         <Route path="/*" component={NavBar} />
-        <Route path="/*" component={LoadingComponent} />
-        <Route path="/*" component={SnackBarComponent} />
         <Switch>
           <Route path="/u/:username" component={ProfileScreen} exact />
           <Route path="/landing" component={LandingScreen} />

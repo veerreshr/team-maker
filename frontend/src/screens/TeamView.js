@@ -4,6 +4,7 @@ import Chat from "./../components/Chat";
 import Whiteboard from "./../components/Whiteboard";
 import { useDispatch, useSelector } from "react-redux";
 import { teamViewAction } from "./../actions/teamActions";
+import Loader from "./../components/Loader";
 
 function TeamView({
   match: {
@@ -11,13 +12,14 @@ function TeamView({
   },
 }) {
   const dispatch = useDispatch();
-  const { team } = useSelector((state) => state.teamview);
+  const { loading, team } = useSelector((state) => state.teamview);
   useEffect(() => {
     dispatch(teamViewAction(id));
   }, []);
   return (
     <>
-      {team && (
+      {loading && <Loader />}
+      {!loading && (
         <div class="container">
           <div class="my-2 border-primary bg-primary text-white rounded-3 p-3">
             <h3>&nbsp;&nbsp;{team ? team.name : ""}</h3>

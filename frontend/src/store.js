@@ -12,17 +12,16 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userProfileReducer,
-  getBasicInformationReducer,
 } from "./reducers/userReducers";
-import { loadingReducer, snackbarReducer } from "./reducers/utilReducers";
 
 const reducer = combineReducers({
-  loading: loadingReducer,
-  snackbar: snackbarReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userProfile: userProfileReducer,
-  basicInformation: getBasicInformationReducer,
+  // userUpdateProfile: userUpdateProfileReducer,
+  // userList: userListReducer,
+  // userDelete: userDeleteReducer,
+  // userUpdate: userUpdateReducer,
   addEventReducer: addEventReducer,
   createTeamReducer: createTeamReducer,
   myteams: myTeamsReducer,

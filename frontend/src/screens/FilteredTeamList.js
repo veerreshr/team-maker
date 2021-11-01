@@ -1,15 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Loader from "./../components/Loader";
 import { useSelector } from "react-redux";
 
 function FilteredTeamList({ history }) {
-  const { teams } = useSelector((state) => state.filteredteams);
+  const { loading, teams } = useSelector((state) => state.filteredteams);
   const openFilterModal = () => {
     history.push("/joinTeam");
   };
   return (
     <>
-      {teams && (
+      {loading && <Loader />}
+      {!loading && (
         <div class="container mt-3">
           <div>
             <h1>Search Teams</h1>

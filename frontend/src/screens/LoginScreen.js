@@ -9,6 +9,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { login } from "./../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
+import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -38,7 +39,7 @@ export default function LoginScreen({ location, history }) {
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { error, userInfo } = userLogin;
+  const { loading, error, userInfo } = userLogin;
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
@@ -63,6 +64,7 @@ export default function LoginScreen({ location, history }) {
 
   return (
     <>
+      <Loader loading={loading} />
       <Box
         sx={{
           my: 8,

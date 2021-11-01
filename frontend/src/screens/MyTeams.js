@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { myTeamsAction } from "../actions/teamActions";
 import { useDispatch, useSelector } from "react-redux";
+import Loader from "./../components/Loader";
 
 function MyTeams({ history }) {
   const dispatch = useDispatch();
-  const { teams } = useSelector((state) => state.myteams);
+  const { loading, teams } = useSelector((state) => state.myteams);
   useEffect(() => {
     dispatch(myTeamsAction());
   }, []);
   return (
     <div class="container">
       <h2 className="my-2">My Teams</h2>
+      {loading && <Loader />}
       {teams &&
         teams.map((t) => (
           <div class="card my-3">
