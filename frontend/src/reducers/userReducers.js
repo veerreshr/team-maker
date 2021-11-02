@@ -16,6 +16,14 @@ import {
   UPDATE_BASIC_INFORMATION_REQUEST,
   UPDATE_BASIC_INFORMATION_SUCCESS,
   UPDATE_BASIC_INFORMATION_FAIL,
+  GET_SKILLS_REQUEST,
+  GET_SKILLS_SUCCESS,
+  GET_SKILLS_FAIL,
+  GET_SKILLS_UPDATE_SUCCESS,
+  GET_LANGUAGES_REQUEST,
+  GET_LANGUAGES_SUCCESS,
+  GET_LANGUAGES_FAIL,
+  GET_LANGUAGES_UPDATE_SUCCESS,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -89,6 +97,46 @@ export const updateBasicInformationReducer = (
       };
     case UPDATE_BASIC_INFORMATION_FAIL:
       return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const getSkillsReducer = (
+  state = { loading: false, updateSuccess: false },
+  action
+) => {
+  switch (action.type) {
+    case GET_SKILLS_REQUEST:
+      return { ...state, loading: true, updateSuccess: false };
+    case GET_SKILLS_SUCCESS:
+      return { loading: false, skills: action.payload, updateSuccess: false };
+    case GET_SKILLS_UPDATE_SUCCESS:
+      return { loading: false, updateSuccess: true, skills: action.payload };
+    case GET_SKILLS_FAIL:
+      return { loading: false, error: action.payload, updateSuccess: false };
+    default:
+      return state;
+  }
+};
+
+export const getLanguagesReducer = (
+  state = { loading: false, updateSuccess: false },
+  action
+) => {
+  switch (action.type) {
+    case GET_LANGUAGES_REQUEST:
+      return { ...state, loading: true, updateSuccess: false };
+    case GET_LANGUAGES_SUCCESS:
+      return {
+        loading: false,
+        languages: action.payload,
+        updateSuccess: false,
+      };
+    case GET_LANGUAGES_UPDATE_SUCCESS:
+      return { loading: false, updateSuccess: true, languages: action.payload };
+    case GET_LANGUAGES_FAIL:
+      return { loading: false, error: action.payload, updateSuccess: false };
     default:
       return state;
   }

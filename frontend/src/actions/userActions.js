@@ -16,6 +16,14 @@ import {
   UPDATE_BASIC_INFORMATION_REQUEST,
   UPDATE_BASIC_INFORMATION_SUCCESS,
   UPDATE_BASIC_INFORMATION_FAIL,
+  GET_SKILLS_REQUEST,
+  GET_SKILLS_SUCCESS,
+  GET_SKILLS_FAIL,
+  GET_SKILLS_UPDATE_SUCCESS,
+  GET_LANGUAGES_REQUEST,
+  GET_LANGUAGES_SUCCESS,
+  GET_LANGUAGES_FAIL,
+  GET_LANGUAGES_UPDATE_SUCCESS,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -200,3 +208,139 @@ export const updateBasicInformation =
       });
     }
   };
+
+export const getSkills = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_SKILLS_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/skills?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_SKILLS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SKILLS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const updateSkills = (skills) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_SKILLS_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/skills`,
+      skills,
+      config
+    );
+    console.log(data);
+    dispatch({
+      type: GET_SKILLS_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SKILLS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getLanguages = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_LANGUAGES_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/languages?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_LANGUAGES_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_LANGUAGES_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const updateLanguages = (skills) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_LANGUAGES_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/languages`,
+      skills,
+      config
+    );
+    console.log(data);
+    dispatch({
+      type: GET_LANGUAGES_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_LANGUAGES_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

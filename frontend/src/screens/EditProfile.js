@@ -19,14 +19,20 @@ import ComingSoon from "./../components/ComingSoon";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getBasicInformation,
+  getLanguages,
+  getSkills,
   updateBasicInformation,
+  updateLanguages,
+  updateSkills,
 } from "./../actions/userActions";
 import Message from "./../components/Message";
+import Loader from "./../components/Loader";
+import Chip from "@mui/material/Chip";
 
 export default function EditProfile({ history }) {
   const [value, setValue] = React.useState(0);
   const userLogin = useSelector((state) => state.userLogin);
-  const { error, userInfo } = userLogin;
+  const { loading, error, userInfo } = userLogin;
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
@@ -38,6 +44,7 @@ export default function EditProfile({ history }) {
   };
   return (
     <div style={{ margin: "3em 2em" }}>
+      <Loader loading={loading} />
       {error && <Message variant="error">{error}</Message>}
       <BasicInformation id={userInfo?._id} />
       <Skills id={userInfo?._id} />
@@ -78,11 +85,12 @@ export default function EditProfile({ history }) {
 function BasicInformation({ id }) {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.basicInformation);
-  const { error, basicInformation } = data;
+  const { loading, error, basicInformation } = data;
 
   const updatedData = useSelector((state) => state.updateBasicInformation);
   const updateSuccess = updatedData.success;
   const updateError = updatedData.error;
+  const updateLoading = updatedData.loading;
 
   const [name, setName] = useState("");
   const [photo, setPhoto] = useState("");
@@ -142,6 +150,7 @@ function BasicInformation({ id }) {
 
   return (
     <Paper sx={{ padding: "1em", margin: "0.5em 0" }}>
+      <Loader loading={loading || updateLoading} />
       {error && <Message variant="error">{error}</Message>}
       {updateError && <Message variant="error">{updateError}</Message>}
       {updateSuccess && (
@@ -330,41 +339,29 @@ function BasicInformation({ id }) {
   );
 }
 
-function Languages() {
-  return (
-    <Paper sx={{ padding: "1em", margin: "0.5em 0" }}>
-      <Typography
-        variant="h5"
-        gutterBottom
-        component="div"
-        sx={{ margin: "0.5em 0" }}
-      >
-        Languages
-      </Typography>
-      <Box
-        sx={{
-          width: "100%",
-          height: "150px",
-          border: "1px solid rgb(218 218 218)",
-          borderRadius: "4px",
-        }}
-      ></Box>
-      <TextField
-        label="Add Languages"
-        fullWidth
-        sx={{ margin: "0.5em 0" }}
-        helperText="Please enter the spoken language and press enter"
-      />
-      <Button variant="contained" startIcon={<SaveIcon />} fullWidth>
-        Save Changes
-      </Button>
-    </Paper>
-  );
-}
+function Skills({ id }) {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.skills);
+  const { loading, error, skills, updateSuccess } = data;
+  const [skillList, setSkillList] = useState([]);
+  useEffect(() => {
+    if (skills) {
+      setSkillList(skills);
+    } else {
+      dispatch(getSkills(id));
+    }
+  }, [dispatch, id, skills]);
 
-function Skills() {
+  const handleSubmit = () => {
+    dispatch(updateSkills({ toolsAndTech: skillList }));
+  };
   return (
     <Paper sx={{ padding: "1em", margin: "0.5em 0" }}>
+      <Loader loading={loading} />
+      {error && <Message variant="error">{error}</Message>}
+      {updateSuccess && (
+        <Message variant="success">{"Skills Updated Successfully"}</Message>
+      )}
       <Typography
         variant="h5"
         gutterBottom
@@ -380,14 +377,93 @@ function Skills() {
           border: "1px solid rgb(218 218 218)",
           borderRadius: "4px",
         }}
-      ></Box>
+      >
+        {" "}
+        {skillList?.map((s) => (
+          <Chip label={s} sx={{ margin: 0.5 }} />
+        ))}
+      </Box>
       <TextField
+        InputLabelProps={{ shrink: true }}
         label="Add Skills"
         fullWidth
         sx={{ margin: "0.5em 0" }}
-        helperText="Please enter the skill and press enter"
+        value={skillList.join()}
+        onChange={(newValue) => setSkillList(newValue.target.value.split(","))}
+        helperText="Please enter comma separated skills. Ex: HTML,CSS,JS"
       />
-      <Button variant="contained" startIcon={<SaveIcon />} fullWidth>
+      <Button
+        variant="contained"
+        onClick={handleSubmit}
+        startIcon={<SaveIcon />}
+        fullWidth
+      >
+        Save Changes
+      </Button>
+    </Paper>
+  );
+}
+function Languages({ id }) {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.languages);
+  const { loading, error, languages, updateSuccess } = data;
+  const [languageList, setLanguageList] = useState([]);
+  useEffect(() => {
+    if (languages) {
+      setLanguageList(languages);
+    } else {
+      dispatch(getLanguages(id));
+    }
+  }, [dispatch, id, languages]);
+
+  const handleSubmit = () => {
+    dispatch(updateLanguages({ languages: languageList }));
+  };
+  return (
+    <Paper sx={{ padding: "1em", margin: "0.5em 0" }}>
+      <Loader loading={loading} />
+      {error && <Message variant="error">{error}</Message>}
+      {updateSuccess && (
+        <Message variant="success">{"Languages Updated Successfully"}</Message>
+      )}
+      <Typography
+        variant="h5"
+        gutterBottom
+        component="div"
+        sx={{ margin: "0.5em 0" }}
+      >
+        Languages
+      </Typography>
+      <Box
+        sx={{
+          width: "100%",
+          height: "150px",
+          border: "1px solid rgb(218 218 218)",
+          borderRadius: "4px",
+        }}
+      >
+        {" "}
+        {languageList?.map((s) => (
+          <Chip label={s} sx={{ margin: 0.5 }} />
+        ))}
+      </Box>
+      <TextField
+        InputLabelProps={{ shrink: true }}
+        label="Add Languages"
+        fullWidth
+        sx={{ margin: "0.5em 0" }}
+        value={languageList.join()}
+        onChange={(newValue) =>
+          setLanguageList(newValue.target.value.split(","))
+        }
+        helperText="Please enter comma separated languages. Ex: English,Hindi"
+      />
+      <Button
+        variant="contained"
+        onClick={handleSubmit}
+        startIcon={<SaveIcon />}
+        fullWidth
+      >
         Save Changes
       </Button>
     </Paper>
