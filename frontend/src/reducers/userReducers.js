@@ -10,6 +10,12 @@ import {
   USER_PROFILE_DETAILS_REQUEST,
   USER_PROFILE_DETAILS_RESET,
   USER_PROFILE_DETAILS_FAIL,
+  GET_BASIC_INFORMATION_REQUEST,
+  GET_BASIC_INFORMATION_SUCCESS,
+  GET_BASIC_INFORMATION_FAIL,
+  UPDATE_BASIC_INFORMATION_REQUEST,
+  UPDATE_BASIC_INFORMATION_SUCCESS,
+  UPDATE_BASIC_INFORMATION_FAIL,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -51,6 +57,38 @@ export const userProfileReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case USER_PROFILE_DETAILS_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const getBasicInformationReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_BASIC_INFORMATION_REQUEST:
+      return { ...state, loading: true };
+    case GET_BASIC_INFORMATION_SUCCESS:
+      return { loading: false, basicInformation: action.payload };
+    case GET_BASIC_INFORMATION_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const updateBasicInformationReducer = (
+  state = { loading: false, success: false },
+  action
+) => {
+  switch (action.type) {
+    case UPDATE_BASIC_INFORMATION_REQUEST:
+      return { ...state, loading: true, success: false };
+    case UPDATE_BASIC_INFORMATION_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case UPDATE_BASIC_INFORMATION_FAIL:
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

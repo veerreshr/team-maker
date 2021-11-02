@@ -195,7 +195,7 @@ function ProfileScreen({
                 {profile.socialLinks && (
                   <>
                     {Object.keys(profile.socialLinks).map((key) =>
-                      socialButton(key, profile.socialLinks["key"], classes)
+                      socialButton(key, profile.socialLinks[key], classes)
                     )}
                   </>
                 )}
@@ -220,7 +220,7 @@ function ProfileScreen({
             </AccordionSummary>
             <AccordionDetails style={{ flexWrap: "wrap" }}>
               {profile.toolsAndTech.length > 0
-                ? profile.toolsAndTech.map.map((val) => (
+                ? profile.toolsAndTech.map((val) => (
                     <Chip label={val} key={val} style={{ margin: "3px 2px" }} />
                   ))
                 : "No Information Available"}
@@ -237,7 +237,7 @@ function ProfileScreen({
                 }}
               >
                 {profile.languages.length > 0
-                  ? profile.languages.map.map((language) => (
+                  ? profile.languages.map((language) => (
                       <Typography
                         key={language}
                         variant="body2"
@@ -393,7 +393,7 @@ function socialButton(socialIconName, url, classes) {
                       fill-rule="evenodd"
                       clip-rule="evenodd"
                       d="M23.155 112.598c-30.873 30.874-30.873 80.93 0 111.804l89.443 89.443c30.874 30.873 80.93 30.873 111.804 0l89.443-89.443c30.873-30.874 30.873-80.93 0-111.804l-89.443-89.443c-30.874-30.873-80.93-30.873-111.804 0l-89.443 89.443zm184.476 95.033c21.612-21.611 21.612-56.651 0-78.262-21.611-21.612-56.651-21.612-78.262 0-21.612 21.611-21.612 56.651 0 78.262 21.611 21.612 56.651 21.612 78.262 0z"
-                      fill="#2962FF"
+                      fill="black"
                     />
                   </svg>
                 </SvgIcon>

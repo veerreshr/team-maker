@@ -12,16 +12,16 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userProfileReducer,
+  getBasicInformationReducer,
+  updateBasicInformationReducer,
 } from "./reducers/userReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userProfile: userProfileReducer,
-  // userUpdateProfile: userUpdateProfileReducer,
-  // userList: userListReducer,
-  // userDelete: userDeleteReducer,
-  // userUpdate: userUpdateReducer,
+  basicInformation: getBasicInformationReducer,
+  updateBasicInformation: updateBasicInformationReducer,
   addEventReducer: addEventReducer,
   createTeamReducer: createTeamReducer,
   myteams: myTeamsReducer,
