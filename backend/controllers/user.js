@@ -280,6 +280,11 @@ const updateExperience = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.experience.push(req.body.experience);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all mandatory fields : Title, Company, Start Date"
+        );
       }
     }
     User.findByIdAndUpdate(
