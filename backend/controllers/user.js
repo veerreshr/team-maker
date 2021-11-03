@@ -314,7 +314,7 @@ const deleteExperience = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { experience: { _id: req.body.experience._id } } },
+      { $pull: { experience: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {

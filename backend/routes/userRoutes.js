@@ -65,8 +65,8 @@ router
 router
   .route("/profile/experience")
   .get(getExperience)
-  .put(protect, updateExperience)
-  .delete(protect, deleteExperience);
+  .put(protect, updateExperience);
+router.route("/profile/experience/:id").delete(protect, deleteExperience);
 
 router
   .route("/profile/certification")
