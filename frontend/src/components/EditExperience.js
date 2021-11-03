@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -10,56 +10,51 @@ import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDayJS from "@mui/lab/AdapterDayjs";
-import fr from "dayjs/locale/fr";
+import en from "dayjs/locale/en-in";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AlertComponent from "./AlertComponent";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteExperience,
+  getExperience,
+  updateExperience,
+} from "./../actions/userActions";
+import Loader from "./Loader";
+import Message from "./Message";
+import LinearProgress from "@mui/material/LinearProgress";
+import { GET_EXPERIENCE_UPDATE_RESET } from "./../constants/userConstants";
 
-export default function EditExperience() {
+export default function EditExperience({ id }) {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.experience);
+  const { loading, error, experiences, updateSuccess, updateError } = data;
+
   const [dialogData, setDialogData] = useState({ open: false });
-  const [alertData, setAlertData] = useState({ open: false });
+  const [alertData, setAlertData] = useState({ open: false, _id: null });
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState();
   const [companyName, setCompanyName] = useState();
   const [description, setDescription] = useState();
-  let dummyData = [
-    {
-      _id: 1,
-      title: "Software Engineer", //required
-      company: "Microsoft", //required
-      location: "Bangalore",
-      startDate: "12/10/2021", //required
-      endDate: "13/10/2021",
-      description:
-        "Some random description Some random description Some random description Some random description",
-    },
-    {
-      _id: 2,
-      title: "Software Engineer", //required
-      company: "Microsoft", //required
-      startDate: "12/10/2021", //required
-      endDate: "13/10/2021",
-      description:
-        "Some random description Some random description Some random description Some random description",
-    },
-    {
-      _id: 3,
-      title: "Software Engineer", //required
-      company: "Microsoft", //required
-      startDate: "12/10/2021", //required
-    },
-    {
-      _id: 4,
-      title: "Software Engineer", //required
-      company: "Microsoft", //required
-      location: "Bangalore",
-      startDate: "12/10/2021", //required
-      description:
-        "Some random description Some random description Some random description Some random description",
-    },
-  ];
+  const [experienceList, setExperienceList] = useState([]);
+
+  useEffect(() => {
+    if (experiences) {
+      setExperienceList(experiences);
+    } else {
+      if (updateError || error) return;
+      dispatch(getExperience(id));
+    }
+  }, [dispatch, error, experiences, id, updateError]);
+
   const handleEdit = (_id) => {
+    const selectedExperience = experienceList.filter((e) => e._id === _id)[0];
+    setStartDate(selectedExperience.startDate);
+    setEndDate(selectedExperience.endDate);
+    setTitle(selectedExperience.title);
+    setCompanyName(selectedExperience.company);
+    setDescription(selectedExperience.description);
     setDialogData({
       open: true,
       _id,
@@ -75,12 +70,42 @@ export default function EditExperience() {
       _id: null,
       title: "Add New Experience",
     });
+    setStartDate(null);
+    setEndDate(null);
+    setTitle("");
+    setCompanyName("");
+    setDescription("");
   };
   const handleSave = () => {
-    handleClose();
+    if (dialogData._id != null) {
+      dispatch(
+        updateExperience({
+          experience: {
+            _id: dialogData._id,
+            title,
+            company: companyName,
+            startDate,
+            endDate,
+          },
+        })
+      );
+    } else {
+      dispatch(
+        updateExperience({
+          experience: {
+            title,
+            company: companyName,
+            startDate,
+            endDate,
+          },
+        })
+      );
+    }
   };
   const handleDelete = () => {
     //deleteAction to be called here
+    dispatch(deleteExperience(alertData._id));
+    setAlertData({ open: false });
   };
   const alertHandleClose = () => {
     setAlertData({ open: false });
@@ -88,9 +113,18 @@ export default function EditExperience() {
   const triggerDeleteAlert = (_id) => {
     setAlertData({ open: true, _id });
   };
+
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <Loader loading={loading} />
+      {error && <Message variant="error">{error}</Message>}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "1em",
+        }}
+      >
         <Typography variant="h5" gutterBottom style={{ padding: "0 0.5em" }}>
           Experience
         </Typography>
@@ -104,17 +138,23 @@ export default function EditExperience() {
         </Button>
       </div>
 
-      {dummyData.length > 0 &&
-        dummyData.map((experience) => {
+      {experienceList.length > 0 &&
+        experienceList.map((experience) => {
           return (
-            <Card variant="outlined" sx={{ margin: "0.5em 0" }}>
+            <Card
+              id={experience._id}
+              variant="outlined"
+              sx={{ margin: "0.5em 0" }}
+            >
               <CardContent>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <Typography variant="overline" gutterBottom>
-                    {`${experience.startDate} - ${
-                      experience.endDate ? experience.endDate : "present"
+                    {`${experience.startDate.substring(0, 10)} - ${
+                      experience.endDate
+                        ? experience.endDate.substring(0, 10)
+                        : "present"
                     }`}
                   </Typography>
                   <div>
@@ -159,11 +199,19 @@ export default function EditExperience() {
         title={dialogData.title}
         handleSave={handleSave}
       >
-        <LocalizationProvider dateAdapter={AdapterDayJS} locale={fr}>
+        {loading && <LinearProgress />}
+        {updateSuccess && (
+          <Message variant="success">
+            {"Successfully Updated Experience List"}
+          </Message>
+        )}
+        {updateError && <Message variant="error">{updateError}</Message>}
+        <LocalizationProvider dateAdapter={AdapterDayJS} locale={en}>
           <DatePicker
-            mask={"__/__/____"}
+            sx={{ marginTop: "1em" }}
             label="Start Date"
             value={startDate}
+            inputFormat="DD-MM-YYYY"
             defaultValue={null}
             onChange={(newValue) => setStartDate(newValue)}
             renderInput={(params) => (
@@ -176,11 +224,11 @@ export default function EditExperience() {
             )}
           />
           <DatePicker
-            mask={"__/__/____"}
+            inputFormat="DD-MM-YYYY"
             label="End Date"
             value={endDate}
             defaultValue={null}
-            onChange={(newValue) => setEndDate(endDate)}
+            onChange={(newValue) => setEndDate(newValue)}
             renderInput={(params) => (
               <TextField
                 sx={{ margin: "0.5em 0" }}
@@ -193,7 +241,7 @@ export default function EditExperience() {
         </LocalizationProvider>
         <TextField
           value={title}
-          onChange={(newValue) => setTitle(newValue)}
+          onChange={(newValue) => setTitle(newValue.target.value)}
           label="Title"
           variant="outlined"
           fullWidth
@@ -202,7 +250,7 @@ export default function EditExperience() {
         />
         <TextField
           value={companyName}
-          onChange={(newValue) => setCompanyName(newValue)}
+          onChange={(newValue) => setCompanyName(newValue.target.value)}
           label="Company Name"
           variant="outlined"
           fullWidth
@@ -211,7 +259,7 @@ export default function EditExperience() {
         />
         <TextField
           value={description}
-          onChange={(newValue) => setDescription(newValue)}
+          onChange={(newValue) => setDescription(newValue.target.value)}
           id="outlined-multiline-flexible"
           label="Description"
           multiline

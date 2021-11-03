@@ -24,6 +24,12 @@ import {
   GET_LANGUAGES_SUCCESS,
   GET_LANGUAGES_FAIL,
   GET_LANGUAGES_UPDATE_SUCCESS,
+  GET_EXPERIENCE_REQUEST,
+  GET_EXPERIENCE_SUCCESS,
+  GET_EXPERIENCE_FAIL,
+  GET_EXPERIENCE_UPDATE_SUCCESS,
+  GET_EXPERIENCE_UPDATE_FAIL,
+  GET_EXPERIENCE_UPDATE_RESET,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -136,6 +142,39 @@ export const getLanguagesReducer = (
     case GET_LANGUAGES_UPDATE_SUCCESS:
       return { loading: false, updateSuccess: true, languages: action.payload };
     case GET_LANGUAGES_FAIL:
+      return { loading: false, error: action.payload, updateSuccess: false };
+    default:
+      return state;
+  }
+};
+
+export const getExperienceReducer = (
+  state = { loading: false, updateSuccess: false },
+  action
+) => {
+  switch (action.type) {
+    case GET_EXPERIENCE_REQUEST:
+      return { ...state, loading: true, updateSuccess: false };
+    case GET_EXPERIENCE_SUCCESS:
+      return {
+        loading: false,
+        experiences: action.payload,
+        updateSuccess: false,
+      };
+    case GET_EXPERIENCE_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        experiences: action.payload,
+        updateSuccess: true,
+      };
+
+    case GET_EXPERIENCE_UPDATE_FAIL:
+      return {
+        loading: false,
+        updateError: action.payload,
+        updateSuccess: false,
+      };
+    case GET_EXPERIENCE_FAIL:
       return { loading: false, error: action.payload, updateSuccess: false };
     default:
       return state;

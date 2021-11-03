@@ -24,6 +24,11 @@ import {
   GET_LANGUAGES_SUCCESS,
   GET_LANGUAGES_FAIL,
   GET_LANGUAGES_UPDATE_SUCCESS,
+  GET_EXPERIENCE_REQUEST,
+  GET_EXPERIENCE_SUCCESS,
+  GET_EXPERIENCE_FAIL,
+  GET_EXPERIENCE_UPDATE_SUCCESS,
+  GET_EXPERIENCE_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -329,7 +334,6 @@ export const updateLanguages = (skills) => async (dispatch, getState) => {
       skills,
       config
     );
-    console.log(data);
     dispatch({
       type: GET_LANGUAGES_UPDATE_SUCCESS,
       payload: data,
@@ -337,6 +341,109 @@ export const updateLanguages = (skills) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_LANGUAGES_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getExperience = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EXPERIENCE_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/experience?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_EXPERIENCE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EXPERIENCE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateExperience = (experience) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EXPERIENCE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/experience`,
+      experience,
+      config
+    );
+    dispatch({
+      type: GET_EXPERIENCE_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EXPERIENCE_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteExperience = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EXPERIENCE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/experience/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_EXPERIENCE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EXPERIENCE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
