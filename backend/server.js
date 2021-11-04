@@ -3,7 +3,7 @@ import { config } from "dotenv";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
-import customEventRoutes from './routes/customEventRoutes.js';
+import eventRoutes from './routes/eventRoutes.js';
 import helperRoutes from './routes/helperRoutes.js';
 // import teamRoutes from './routes/teamRoutes.js';
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
@@ -36,7 +36,7 @@ app.use("/api/users", userRoutes);
 
 app.use("/api/teams",teamRoutes);
 
-app.use("/api/customEvents", customEventRoutes);
+app.use("/api/events", eventRoutes);
 
 app.use("/api/helper", helperRoutes);
 
