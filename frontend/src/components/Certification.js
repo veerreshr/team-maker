@@ -60,7 +60,9 @@ function Certification({ certifications }) {
                       <Button
                         size="small"
                         component={Link}
-                        to={c.credentialUrl}
+                        to={{ pathname: c.credentialUrl }}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         View Certification
                       </Button>

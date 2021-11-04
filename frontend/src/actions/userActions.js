@@ -39,6 +39,11 @@ import {
   GET_CERTIFICATION_FAIL,
   GET_CERTIFICATION_UPDATE_SUCCESS,
   GET_CERTIFICATION_UPDATE_FAIL,
+  GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+  GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS,
+  GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
+  GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_SUCCESS,
+  GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -672,3 +677,110 @@ export const deleteCertification = (id) => async (dispatch, getState) => {
     });
   }
 };
+
+//----------------------------------------Awards and Certifications---------------------------------------------
+
+export const getAwardsAndAchievements = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/awardsandachievements?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateAwardsAndAchievement =
+  (awardsandachievements) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/users/profile/awardsandachievements`,
+        awardsandachievements,
+        config
+      );
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const deleteAwardsAndAchievement =
+  (id) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.delete(
+        `/api/users/profile/awardsandachievements/${id}`,
+        config
+      );
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };

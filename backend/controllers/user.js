@@ -461,7 +461,9 @@ const updateAchievements = expressAsyncHandler(async (req, res) => {
         }
       } else {
         res.status(400);
-        throw new Error("Title field is left empty, Please fill");
+        throw new Error(
+          "Title field cannot be empty, Please fill all necessary details"
+        );
       }
     }
     User.findByIdAndUpdate(

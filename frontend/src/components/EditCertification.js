@@ -195,11 +195,19 @@ export default function EditCertification({ id }) {
                   {cert.credentialId && `Credential Id : ${cert.credentialId}`}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button size="small" component={Link} to={cert.credentialUrl}>
-                  View Certification
-                </Button>
-              </CardActions>
+              {cert.credentialUrl && (
+                <CardActions>
+                  <Button
+                    size="small"
+                    component={Link}
+                    to={{ pathname: cert.credentialUrl }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Certification
+                  </Button>
+                </CardActions>
+              )}
             </Card>
           );
         })}

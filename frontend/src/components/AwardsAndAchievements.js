@@ -33,7 +33,13 @@ function AwardsAndAchievements({ achievements }) {
               </CardContent>
               {a.link && (
                 <CardActions>
-                  <Button size="small" component={Link} to={a.link}>
+                  <Button
+                    size="small"
+                    component={Link}
+                    to={{ pathname: a.link }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     link
                   </Button>
                 </CardActions>

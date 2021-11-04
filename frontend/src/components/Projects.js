@@ -55,7 +55,13 @@ function Projects({ projects }) {
                   </CardContent>
                   {p.link && (
                     <CardActions>
-                      <Button size="small" component={Link} to={p.link}>
+                      <Button
+                        size="small"
+                        component={Link}
+                        to={{ pathname: p.link }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         View Project
                       </Button>
                     </CardActions>

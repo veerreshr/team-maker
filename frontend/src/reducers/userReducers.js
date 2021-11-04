@@ -39,6 +39,11 @@ import {
   GET_CERTIFICATION_FAIL,
   GET_CERTIFICATION_UPDATE_SUCCESS,
   GET_CERTIFICATION_UPDATE_FAIL,
+  GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+  GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS,
+  GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
+  GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_SUCCESS,
+  GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -250,6 +255,39 @@ export const getCertificationReducer = (
         updateSuccess: false,
       };
     case GET_CERTIFICATION_FAIL:
+      return { loading: false, error: action.payload, updateSuccess: false };
+    default:
+      return state;
+  }
+};
+
+export const getAwardsAndCertificationsReducer = (
+  state = { loading: false, updateSuccess: false },
+  action
+) => {
+  switch (action.type) {
+    case GET_AWARDS_AND_ACHIEVEMENTS_REQUEST:
+      return { ...state, loading: true, updateSuccess: false };
+    case GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS:
+      return {
+        loading: false,
+        awardsAndAchievements: action.payload,
+        updateSuccess: false,
+      };
+    case GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        awardsAndAchievements: action.payload,
+        updateSuccess: true,
+      };
+
+    case GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_FAIL:
+      return {
+        loading: false,
+        updateError: action.payload,
+        updateSuccess: false,
+      };
+    case GET_AWARDS_AND_ACHIEVEMENTS_FAIL:
       return { loading: false, error: action.payload, updateSuccess: false };
     default:
       return state;

@@ -19,6 +19,7 @@ import {
   getExperienceReducer,
   getEducationReducer,
   getCertificationReducer,
+  getAwardsAndCertificationsReducer,
 } from "./reducers/userReducers";
 
 const reducer = combineReducers({
@@ -32,6 +33,7 @@ const reducer = combineReducers({
   experience: getExperienceReducer,
   education: getEducationReducer,
   certification: getCertificationReducer,
+  awardsAndAchievements: getAwardsAndCertificationsReducer,
   addEventReducer: addEventReducer,
   createTeamReducer: createTeamReducer,
   myteams: myTeamsReducer,
