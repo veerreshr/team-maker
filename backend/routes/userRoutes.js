@@ -59,8 +59,8 @@ router
 router
   .route("/profile/education")
   .get(getEducation)
-  .put(protect, updateEducation)
-  .delete(protect, deleteEducation);
+  .put(protect, updateEducation);
+router.route("/profile/education/:id").delete(protect, deleteEducation);
 
 router
   .route("/profile/experience")
@@ -71,20 +71,21 @@ router.route("/profile/experience/:id").delete(protect, deleteExperience);
 router
   .route("/profile/certification")
   .get(getCertifications)
-  .put(protect, updateCertifications)
+  .put(protect, updateCertifications);
+router
+  .route("/profile/certification/:id")
   .delete(protect, deleteCertifications);
 
 router
   .route("/profile/awardsandachievements")
   .get(getAchievements)
-  .put(protect, updateAchievements)
+  .put(protect, updateAchievements);
+router
+  .route("/profile/awardsandachievements/:id")
   .delete(protect, deleteAchievements);
 
-router
-  .route("/profile/projects")
-  .get(getProjects)
-  .put(protect, updateProjects)
-  .delete(protect, deleteProjects);
+router.route("/profile/projects").get(getProjects).put(protect, updateProjects);
+router.route("/profile/projects/:id").delete(protect, deleteProjects);
 
 router.put("/:UserId", updateUser);
 

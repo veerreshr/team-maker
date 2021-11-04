@@ -196,6 +196,11 @@ const updateEducation = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.education.push(req.body.education);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all the mandatory fields : School Name, Start Date"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -217,7 +222,7 @@ const updateEducation = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user education
-// @route   DELETE /api/users/profile/education
+// @route   DELETE /api/users/profile/education/:id
 // @access  Private
 
 const deleteEducation = expressAsyncHandler(async (req, res) => {
@@ -225,7 +230,7 @@ const deleteEducation = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { education: { _id: req.body.education._id } } },
+      { $pull: { education: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -306,7 +311,7 @@ const updateExperience = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user experience
-// @route   DELETE /api/users/profile/experience
+// @route   DELETE /api/users/profile/experience/:id
 // @access  Private
 
 const deleteExperience = expressAsyncHandler(async (req, res) => {
@@ -369,6 +374,11 @@ const updateCertifications = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.certifications.push(req.body.certifications);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all the mandatory fields : Certification Name, issuing Organisation Name, Issue Date"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -390,7 +400,7 @@ const updateCertifications = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user certification
-// @route   DELETE /api/users/profile/certification
+// @route   DELETE /api/users/profile/certification/:id
 // @access  Private
 
 const deleteCertifications = expressAsyncHandler(async (req, res) => {
@@ -398,7 +408,7 @@ const deleteCertifications = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { certifications: { _id: req.body.certifications._id } } },
+      { $pull: { certifications: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -449,6 +459,9 @@ const updateAchievements = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.achievements.push(req.body.achievements);
         }
+      } else {
+        res.status(400);
+        throw new Error("Title field is left empty, Please fill");
       }
     }
     User.findByIdAndUpdate(
@@ -470,7 +483,7 @@ const updateAchievements = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user's awards & achievements
-// @route   DELETE /api/users/profile/awardsandachievements
+// @route   DELETE /api/users/profile/awardsandachievements/:id
 // @access  Private
 
 const deleteAchievements = expressAsyncHandler(async (req, res) => {
@@ -478,7 +491,7 @@ const deleteAchievements = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { achievements: { _id: req.body.achievements._id } } },
+      { $pull: { achievements: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -529,6 +542,11 @@ const updateProjects = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.projects.push(req.body.projects);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all the mandatory fields : Project Title, Start Date"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -550,7 +568,7 @@ const updateProjects = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user's projects
-// @route   DELETE /api/users/profile/projects
+// @route   DELETE /api/users/profile/projects/:id
 // @access  Private
 
 const deleteProjects = expressAsyncHandler(async (req, res) => {
@@ -558,7 +576,7 @@ const deleteProjects = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { projects: { _id: req.body.projects._id } } },
+      { $pull: { projects: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
