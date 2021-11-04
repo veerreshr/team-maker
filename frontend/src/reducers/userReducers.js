@@ -34,6 +34,11 @@ import {
   GET_EDUCATION_FAIL,
   GET_EDUCATION_UPDATE_SUCCESS,
   GET_EDUCATION_UPDATE_FAIL,
+  GET_CERTIFICATION_REQUEST,
+  GET_CERTIFICATION_SUCCESS,
+  GET_CERTIFICATION_FAIL,
+  GET_CERTIFICATION_UPDATE_SUCCESS,
+  GET_CERTIFICATION_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -212,6 +217,39 @@ export const getEducationReducer = (
         updateSuccess: false,
       };
     case GET_EDUCATION_FAIL:
+      return { loading: false, error: action.payload, updateSuccess: false };
+    default:
+      return state;
+  }
+};
+
+export const getCertificationReducer = (
+  state = { loading: false, updateSuccess: false },
+  action
+) => {
+  switch (action.type) {
+    case GET_CERTIFICATION_REQUEST:
+      return { ...state, loading: true, updateSuccess: false };
+    case GET_CERTIFICATION_SUCCESS:
+      return {
+        loading: false,
+        certifications: action.payload,
+        updateSuccess: false,
+      };
+    case GET_CERTIFICATION_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        certifications: action.payload,
+        updateSuccess: true,
+      };
+
+    case GET_CERTIFICATION_UPDATE_FAIL:
+      return {
+        loading: false,
+        updateError: action.payload,
+        updateSuccess: false,
+      };
+    case GET_CERTIFICATION_FAIL:
       return { loading: false, error: action.payload, updateSuccess: false };
     default:
       return state;

@@ -18,6 +18,7 @@ import {
   getLanguagesReducer,
   getExperienceReducer,
   getEducationReducer,
+  getCertificationReducer,
 } from "./reducers/userReducers";
 
 const reducer = combineReducers({
@@ -30,6 +31,7 @@ const reducer = combineReducers({
   languages: getLanguagesReducer,
   experience: getExperienceReducer,
   education: getEducationReducer,
+  certification: getCertificationReducer,
   addEventReducer: addEventReducer,
   createTeamReducer: createTeamReducer,
   myteams: myTeamsReducer,

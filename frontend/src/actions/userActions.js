@@ -34,6 +34,11 @@ import {
   GET_EDUCATION_FAIL,
   GET_EDUCATION_UPDATE_SUCCESS,
   GET_EDUCATION_UPDATE_FAIL,
+  GET_CERTIFICATION_REQUEST,
+  GET_CERTIFICATION_SUCCESS,
+  GET_CERTIFICATION_FAIL,
+  GET_CERTIFICATION_UPDATE_SUCCESS,
+  GET_CERTIFICATION_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -457,6 +462,8 @@ export const deleteExperience = (id) => async (dispatch, getState) => {
   }
 };
 
+//----------------------------------------Education---------------------------------------------
+
 export const getEducation = (id) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -552,6 +559,112 @@ export const deleteEducation = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_EDUCATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//----------------------------------------Certification---------------------------------------------
+
+export const getCertifications = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_CERTIFICATION_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/certification?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_CERTIFICATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_CERTIFICATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateCertification =
+  (certification) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: GET_CERTIFICATION_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/users/profile/certification`,
+        certification,
+        config
+      );
+      dispatch({
+        type: GET_CERTIFICATION_UPDATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_CERTIFICATION_UPDATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const deleteCertification = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_CERTIFICATION_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/certification/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_CERTIFICATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_CERTIFICATION_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
