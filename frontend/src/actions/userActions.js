@@ -29,6 +29,11 @@ import {
   GET_EXPERIENCE_FAIL,
   GET_EXPERIENCE_UPDATE_SUCCESS,
   GET_EXPERIENCE_UPDATE_FAIL,
+  GET_EDUCATION_REQUEST,
+  GET_EDUCATION_SUCCESS,
+  GET_EDUCATION_FAIL,
+  GET_EDUCATION_UPDATE_SUCCESS,
+  GET_EDUCATION_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -444,6 +449,109 @@ export const deleteExperience = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_EXPERIENCE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getEducation = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EDUCATION_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/education?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_EDUCATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EDUCATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateEducation = (experience) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EDUCATION_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/education`,
+      experience,
+      config
+    );
+    dispatch({
+      type: GET_EDUCATION_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EDUCATION_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteEducation = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EDUCATION_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/education/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_EDUCATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EDUCATION_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -23,7 +23,6 @@ import {
 import Loader from "./Loader";
 import Message from "./Message";
 import LinearProgress from "@mui/material/LinearProgress";
-import { GET_EXPERIENCE_UPDATE_RESET } from "./../constants/userConstants";
 
 export default function EditExperience({ id }) {
   const dispatch = useDispatch();
@@ -86,6 +85,7 @@ export default function EditExperience({ id }) {
             company: companyName,
             startDate,
             endDate,
+            description,
           },
         })
       );
@@ -97,6 +97,7 @@ export default function EditExperience({ id }) {
             company: companyName,
             startDate,
             endDate,
+            description,
           },
         })
       );

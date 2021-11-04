@@ -29,7 +29,11 @@ import {
   GET_EXPERIENCE_FAIL,
   GET_EXPERIENCE_UPDATE_SUCCESS,
   GET_EXPERIENCE_UPDATE_FAIL,
-  GET_EXPERIENCE_UPDATE_RESET,
+  GET_EDUCATION_REQUEST,
+  GET_EDUCATION_SUCCESS,
+  GET_EDUCATION_FAIL,
+  GET_EDUCATION_UPDATE_SUCCESS,
+  GET_EDUCATION_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -175,6 +179,39 @@ export const getExperienceReducer = (
         updateSuccess: false,
       };
     case GET_EXPERIENCE_FAIL:
+      return { loading: false, error: action.payload, updateSuccess: false };
+    default:
+      return state;
+  }
+};
+
+export const getEducationReducer = (
+  state = { loading: false, updateSuccess: false },
+  action
+) => {
+  switch (action.type) {
+    case GET_EDUCATION_REQUEST:
+      return { ...state, loading: true, updateSuccess: false };
+    case GET_EDUCATION_SUCCESS:
+      return {
+        loading: false,
+        educationData: action.payload,
+        updateSuccess: false,
+      };
+    case GET_EDUCATION_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        educationData: action.payload,
+        updateSuccess: true,
+      };
+
+    case GET_EDUCATION_UPDATE_FAIL:
+      return {
+        loading: false,
+        updateError: action.payload,
+        updateSuccess: false,
+      };
+    case GET_EDUCATION_FAIL:
       return { loading: false, error: action.payload, updateSuccess: false };
     default:
       return state;

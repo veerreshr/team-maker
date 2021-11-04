@@ -43,7 +43,8 @@ function Projects({ projects }) {
                 <Card variant="outlined">
                   <CardContent>
                     <Typography variant="overline" gutterBottom>
-                      {p.startDate} - {`${p.endDate ? p.endDate : "present"}`}
+                      {p.startDate.substring(0, 10)} -{" "}
+                      {`${p.endDate ? p.endDate.substring(0, 10) : "present"}`}
                     </Typography>
                     <Typography variant="h5" component="h5">
                       {p.title}

@@ -40,7 +40,8 @@ function Education({ educationList }) {
                 <Card variant="outlined">
                   <CardContent>
                     <Typography variant="overline" gutterBottom>
-                      {e.startDate} - {`${e.endDate ? e.endDate : "present"}`}
+                      {e.startDate.substring(0, 10)} -{" "}
+                      {`${e.endDate ? e.endDate.substring(0, 10) : "present"}`}
                     </Typography>
                     <Typography variant="h5" component="h5">
                       {e.schoolName}
