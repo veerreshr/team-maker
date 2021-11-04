@@ -28,7 +28,7 @@ import { Link } from "react-router-dom";
 
 export default function EditCertification({ id }) {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.certification);
+  const data = useSelector((state) => state.profile.certification);
   const { loading, error, certifications, updateSuccess, updateError } = data;
 
   const [dialogData, setDialogData] = useState({ open: false });

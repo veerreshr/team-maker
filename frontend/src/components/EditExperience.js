@@ -26,7 +26,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 export default function EditExperience({ id }) {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.experience);
+  const data = useSelector((state) => state.profile.experience);
   const { loading, error, experiences, updateSuccess, updateError } = data;
 
   const [dialogData, setDialogData] = useState({ open: false });

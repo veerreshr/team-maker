@@ -44,6 +44,11 @@ import {
   GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
   GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_SUCCESS,
   GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_FAIL,
+  GET_PROJECT_REQUEST,
+  GET_PROJECT_SUCCESS,
+  GET_PROJECT_FAIL,
+  GET_PROJECT_UPDATE_SUCCESS,
+  GET_PROJECT_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -784,3 +789,108 @@ export const deleteAwardsAndAchievement =
       });
     }
   };
+
+//----------------------------------------Projects---------------------------------------------
+
+export const getProjects = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PROJECT_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/projects?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_PROJECT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PROJECT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateProject = (projects) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PROJECT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/projects`,
+      projects,
+      config
+    );
+    dispatch({
+      type: GET_PROJECT_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PROJECT_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteProject = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PROJECT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/projects/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_PROJECT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PROJECT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

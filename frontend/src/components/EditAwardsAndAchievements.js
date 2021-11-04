@@ -28,7 +28,7 @@ import { Link } from "react-router-dom";
 
 export default function EditAwardsAndAchievements({ id }) {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.awardsAndAchievements);
+  const data = useSelector((state) => state.profile.awardsAndAchievements);
   const { loading, error, awardsAndAchievements, updateSuccess, updateError } =
     data;
 

@@ -108,7 +108,7 @@ function ProfileScreen({
 
   const { userInfo } = userLogin;
 
-  const userProfile = useSelector((state) => state.userProfile);
+  const userProfile = useSelector((state) => state.profile.userProfile);
 
   const { loading, error, profile } = userProfile;
 

@@ -26,7 +26,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 export default function EditEducation({ id }) {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.education);
+  const data = useSelector((state) => state.profile.education);
   const { loading, error, educationData, updateSuccess, updateError } = data;
 
   const [dialogData, setDialogData] = useState({ open: false });

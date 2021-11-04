@@ -84,10 +84,12 @@ export default function EditProfile({ history }) {
 
 function BasicInformation({ id }) {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.basicInformation);
+  const data = useSelector((state) => state.profile.basicInformation);
   const { loading, error, basicInformation } = data;
 
-  const updatedData = useSelector((state) => state.updateBasicInformation);
+  const updatedData = useSelector(
+    (state) => state.profile.updateBasicInformation
+  );
   const updateSuccess = updatedData.success;
   const updateError = updatedData.error;
   const updateLoading = updatedData.loading;
@@ -341,7 +343,7 @@ function BasicInformation({ id }) {
 
 function Skills({ id }) {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.skills);
+  const data = useSelector((state) => state.profile.skills);
   const { loading, error, skills, updateSuccess } = data;
   const [skillList, setSkillList] = useState([]);
   useEffect(() => {
@@ -405,7 +407,7 @@ function Skills({ id }) {
 }
 function Languages({ id }) {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.languages);
+  const data = useSelector((state) => state.profile.languages);
   const { loading, error, languages, updateSuccess } = data;
   const [languageList, setLanguageList] = useState([]);
   useEffect(() => {
