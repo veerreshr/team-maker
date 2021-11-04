@@ -7,23 +7,48 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
-  USER_DETAILS_REQUEST,
-  USER_DETAILS_SUCCESS,
-  USER_DETAILS_FAIL,
-  USER_DETAILS_RESET,
-  USER_UPDATE_PROFILE_REQUEST,
-  USER_UPDATE_PROFILE_FAIL,
-  USER_UPDATE_PROFILE_SUCCESS,
-  USER_LIST_FAIL,
-  USER_LIST_SUCCESS,
-  USER_LIST_REQUEST,
-  USER_LIST_RESET,
-  USER_DELETE_REQUEST,
-  USER_DELETE_SUCCESS,
-  USER_DELETE_FAIL,
-  USER_UPDATE_FAIL,
-  USER_UPDATE_SUCCESS,
-  USER_UPDATE_REQUEST,
+  USER_PROFILE_DETAILS_REQUEST,
+  USER_PROFILE_DETAILS_SUCCESS,
+  USER_PROFILE_DETAILS_FAIL,
+  GET_BASIC_INFORMATION_REQUEST,
+  GET_BASIC_INFORMATION_SUCCESS,
+  GET_BASIC_INFORMATION_FAIL,
+  UPDATE_BASIC_INFORMATION_REQUEST,
+  UPDATE_BASIC_INFORMATION_SUCCESS,
+  UPDATE_BASIC_INFORMATION_FAIL,
+  GET_SKILLS_REQUEST,
+  GET_SKILLS_SUCCESS,
+  GET_SKILLS_FAIL,
+  GET_SKILLS_UPDATE_SUCCESS,
+  GET_LANGUAGES_REQUEST,
+  GET_LANGUAGES_SUCCESS,
+  GET_LANGUAGES_FAIL,
+  GET_LANGUAGES_UPDATE_SUCCESS,
+  GET_EXPERIENCE_REQUEST,
+  GET_EXPERIENCE_SUCCESS,
+  GET_EXPERIENCE_FAIL,
+  GET_EXPERIENCE_UPDATE_SUCCESS,
+  GET_EXPERIENCE_UPDATE_FAIL,
+  GET_EDUCATION_REQUEST,
+  GET_EDUCATION_SUCCESS,
+  GET_EDUCATION_FAIL,
+  GET_EDUCATION_UPDATE_SUCCESS,
+  GET_EDUCATION_UPDATE_FAIL,
+  GET_CERTIFICATION_REQUEST,
+  GET_CERTIFICATION_SUCCESS,
+  GET_CERTIFICATION_FAIL,
+  GET_CERTIFICATION_UPDATE_SUCCESS,
+  GET_CERTIFICATION_UPDATE_FAIL,
+  GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+  GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS,
+  GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
+  GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_SUCCESS,
+  GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_FAIL,
+  GET_PROJECT_REQUEST,
+  GET_PROJECT_SUCCESS,
+  GET_PROJECT_FAIL,
+  GET_PROJECT_UPDATE_SUCCESS,
+  GET_PROJECT_UPDATE_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -63,8 +88,7 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
-  dispatch({ type: USER_DETAILS_RESET });
-  dispatch({ type: USER_LIST_RESET });
+  //need to add team data reset
 };
 
 export const register =
@@ -107,14 +131,149 @@ export const register =
       });
     }
   };
-export const getUserDetails = (id) => async (dispatch, getState) => {
+export const getUserProfileDetails =
+  (username) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: USER_PROFILE_DETAILS_REQUEST,
+      });
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        `/api/users/profile?username=${username}`,
+        config
+      );
+
+      dispatch({
+        type: USER_PROFILE_DETAILS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: USER_PROFILE_DETAILS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const getBasicInformation = (id) => async (dispatch, getState) => {
   try {
     dispatch({
-      type: USER_DETAILS_REQUEST,
+      type: GET_BASIC_INFORMATION_REQUEST,
     });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/basicinformation?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_BASIC_INFORMATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_BASIC_INFORMATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const updateBasicInformation =
+  (updatedValues) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: UPDATE_BASIC_INFORMATION_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/users/profile/basicinformation`,
+        updatedValues,
+        config
+      );
+
+      dispatch({
+        type: UPDATE_BASIC_INFORMATION_SUCCESS,
+      });
+      dispatch({
+        type: GET_BASIC_INFORMATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: UPDATE_BASIC_INFORMATION_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const getSkills = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_SKILLS_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/skills?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_SKILLS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SKILLS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+export const updateSkills = (skills) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_SKILLS_REQUEST,
+    });
+
     const {
       userLogin: { userInfo },
     } = getState();
+
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -122,15 +281,19 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/users/${id}`, config);
-
+    const { data } = await axios.put(
+      `/api/users/profile/skills`,
+      skills,
+      config
+    );
+    console.log(data);
     dispatch({
-      type: USER_DETAILS_SUCCESS,
+      type: GET_SKILLS_UPDATE_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: USER_DETAILS_FAIL,
+      type: GET_SKILLS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -138,35 +301,30 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     });
   }
 };
-export const updateUserProfile = (user) => async (dispatch, getState) => {
+
+export const getLanguages = (id) => async (dispatch, getState) => {
   try {
     dispatch({
-      type: USER_UPDATE_PROFILE_REQUEST,
+      type: GET_LANGUAGES_REQUEST,
     });
-    const {
-      userLogin: { userInfo },
-    } = getState();
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const { data } = await axios.put(`/api/users/profile`, user, config);
+    const { data } = await axios.get(
+      `/api/users/profile/languages?_id=${id}`,
+      config
+    );
 
     dispatch({
-      type: USER_UPDATE_PROFILE_SUCCESS,
+      type: GET_LANGUAGES_SUCCESS,
       payload: data,
     });
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    });
-    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
-      type: USER_UPDATE_PROFILE_FAIL,
+      type: GET_LANGUAGES_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -174,74 +332,10 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     });
   }
 };
-
-export const listUsers = () => async (dispatch, getState) => {
+export const updateLanguages = (skills) => async (dispatch, getState) => {
   try {
     dispatch({
-      type: USER_LIST_REQUEST,
-    });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/users`, config);
-
-    dispatch({
-      type: USER_LIST_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: USER_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
-
-export const deleteUser = (id) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_DELETE_REQUEST,
-    });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    await axios.delete(`/api/users/${id}`, config);
-
-    dispatch({ type: USER_DELETE_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: USER_DELETE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
-
-export const updateUser = (user) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_UPDATE_REQUEST,
+      type: GET_LANGUAGES_REQUEST,
     });
 
     const {
@@ -255,14 +349,544 @@ export const updateUser = (user) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
-
-    dispatch({ type: USER_UPDATE_SUCCESS });
-
-    dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
+    const { data } = await axios.put(
+      `/api/users/profile/languages`,
+      skills,
+      config
+    );
+    dispatch({
+      type: GET_LANGUAGES_UPDATE_SUCCESS,
+      payload: data,
+    });
   } catch (error) {
     dispatch({
-      type: USER_UPDATE_FAIL,
+      type: GET_LANGUAGES_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getExperience = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EXPERIENCE_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/experience?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_EXPERIENCE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EXPERIENCE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateExperience = (experience) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EXPERIENCE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/experience`,
+      experience,
+      config
+    );
+    dispatch({
+      type: GET_EXPERIENCE_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EXPERIENCE_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteExperience = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EXPERIENCE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/experience/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_EXPERIENCE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EXPERIENCE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//----------------------------------------Education---------------------------------------------
+
+export const getEducation = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EDUCATION_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/education?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_EDUCATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EDUCATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateEducation = (experience) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EDUCATION_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/education`,
+      experience,
+      config
+    );
+    dispatch({
+      type: GET_EDUCATION_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EDUCATION_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteEducation = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_EDUCATION_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/education/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_EDUCATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_EDUCATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//----------------------------------------Certification---------------------------------------------
+
+export const getCertifications = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_CERTIFICATION_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/certification?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_CERTIFICATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_CERTIFICATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateCertification =
+  (certification) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: GET_CERTIFICATION_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/users/profile/certification`,
+        certification,
+        config
+      );
+      dispatch({
+        type: GET_CERTIFICATION_UPDATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_CERTIFICATION_UPDATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const deleteCertification = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_CERTIFICATION_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/certification/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_CERTIFICATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_CERTIFICATION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//----------------------------------------Awards and Certifications---------------------------------------------
+
+export const getAwardsAndAchievements = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/awardsandachievements?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateAwardsAndAchievement =
+  (awardsandachievements) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/users/profile/awardsandachievements`,
+        awardsandachievements,
+        config
+      );
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_UPDATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const deleteAwardsAndAchievement =
+  (id) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.delete(
+        `/api/users/profile/awardsandachievements/${id}`,
+        config
+      );
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_AWARDS_AND_ACHIEVEMENTS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+//----------------------------------------Projects---------------------------------------------
+
+export const getProjects = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PROJECT_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/users/profile/projects?_id=${id}`,
+      config
+    );
+
+    dispatch({
+      type: GET_PROJECT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PROJECT_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateProject = (projects) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PROJECT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/users/profile/projects`,
+      projects,
+      config
+    );
+    dispatch({
+      type: GET_PROJECT_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PROJECT_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteProject = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_PROJECT_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/users/profile/projects/${id}`,
+      config
+    );
+    dispatch({
+      type: GET_PROJECT_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_PROJECT_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

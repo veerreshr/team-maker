@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Education() {
+function Education({ educationList }) {
   const classes = useStyles();
 
   return (
@@ -28,80 +28,35 @@ function Education() {
         Education
       </Typography>
       <Timeline align={"left"}>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Indian Institute of Technology, Bombay
-                </Typography>
-                <Typography color="textSecondary">
-                  BE, Computer Science
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Description about your education here. some random description
-                  some random description
-                </Typography>
-              </CardContent>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Indian Institute of Technology, Bombay
-                </Typography>
-                <Typography color="textSecondary">
-                  BE, Computer Science
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Description about your education here. some random description
-                  some random description
-                </Typography>
-              </CardContent>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Indian Institute of Technology, Bombay
-                </Typography>
-                <Typography color="textSecondary">
-                  BE, Computer Science
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Description about your education here. some random description
-                  some random description
-                </Typography>
-              </CardContent>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
+        {educationList.length === 0 && "No Information Available"}
+        {educationList.length > 0 &&
+          educationList.map((e) => (
+            <TimelineItem className={classes.timelineItem}>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography variant="overline" gutterBottom>
+                      {e.startDate.substring(0, 10)} -{" "}
+                      {`${e.endDate ? e.endDate.substring(0, 10) : "present"}`}
+                    </Typography>
+                    <Typography variant="h5" component="h5">
+                      {e.schoolName}
+                    </Typography>
+                    <Typography color="textSecondary">
+                      {e.degree} {e.fieldOfStudy && `, ${e.fieldOfStudy}`}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      {e.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </TimelineContent>
+            </TimelineItem>
+          ))}
       </Timeline>
     </div>
   );
