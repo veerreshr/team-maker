@@ -196,6 +196,11 @@ const updateEducation = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.education.push(req.body.education);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all the mandatory fields : School Name, Start Date"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -217,7 +222,7 @@ const updateEducation = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user education
-// @route   DELETE /api/users/profile/education
+// @route   DELETE /api/users/profile/education/:id
 // @access  Private
 
 const deleteEducation = expressAsyncHandler(async (req, res) => {
@@ -225,7 +230,7 @@ const deleteEducation = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { education: { _id: req.body.education._id } } },
+      { $pull: { education: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -280,6 +285,11 @@ const updateExperience = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.experience.push(req.body.experience);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all mandatory fields : Title, Company, Start Date"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -301,7 +311,7 @@ const updateExperience = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user experience
-// @route   DELETE /api/users/profile/experience
+// @route   DELETE /api/users/profile/experience/:id
 // @access  Private
 
 const deleteExperience = expressAsyncHandler(async (req, res) => {
@@ -309,7 +319,7 @@ const deleteExperience = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { experience: { _id: req.body.experience._id } } },
+      { $pull: { experience: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -364,6 +374,11 @@ const updateCertifications = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.certifications.push(req.body.certifications);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all the mandatory fields : Certification Name, issuing Organisation Name, Issue Date"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -385,7 +400,7 @@ const updateCertifications = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user certification
-// @route   DELETE /api/users/profile/certification
+// @route   DELETE /api/users/profile/certification/:id
 // @access  Private
 
 const deleteCertifications = expressAsyncHandler(async (req, res) => {
@@ -393,7 +408,7 @@ const deleteCertifications = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { certifications: { _id: req.body.certifications._id } } },
+      { $pull: { certifications: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -444,6 +459,11 @@ const updateAchievements = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.achievements.push(req.body.achievements);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Title field cannot be empty, Please fill all necessary details"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -465,7 +485,7 @@ const updateAchievements = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user's awards & achievements
-// @route   DELETE /api/users/profile/awardsandachievements
+// @route   DELETE /api/users/profile/awardsandachievements/:id
 // @access  Private
 
 const deleteAchievements = expressAsyncHandler(async (req, res) => {
@@ -473,7 +493,7 @@ const deleteAchievements = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { achievements: { _id: req.body.achievements._id } } },
+      { $pull: { achievements: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -524,6 +544,11 @@ const updateProjects = expressAsyncHandler(async (req, res) => {
         if (!found) {
           user.projects.push(req.body.projects);
         }
+      } else {
+        res.status(400);
+        throw new Error(
+          "Please fill all the mandatory fields : Project Title, Start Date"
+        );
       }
     }
     User.findByIdAndUpdate(
@@ -545,7 +570,7 @@ const updateProjects = expressAsyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user's projects
-// @route   DELETE /api/users/profile/projects
+// @route   DELETE /api/users/profile/projects/:id
 // @access  Private
 
 const deleteProjects = expressAsyncHandler(async (req, res) => {
@@ -553,7 +578,7 @@ const deleteProjects = expressAsyncHandler(async (req, res) => {
   if (user) {
     User.findByIdAndUpdate(
       { _id: user._id },
-      { $pull: { projects: { _id: req.body.projects._id } } },
+      { $pull: { projects: { _id: req.params.id } } },
       { new: true },
       (err, userRes) => {
         if (err) {
@@ -595,7 +620,6 @@ const deleteUser = expressAsyncHandler(async (req, res) => {
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Public
-//middleware
 const getUserProfileByUsername = (req, res) => {
   User.find(
     { username: `${req.query.username}` },
@@ -622,7 +646,7 @@ const getUserProfileByUsername = (req, res) => {
         error: "User Profile not found",
       });
     }
-    res.json(user);
+    res.json(user[0]);
   });
 };
 

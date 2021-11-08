@@ -11,6 +11,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CardActions from "@mui/material/CardActions";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   timelineItem: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Projects() {
+function Projects({ projects }) {
   const classes = useStyles();
 
   return (
@@ -30,80 +31,45 @@ function Projects() {
         Projects
       </Typography>
       <Timeline align={`left`}>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Team Maker
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Description about your work here. some random description some
-                  random description
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">View Project</Button>
-              </CardActions>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Team Maker
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Description about your work here. some random description some
-                  random description
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">View Project</Button>
-              </CardActions>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem className={classes.timelineItem}>
-          <TimelineSeparator>
-            <TimelineDot />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Card variant="outlined">
-              <CardContent>
-                <Typography variant="overline" gutterBottom>
-                  Aug/18 - present
-                </Typography>
-                <Typography variant="h5" component="h5">
-                  Team Maker
-                </Typography>
-                <Typography variant="body2" component="p">
-                  Description about your work here. some random description some
-                  random description
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">View Project</Button>
-              </CardActions>
-            </Card>
-          </TimelineContent>
-        </TimelineItem>
+        {projects.length === 0 && "No Information Available"}
+        {projects.length > 0 &&
+          projects.map((p) => (
+            <TimelineItem className={classes.timelineItem}>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography variant="overline" gutterBottom>
+                      {p.startDate.substring(0, 10)} -{" "}
+                      {`${p.endDate ? p.endDate.substring(0, 10) : "present"}`}
+                    </Typography>
+                    <Typography variant="h5" component="h5">
+                      {p.title}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      {p.desc}
+                    </Typography>
+                  </CardContent>
+                  {p.link && (
+                    <CardActions>
+                      <Button
+                        size="small"
+                        component={Link}
+                        to={{ pathname: p.link }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Project
+                      </Button>
+                    </CardActions>
+                  )}
+                </Card>
+              </TimelineContent>
+            </TimelineItem>
+          ))}
       </Timeline>
     </div>
   );
