@@ -11,7 +11,7 @@
     "@mui/material": "latest",
     "@mui/styles": "latest",
     "@mui/x-data-grid": "^4.0.2",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "clsx": "latest",
     "dayjs": "^1.10.7",
     "prop-types": "latest",
