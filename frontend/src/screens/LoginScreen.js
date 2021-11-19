@@ -98,9 +98,9 @@ export default function LoginScreen({ location, history }) {
             fullWidth
             name="password"
             label="Password"
-            type="password"
             id="password"
             autoComplete="current-password"
+            type={showPassword ? "text" : "password"}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
