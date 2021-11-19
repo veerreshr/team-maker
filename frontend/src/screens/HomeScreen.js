@@ -208,13 +208,13 @@ function EventCard({ name, photo, desc, startDate, url }) {
                 marginBottom: "auto",
               }}
             >
-              <Tooltip title="Create Event">
-                <IconButton aria-label="Create Event">
+              <Tooltip title="Create Team">
+                <IconButton aria-label="Create Team">
                   <AddCircleIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Join Event">
-                <IconButton aria-label="Join Event">
+              <Tooltip title="Join Team">
+                <IconButton aria-label="Join Team">
                   <GroupAddIcon />
                 </IconButton>
               </Tooltip>
