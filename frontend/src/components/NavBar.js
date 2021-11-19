@@ -28,6 +28,7 @@ import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
 import { ListSubheader } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -133,6 +134,9 @@ export default function PrimarySearchAppBar({ history }) {
     setAnchorEl(null);
     handleMenuClose();
   };
+
+  const matches_md_up = useMediaQuery((theme) => theme.breakpoints.up("md"));
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -256,15 +260,17 @@ export default function PrimarySearchAppBar({ history }) {
 
           {loggedIn ? (
             <>
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
+              {matches_md_up && (
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </Search>
+              )}
               <Box sx={{ flexGrow: 1 }} />
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <IconButton

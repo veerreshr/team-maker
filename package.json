@@ -1,7 +1,7 @@
 {
-    "name": "e-commerce",
+    "name": "team-maker",
     "version": "1.0.0",
-    "description": "shopping app",
+    "description": "A Platform to find and connect with team members for your next big event",
     "main": "server.js",
     "type": "module",
     "scripts": {
