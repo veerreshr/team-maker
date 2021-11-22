@@ -1,35 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { myTeamsAction } from "../actions/teamActions";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "./../components/Loader";
+import React from "react";
 
-function MyTeams({ history }) {
-  const dispatch = useDispatch();
-  const { loading, teams } = useSelector((state) => state.myteams);
-  useEffect(() => {
-    dispatch(myTeamsAction());
-  }, []);
-  return (
-    <div class="container">
-      <h2 className="my-2">My Teams</h2>
-      {loading && <Loader />}
-      {teams &&
-        teams.map((t) => (
-          <div class="card my-3">
-            <div class="card-body">
-              <Link to={`/teams/${t._id}`}>
-                <h4 class="card-title">{t.name}</h4>
-              </Link>
-              <p class="text-muted card-subtitle">
-                <strong>Event Name</strong>: {t.eventname}
-              </p>
-              <p class="card-text d-inline-block text-truncate">{t.desc}</p>
-            </div>
-          </div>
-        ))}
-    </div>
-  );
+function MyTeams() {
+  return <div>My Teams</div>;
 }
 
 export default MyTeams;
