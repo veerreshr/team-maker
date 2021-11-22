@@ -24,11 +24,17 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import LabelOutlinedIcon from "@mui/icons-material/LabelOutlined";
-import { ListSubheader } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import HomeIcon from "@mui/icons-material/Home";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import AddIcon from "@mui/icons-material/Add";
+import SendToMobileIcon from "@mui/icons-material/SendToMobile";
+import GroupIcon from "@mui/icons-material/Group";
+import LogoutIcon from "@mui/icons-material/Logout";
+import InfoIcon from "@mui/icons-material/Info";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -41,7 +47,7 @@ const Search = styled("div")(({ theme }) => ({
   marginLeft: 0,
   width: "100%",
   [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
+    marginLeft: theme.spacing(2),
     width: "auto",
   },
 }));
@@ -339,11 +345,18 @@ export default function PrimarySearchAppBar({ history }) {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-      {loggedIn && menuList(open, toggleDrawer)}
+      {loggedIn &&
+        menuList(open, toggleDrawer, history, handleLogout, handleProfileClick)}
     </Box>
   );
 }
-function menuList(open, toggleDrawer) {
+function menuList(
+  open,
+  toggleDrawer,
+  history,
+  handleLogout,
+  handleProfileClick
+) {
   const iOS =
     typeof navigator !== "undefined" &&
     /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -356,59 +369,106 @@ function menuList(open, toggleDrawer) {
       onClose={toggleDrawer(false)}
       onOpen={toggleDrawer(true)}
     >
+      <Toolbar />
+      <Divider />
+      <Search style={{ margin: "1em" }}>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInputBase
+          placeholder="Search by Event name"
+          inputProps={{ "aria-label": "search by event name" }}
+        />
+      </Search>
       <div
         role="presentation"
         onClick={toggleDrawer(false)}
         onKeyDown={toggleDrawer(false)}
       >
-        <Toolbar />
         <Divider />
         <List dense={true}>
-          <ListItem button key={"Explore Events Happening"}>
+          <ListItem button key={"Home"} onClick={() => history.push("/")}>
             <ListItemIcon>
-              <LabelOutlinedIcon />
+              <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary={"Explore Events Happening"} />
+            <ListItemText primary={"Home"} />
           </ListItem>
-          <ListItem button key={"Make Your Own Team"}>
+          <ListItem
+            button
+            key={"Create a Team"}
+            onClick={() => history.push("/createTeam")}
+          >
             <ListItemIcon>
-              <LabelOutlinedIcon />
+              <AddIcon />
             </ListItemIcon>
-            <ListItemText primary={"Make Your Own Team"} />
+            <ListItemText primary={"Create a Team"} />
           </ListItem>
-          <ListItem button key={"Join a Existing Team"}>
+          <ListItem
+            button
+            key={"Join a Team"}
+            onClick={() => history.push("/searchForTeams")}
+          >
             <ListItemIcon>
-              <LabelOutlinedIcon />
+              <GroupAddIcon />
             </ListItemIcon>
-            <ListItemText primary={"Join a Existing Team"} />
+            <ListItemText primary={"Join a Team"} />
           </ListItem>
         </List>
         <Divider />
-        <List
-          dense={true}
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Teams
-            </ListSubheader>
-          }
-        >
-          <ListItem button key={"Team 1"}>
+        <List dense={true}>
+          <ListItem
+            button
+            key={"My Teams"}
+            onClick={() => history.push("/myTeams")}
+          >
             <ListItemIcon>
-              <LabelOutlinedIcon />
+              <GroupIcon />
             </ListItemIcon>
-            <ListItemText primary={"Team 1"} />
+            <ListItemText primary={"My Teams"} />
           </ListItem>
-          <ListItem button key={"Team 2"}>
+          <ListItem
+            button
+            key={"Requests"}
+            onClick={() => history.push("/requests")}
+          >
             <ListItemIcon>
-              <LabelOutlinedIcon />
+              <SendToMobileIcon />
             </ListItemIcon>
-            <ListItemText primary={"Team 2"} />
+            <ListItemText primary={"Requests"} />
           </ListItem>
-          <ListItem button key={"Team 3"}>
+        </List>
+      </div>
+      <div
+        role="presentation"
+        onClick={toggleDrawer(false)}
+        onKeyDown={toggleDrawer(false)}
+        style={{ marginTop: "auto" }}
+      >
+        <Divider />
+        <List dense={true}>
+          <ListItem
+            button
+            key={"About Us"}
+            onClick={() => {
+              history.push("/landing");
+            }}
+          >
             <ListItemIcon>
-              <LabelOutlinedIcon />
+              <InfoIcon />
             </ListItemIcon>
-            <ListItemText primary={"Team 3"} />
+            <ListItemText primary={"About Us"} />
+          </ListItem>
+          <ListItem button key={"Profile"} onClick={handleProfileClick}>
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Profile"} />
+          </ListItem>
+          <ListItem button key={"Logout"} onClick={handleLogout}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Logout"} />
           </ListItem>
         </List>
       </div>
