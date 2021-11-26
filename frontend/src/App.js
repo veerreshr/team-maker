@@ -17,6 +17,7 @@ import PageNotFound from "./components/PageNotFound";
 import EditProfile from "./screens/EditProfile";
 import SearchForTeams from "./screens/SearchForTeams";
 import Requests from "./screens/Requests";
+import EditTeam from "./screens/EditTeam";
 
 function App() {
   const theme = createTheme({
@@ -42,6 +43,7 @@ function App() {
           <ProtectedRoute path="/" component={HomeScreen} exact />
           <ProtectedRoute path="/editprofile" component={EditProfile} exact />
           <ProtectedRoute path="/createTeam" component={CreateTeam} exact />
+          <ProtectedRoute path="/editTeam/:id" component={EditTeam} exact />
           <ProtectedRoute
             path="/searchForTeams"
             component={SearchForTeams}
