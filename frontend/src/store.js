@@ -1,7 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { addEventReducer } from "./reducers/eventReducers";
+import {
+  getEventsReducer,
+  getScrappedEventsReducer,
+} from "./reducers/eventReducers";
 import {
   createTeamReducer,
   filterTeamsReducer,
@@ -38,7 +41,10 @@ const reducer = combineReducers({
     awardsAndAchievements: getAwardsAndCertificationsReducer,
     projects: getProjectsReducer,
   }),
-  addEventReducer: addEventReducer,
+  eventSection: combineReducers({
+    events: getEventsReducer,
+    scrappedEvents: getScrappedEventsReducer,
+  }),
   createTeamReducer: createTeamReducer,
   myteams: myTeamsReducer,
   teamview: teamViewReducer,
