@@ -1,7 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { addEventReducer } from "./reducers/eventReducers";
+import {
+  getEventsReducer,
+  getScrappedEventsReducer,
+} from "./reducers/eventReducers";
 import {
   createTeamReducer,
   filterTeamsReducer,
@@ -11,22 +14,37 @@ import {
 import {
   userLoginReducer,
   userRegisterReducer,
-  userDetailsReducer,
-  userUpdateProfileReducer,
-  userListReducer,
-  userDeleteReducer,
-  userUpdateReducer,
+  userProfileReducer,
+  getBasicInformationReducer,
+  updateBasicInformationReducer,
+  getSkillsReducer,
+  getLanguagesReducer,
+  getExperienceReducer,
+  getEducationReducer,
+  getCertificationReducer,
+  getAwardsAndCertificationsReducer,
+  getProjectsReducer,
 } from "./reducers/userReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
-  userDetails: userDetailsReducer,
-  // userUpdateProfile: userUpdateProfileReducer,
-  // userList: userListReducer,
-  // userDelete: userDeleteReducer,
-  // userUpdate: userUpdateReducer,
-  addEventReducer: addEventReducer,
+  profile: combineReducers({
+    userProfile: userProfileReducer,
+    basicInformation: getBasicInformationReducer,
+    updateBasicInformation: updateBasicInformationReducer,
+    skills: getSkillsReducer,
+    languages: getLanguagesReducer,
+    experience: getExperienceReducer,
+    education: getEducationReducer,
+    certification: getCertificationReducer,
+    awardsAndAchievements: getAwardsAndCertificationsReducer,
+    projects: getProjectsReducer,
+  }),
+  eventSection: combineReducers({
+    events: getEventsReducer,
+    scrappedEvents: getScrappedEventsReducer,
+  }),
   createTeamReducer: createTeamReducer,
   myteams: myTeamsReducer,
   teamview: teamViewReducer,

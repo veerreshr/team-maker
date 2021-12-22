@@ -33,24 +33,20 @@ import {
   updateUser,
   getTeamById,
 } from "../controllers/user.js";
-
 import { admin, protect } from "../middleware/authMiddleware.js";
 import { buildCheckFunction } from "express-validator";
+
 const checkQuery = buildCheckFunction(["query"]);
 const router = express.Router();
-// router.route("/").post(registerUser).get(protect, admin, getUsers);
 
 // Get data about the User's Team
 // router.get("/getteams", protect, getTeamById);
 
 router.post("/login", login);
-router.route("/profile/").get(getUserProfileByUsername);
+router.post("/register", registerUser);
+router.get("/logout", logout);
 
-// router
-//   .route("/:id")
-//   .delete(protect, admin, deleteUser)
-//   .get(protect, admin, getUserById)
-//   .put(protect, admin, updateUser);
+router.get("/profile", getUserProfileByUsername);
 
 router
   .route("/profile/basicinformation")
@@ -67,32 +63,30 @@ router
 router
   .route("/profile/education")
   .get(getEducation)
-  .put(protect, updateEducation)
-  .delete(protect, deleteEducation);
+  .put(protect, updateEducation);
+router.route("/profile/education/:id").delete(protect, deleteEducation);
 
 router
   .route("/profile/experience")
   .get(getExperience)
-  .put(protect, updateExperience)
-  .delete(protect, deleteExperience);
+  .put(protect, updateExperience);
+router.route("/profile/experience/:id").delete(protect, deleteExperience);
 
 router
   .route("/profile/certification")
   .get(getCertifications)
-  .put(protect, updateCertifications)
+  .put(protect, updateCertifications);
+router
+  .route("/profile/certification/:id")
   .delete(protect, deleteCertifications);
 
 router
   .route("/profile/awardsandachievements")
   .get(getAchievements)
-  .put(protect, updateAchievements)
-  .delete(protect, deleteAchievements);
-
+  .put(protect, updateAchievements);
 router
-  .route("/profile/projects")
-  .get(getProjects)
-  .put(protect, updateProjects)
-  .delete(protect, deleteProjects);
+  .route("/profile/awardsandachievements/:id")
+  .delete(protect, deleteAchievements);
 
 router.get("/getrequests", protect, getRequests);
 
@@ -108,8 +102,9 @@ router.delete("/cancelrequest", protect, cancelRequestSent);
 router.post("/register", registerUser);
 //Logout Route
 router.get("/logout", logout);
+router.route("/profile/projects").get(getProjects).put(protect, updateProjects);
+router.route("/profile/projects/:id").delete(protect, deleteProjects);
 
 router.put("/:UserId", updateUser);
-// router.get('/users',getAllUsers)
 
 export default router;
