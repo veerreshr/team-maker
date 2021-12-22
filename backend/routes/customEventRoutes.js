@@ -4,7 +4,7 @@ import {
   addEvent,
   deleteEvents
 } from "../controllers/customEvent.js";
-import { admin, protect } from "../middleware/authMiddleware.js";
+import { admin, teamAdmin, protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 

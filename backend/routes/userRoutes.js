@@ -24,6 +24,10 @@ import {
   getProjects,
   updateProjects,
   deleteProjects,
+  getRequests,
+  rejectRequest,
+  getMyTeams,
+  cancelRequestSent,
   deleteUser,
   getUserProfileByUsername,
   updateUser,
@@ -37,7 +41,7 @@ const router = express.Router();
 // router.route("/").post(registerUser).get(protect, admin, getUsers);
 
 // Get data about the User's Team
-router.get("/getteams", protect, getTeamById);
+// router.get("/getteams", protect, getTeamById);
 
 router.post("/login", login);
 router.route("/profile/").get(getUserProfileByUsername);
@@ -89,6 +93,16 @@ router
   .get(getProjects)
   .put(protect, updateProjects)
   .delete(protect, deleteProjects);
+
+router.get("/getrequests", protect, getRequests);
+
+router.post("/rejectrequest", protect, rejectRequest);
+
+router.get("/getmyteams", protect, getMyTeams);
+
+router.get("/getteambyid", protect, getTeamById);
+
+router.delete("/cancelrequest", protect, cancelRequestSent);
 
 //Register Route
 router.post("/register", registerUser);

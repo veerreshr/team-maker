@@ -1,23 +1,26 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 // const { Schema } = mongoose;
 // const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const teamSchema = mongoose.Schema(
   { 
-    eventname:{
-      type: String,
-      required: true,      
-    },
     name: {
       type: String,
       required: true,
+      maxlength:30,
     },
-    desc: {
+    description: {
       type:String,
       trim:true,
       required:true,
-      maxlength:2000,
+      maxlength:1000,
     },
+    password: {
+      type: String,
+      required: true,
+    },
+    events_participating: [{ type: String }],
     preferences: {
         languages:{
             type:Array,
@@ -30,16 +33,59 @@ const teamSchema = mongoose.Schema(
               required: true,
           },
     },
-    leader: {
-      type:mongoose.Schema.Types.ObjectId,
-      ref:'User',
-    },
-    members:  [{ type : mongoose.Schema.Types.ObjectId, ref: 'User', }],
-    requests:[{ type : mongoose.Schema.Types.ObjectId, ref: 'User', }],
-
+    members:  [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        userName: {
+          type: String,
+        },
+        role: {
+          type: String,
+          enum: ["member", "admin"],
+          default: "member",
+        },
+      },
+    ],
+    requests_received: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        userName: {
+          type: String
+        },
+      },
+    ],
+    requests_sent: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        userName: {
+          type: String
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
+
+teamSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+teamSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 const Team = mongoose.model("Team", teamSchema);
 export default Team;
