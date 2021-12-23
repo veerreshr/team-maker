@@ -672,6 +672,10 @@ const updateUser = (req, res) => {
   );
 };
 
+// @desc    Get user's sent requests
+// @route   GET /api/users/getrequests
+// @access  Private
+
 const getRequests = expressAsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -681,6 +685,10 @@ const getRequests = expressAsyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+
+// @desc    Reject an user's request received
+// @route   POST /api/users/rejectrequest
+// @access  Private
 
 const rejectRequest = expressAsyncHandler(async (req, res) => {
   try {
@@ -702,6 +710,10 @@ const rejectRequest = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get user's teams
+// @route   GET /api/users/getmyteams
+// @access  Private
+
 const getMyTeams = expressAsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -712,6 +724,10 @@ const getMyTeams = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get a team details by entering the id
+// @route   GET /api/users/getteambyid
+// @access  Private
+
 const getTeamById = expressAsyncHandler(async (req, res) => {
   const team = await Team.findById(`${req.query.teamid}`);
   if (team) {
@@ -721,6 +737,10 @@ const getTeamById = expressAsyncHandler(async (req, res) => {
     throw new Error("Team not found");
   }
 });
+
+// @desc    Cancel a request sent out by user
+// @route   DELETE /api/users/cancelrequest
+// @access  Private
 
 const cancelRequestSent = expressAsyncHandler(async (req, res) => {
   const teamid = req.body.teamid;

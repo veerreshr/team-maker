@@ -32,6 +32,10 @@ const getTeamByID = (req, res) => {
   }
 };
 
+// @desc    Create a new team
+// @route   POST /api/teams/createteam
+// @access  Private
+
 const createTeam = expressAsyncHandler(async (req, res) => {
   try {
     const userid = req.user._id;
@@ -85,6 +89,10 @@ const createTeam = expressAsyncHandler(async (req, res) => {
   /*   Add team data in the user model   */
 });
 
+// @desc    Get a team's details by entering the name
+// @route   GET /api/teams/searchteam
+// @access  Private
+
 const searchTeam = expressAsyncHandler(async (req, res) => {
   try {
     const teamName = req.body.name;
@@ -108,6 +116,10 @@ const searchTeam = expressAsyncHandler(async (req, res) => {
     throw new Error("Something went wrong : " + error);
   }
 });
+
+// @desc    Send a request to a team
+// @route   POST /api/teams/sendrequest
+// @access  Private
 
 const sendRequest = expressAsyncHandler(async (req, res) => {
   try {
@@ -133,6 +145,10 @@ const sendRequest = expressAsyncHandler(async (req, res) => {
     throw new Error("Something went wrong :\n" + error);
   }
 });
+
+// @desc    Join a team directly by entering team password
+// @route   POST /api/teams/jointeam
+// @access  Private
 
 const joinTeamById = expressAsyncHandler(async (req, res) => {
   try {
@@ -171,6 +187,10 @@ const joinTeamById = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get all requests received by the team
+// @route   GET /api/teams/getteamrequests
+// @access  Admin
+
 const getRequests = expressAsyncHandler(async (req, res) => {
   try {
     const teamid = req.body.teamid;
@@ -186,6 +206,10 @@ const getRequests = expressAsyncHandler(async (req, res) => {
     throw new Error("Something went wrong :\n" + error);
   }
 });
+
+// @desc    Accept/Reject a request received by the team
+// @route   POST /api/teams/handlerequest
+// @access  Admin
 
 const handleRequest = expressAsyncHandler(async (req, res) => {
   try {
@@ -217,6 +241,10 @@ const handleRequest = expressAsyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Remove a member from the team
+// @route   DELETE /api/teams/removemember
+// @access  Admin
+
 const removeMember = expressAsyncHandler(async (req, res) => {
   try {
     const teamid = req.body.teamid;
@@ -235,6 +263,10 @@ const removeMember = expressAsyncHandler(async (req, res) => {
     throw new Error("Something went wrong :\n" + error);
   }
 });
+
+// @desc    Edit the team's details
+// @route   PUT /api/teams/editdetails
+// @access  Admin
 
 const editDetails = expressAsyncHandler(async (req, res) => {
   try {
@@ -274,6 +306,10 @@ const editDetails = expressAsyncHandler(async (req, res) => {
     throw new Error("Something went wrong :\n" + error);
   }
 });
+
+// @desc    Update team's password
+// @route   PUT /api/teams/changepassword
+// @access  Admin
 
 const updatePassword = expressAsyncHandler(async (req, res) => {
   try {
