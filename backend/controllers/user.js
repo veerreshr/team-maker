@@ -672,6 +672,98 @@ const updateUser = (req, res) => {
   );
 };
 
+// @desc    Get user's sent requests
+// @route   GET /api/users/getrequests
+// @access  Private
+
+const getRequests = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    res.json(user.requests_sent);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Reject an user's request received
+// @route   POST /api/users/rejectrequest
+// @access  Private
+
+const rejectRequest = expressAsyncHandler(async (req, res) => {
+  try {
+    const teamid = req.body.teamid;
+    const userid = req.user._id;
+    const team = await Team.findById(teamid);
+    const user = await User.findById(userid);
+    if (team && user) {
+      await Team.updateOne({ _id: teamid }, { $pull: { requests_sent: { userId: userid } } });
+      await User.updateOne({ _id: userid }, { $pull: { requests_received: { teamId: teamid } } }, { new: true });
+      res.json(user.requests_received);
+    } else {
+      res.status(400);
+      throw new Error("Invalid data");
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error("Something went wrong :\n" + error);
+  }
+});
+
+// @desc    Get user's teams
+// @route   GET /api/users/getmyteams
+// @access  Private
+
+const getMyTeams = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    res.json(user.teams);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc    Get a team details by entering the id
+// @route   GET /api/users/getteambyid
+// @access  Private
+
+const getTeamById = expressAsyncHandler(async (req, res) => {
+  const team = await Team.findById(`${req.query.teamid}`);
+  if (team) {
+    res.json({teamName: team.name, description: team.description, eventsParticipating : team.events_participating, members: team.members});
+  } else {
+    res.status(404);
+    throw new Error("Team not found");
+  }
+});
+
+// @desc    Cancel a request sent out by user
+// @route   DELETE /api/users/cancelrequest
+// @access  Private
+
+const cancelRequestSent = expressAsyncHandler(async (req, res) => {
+  const teamid = req.body.teamid;
+  const userid = req.user._id;
+  const team = await Team.findById(teamid);
+  const user = await User.findById(userid);
+  if (team && user) {
+    await Team.updateOne({ _id: teamid }, { $pull: { requests_received: { userId: userid } } }, { new: true });
+    await User.updateOne({ _id: userid }, { $pull: { requests_sent: { teamId: teamid } } }, { new: true },
+      (err, userRes) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Update Unsuccessful");
+        }
+        res.json({ status: "Success", requests: userRes.requests_sent });
+      }
+    );
+  } else {
+    res.status(400);
+    throw new Error("Invalid data");
+  }
+});
+
 /*
 API/USERS/GetTeams
 
@@ -681,7 +773,7 @@ user.teams => getData[]
 team_data[]=> res.json([team_name, team_id])
   */
 
-const getTeamById = expressAsyncHandler(async (req, res, next) => {
+/* const getTeamById = expressAsyncHandler(async (req, res, next) => {
   try {
     await User.findById(req.user._id).exec(async (err, user) => {
       if (err || !user) {
@@ -717,7 +809,7 @@ const getTeamById = expressAsyncHandler(async (req, res, next) => {
   } catch (err) {
     console.log(err);
   }
-});
+}); */
 
 export {
   getAllUsers,
@@ -742,6 +834,10 @@ export {
   getProjects,
   updateProjects,
   deleteProjects,
+  getRequests,
+  rejectRequest,
+  getMyTeams,
+  cancelRequestSent,
   deleteUser,
   getUserProfileByUsername,
   updateUser,

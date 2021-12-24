@@ -24,6 +24,10 @@ import {
   getProjects,
   updateProjects,
   deleteProjects,
+  getRequests,
+  rejectRequest,
+  getMyTeams,
+  cancelRequestSent,
   deleteUser,
   getUserProfileByUsername,
   updateUser,
@@ -36,7 +40,7 @@ const checkQuery = buildCheckFunction(["query"]);
 const router = express.Router();
 
 // Get data about the User's Team
-router.get("/getteams", protect, getTeamById);
+// router.get("/getteams", protect, getTeamById);
 
 router.post("/login", login);
 router.post("/register", registerUser);
@@ -84,6 +88,20 @@ router
   .route("/profile/awardsandachievements/:id")
   .delete(protect, deleteAchievements);
 
+router.get("/getrequests", protect, getRequests);
+
+router.post("/rejectrequest", protect, rejectRequest);
+
+router.get("/getmyteams", protect, getMyTeams);
+
+router.get("/getteambyid", protect, getTeamById);
+
+router.delete("/cancelrequest", protect, cancelRequestSent);
+
+//Register Route
+router.post("/register", registerUser);
+//Logout Route
+router.get("/logout", logout);
 router.route("/profile/projects").get(getProjects).put(protect, updateProjects);
 router.route("/profile/projects/:id").delete(protect, deleteProjects);
 

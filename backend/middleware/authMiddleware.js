@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "./../models/userModel.js";
+import Team from "./../models/teamModel.js";
 import expressAsyncHandler from "express-async-handler";
 
 const protect = expressAsyncHandler(async (req, res, next) => {
@@ -25,6 +26,23 @@ const protect = expressAsyncHandler(async (req, res, next) => {
   }
 });
 
+
+const teamAdmin = expressAsyncHandler(async (req, res, next) => {
+  if (req.user) {
+    const teamid = req.body.teamid;
+    const isAdmin = await Team.find({ _id: teamid, members: { $elemMatch: { userId: req.user._id, role: "admin" } } });
+    if (isAdmin && isAdmin.length > 0) next();
+    else {
+      res.status(401);
+      throw new Error("Not authorized as an admin");
+    }
+  }
+  else {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+});
+
 const admin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next();
@@ -34,4 +52,4 @@ const admin = (req, res, next) => {
   }
 };
 
-export { protect, admin };
+export { protect, teamAdmin, admin };

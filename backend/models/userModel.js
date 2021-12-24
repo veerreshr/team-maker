@@ -191,8 +191,39 @@ const userSchema = mongoose.Schema(
         },
       },
     ],
-    teams: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
-    requests: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
+    teams: [
+      {
+        teamId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Team",
+        },
+        teamName: {
+          type: String
+        },
+      },
+    ],
+    requests_sent: [
+      {
+        teamId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Team",
+        },
+        teamName: {
+          type: String
+        },
+      },
+    ],
+    requests_received: [
+      {
+        teamId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Team",
+        },
+        teamName: {
+          type: String
+        },
+      },
+    ],
   },
   { timestamps: true } //Gender,College,Location,
 );
