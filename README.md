@@ -1,4 +1,4 @@
-💡💡 **We are refactoring the design and way of implementation** 💡💡
+💡💡 **We are currently working on this. Thank you for checking this out.** 💡💡
 
 <h1><img src="https://user-images.githubusercontent.com/59141533/131732817-23a34498-10d3-4024-9519-d064a67a8482.png" width=50px height=50px />Team Maker</h1> 
 
@@ -12,18 +12,13 @@ A platform to find and connect with  team members  for your next Big Project .
 ## Demo
 Video Demos : 
 [Video 1](https://youtu.be/MoachkHIS8Q)
-[Video 2](https://youtu.be/yC2Pjm22Iz4)
-[Video 3](https://www.youtube.com/watch?v=0KMcfUrVJfk)
-
-PPT : https://drive.google.com/file/d/1QIaX_xpiCdr9anEzRmRq-1OXlX5BjwHF/view?usp=sharing
 
 Live link :
 https://connect-team.herokuapp.com/
 
-  
-## Screenshots
+<!-- ## Screenshots
 
-![App Screenshot](https://res.cloudinary.com/dcgefz04y/image/upload/v1624793593/Screenshot_275_oibipb.png)
+![App Screenshot](https://res.cloudinary.com/dcgefz04y/image/upload/v1624793593/Screenshot_275_oibipb.png) -->
 
   
 ## Features
@@ -31,8 +26,8 @@ https://connect-team.herokuapp.com/
 - User and Admin Authentication.
 - Creation of Teams.
 - Searching for Teams.
-- Colloboration with Teams.
-- List of all events like hackathons, compititions(for now we only support few events).
+- Colloboration with Teams( Chat functionality ).
+- List of all events like hackathons, competitions(for now we only support few events).
 - Custom addition of events by Admin.
 - Team and User Profiles.
 
@@ -40,13 +35,13 @@ https://connect-team.herokuapp.com/
   
 ## Tech Stack
 
-**Client:** React, Redux, Bootstrap
+**Client:** React Js, Redux, Material UI
 
-**Server:** Node, Express
+**Server:** Node Js ( Express Js )
 
 **Database:** MongoDB
 
-**Tools:** Socket.io, JWT Auth, Postman
+**Others:** Socket.io
 
 
 
@@ -103,15 +98,15 @@ npm run dev
 ## Roadmap
 
 - [ ] Add ESLint
-- [ ] User Profile
-- [ ] Event Section
-- [ ] Chat Implementation
-- [ ] Kanban Boards
+- [x] Landing Page
+- [x] User Profile
+- [x] Event Section
 - [ ] Team Filtering
-- [ ] Landing Page
+- [ ] Chat Implementation
 - [ ] Dockerize the application
 - [ ] Implement Testing 
 - [ ] Voice/Video call Implementation(Optional)
+- [ ] Kanban Boards( optional )
 
 
   
