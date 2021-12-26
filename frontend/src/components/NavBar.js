@@ -82,6 +82,14 @@ export default function PrimarySearchAppBar({ history }) {
   const dispatch = useDispatch();
   const [loggedIn, setLoggedIn] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = useState("");
+
+  const handleSearchByKeyDown = (e) => {
+    if (e.keyCode === 13) handleSearch();
+  };
+  const handleSearch = (e) => {
+    history.push("/teams/" + search);
+  };
 
   const handleDrawerOpen = () => {
     loggedIn && setOpen(true);
@@ -274,6 +282,9 @@ export default function PrimarySearchAppBar({ history }) {
                   <StyledInputBase
                     placeholder="Search…"
                     inputProps={{ "aria-label": "search" }}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={handleSearchByKeyDown}
                   />
                 </Search>
               )}
@@ -346,7 +357,16 @@ export default function PrimarySearchAppBar({ history }) {
       {renderMobileMenu}
       {renderMenu}
       {loggedIn &&
-        menuList(open, toggleDrawer, history, handleLogout, handleProfileClick)}
+        menuList(
+          open,
+          toggleDrawer,
+          history,
+          handleLogout,
+          handleProfileClick,
+          search,
+          setSearch,
+          handleSearchByKeyDown
+        )}
     </Box>
   );
 }
@@ -355,7 +375,10 @@ function menuList(
   toggleDrawer,
   history,
   handleLogout,
-  handleProfileClick
+  handleProfileClick,
+  search,
+  setSearch,
+  handleSearchByKeyDown
 ) {
   const iOS =
     typeof navigator !== "undefined" &&
@@ -378,6 +401,9 @@ function menuList(
         <StyledInputBase
           placeholder="Search by Event name"
           inputProps={{ "aria-label": "search by event name" }}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleSearchByKeyDown}
         />
       </Search>
       <div
@@ -406,7 +432,7 @@ function menuList(
           <ListItem
             button
             key={"Join a Team"}
-            onClick={() => history.push("/searchForTeams")}
+            onClick={() => history.push("/teams")}
           >
             <ListItemIcon>
               <GroupAddIcon />

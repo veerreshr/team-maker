@@ -5,7 +5,6 @@ import RegisterScreen from "./screens/RegisterScreen";
 import NavBar from "./components/NavBar";
 import CreateTeam from "./screens/CreateTeam";
 import TeamView from "./screens/TeamView";
-import FilteredTeamList from "./screens/FilteredTeamList";
 import AboutTeam from "./screens/AboutTeam";
 import MyTeams from "./screens/MyTeams";
 import AddEvent from "./screens/AddEvent";
@@ -44,17 +43,13 @@ function App() {
           <ProtectedRoute path="/editprofile" component={EditProfile} exact />
           <ProtectedRoute path="/createTeam" component={CreateTeam} exact />
           <ProtectedRoute path="/editTeam/:id" component={EditTeam} exact />
+          <ProtectedRoute path="/teams" component={SearchForTeams} exact />
           <ProtectedRoute
-            path="/searchForTeams"
+            path="/teams/:teamName"
             component={SearchForTeams}
             exact
           />
           <ProtectedRoute path="/teams/:id" component={TeamView} exact />
-          <ProtectedRoute
-            path="/filteredteamlist"
-            component={FilteredTeamList}
-            exact
-          />
           <ProtectedRoute path="/aboutteam/:id" component={AboutTeam} exact />
           <ProtectedRoute path="/myTeams" component={MyTeams} exact />
           <ProtectedRoute path="/requests" component={Requests} exact />
