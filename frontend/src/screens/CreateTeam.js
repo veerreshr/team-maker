@@ -10,8 +10,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddIcon from "@mui/icons-material/Add";
+import { createTeamAction } from "./../actions/teamActions";
+import { useDispatch } from "react-redux";
 
 function CreateTeam() {
+  const dispatch = useDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -20,7 +24,12 @@ function CreateTeam() {
     event.preventDefault();
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const events = data.get("events").split(",");
+    dispatch(createTeamAction(data.get("name"), events, data.get("password")));
+  };
   return (
     <Box
       sx={{

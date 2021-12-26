@@ -39,43 +39,45 @@ const getTeamByID = (req, res) => {
 const createTeam = expressAsyncHandler(async (req, res) => {
   try {
     const userid = req.user._id;
-    const teamName = req.body.name;
+    const teamName = req.body.teamName;
     const teamExists = await Team.findOne({ name: teamName });
     if (teamExists) {
       res.status(400);
-      throw new Error("This team name is not available");
+      throw new Error(
+        "Team name previously taken, please enter a different name"
+      );
     }
     const user = await User.findById(userid);
     const format = {
       name: teamName,
-      description: req.body.description,
       password: req.body.password,
-      events_participating: [],
-      preferences: {
-        languages: req.body.preferences.languages,
-        skills: req.body.preferences.skills,
-      },
-      members: [{ userId: userid, userName: user.name, role: "admin" }],
-      requests_received: [],
-      requests_sent: []
+      events_participating: req.body.events,
+      members: [
+        {
+          userId: userid,
+          userName: user.username,
+          role: "admin",
+          photo: user.photo,
+        },
+      ],
     };
     const team = await Team.create(format);
-    await User.updateOne(
-      { _id: userid },
-      {
-        $push: {
-          teams: {
-            teamId: team._id,
-            teamName: teamName
-          }
-        },
-      }
-    );
     if (team) {
+      await User.updateOne(
+        { _id: userid },
+        {
+          $push: {
+            teams: {
+              teamId: team._id,
+              teamName: teamName,
+            },
+          },
+        }
+      );
       res.status(201).json({
         id: team._id,
         name: team.name,
-        description: team.description,
+        events_participating: team.events_participating,
         members: team.members,
       });
     } else {
@@ -86,7 +88,6 @@ const createTeam = expressAsyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Something went wrong : \n" + error);
   }
-  /*   Add team data in the user model   */
 });
 
 // @desc    Get a team's details by entering the name
@@ -95,14 +96,18 @@ const createTeam = expressAsyncHandler(async (req, res) => {
 
 const searchTeam = expressAsyncHandler(async (req, res) => {
   try {
-    const teamName = req.body.name;
-    const matches = await Team.find({ name: { $regex: new RegExp(teamName.toLowerCase(), "i") } });
+    const teamName = req.query.name;
+    const matches = await Team.find({
+      name: { $regex: new RegExp(teamName.toLowerCase(), "i") },
+    });
     let teams = [];
     matches.forEach((match) => {
       const members = match.members;
       const admins = [];
       members.forEach((member) => {
-        if (member.role === "admin") admins.push(member.userName);
+        if (member.role === "admin") {
+          admins.push({ username: member.userName, photo: member.photo });
+        }
       });
       teams.push({
         name: match.name,
@@ -125,8 +130,11 @@ const sendRequest = expressAsyncHandler(async (req, res) => {
   try {
     const userid = req.user._id;
     const teamid = req.body.teamid;
-    const teams = await User.find({ _id: userid, teams: { teamId : teamid } });
-    const sentRequests = await User.find({ _id: userid, "requests_sent.teamId": teamid});
+    const teams = await User.find({ _id: userid, teams: { teamId: teamid } });
+    const sentRequests = await User.find({
+      _id: userid,
+      "requests_sent.teamId": teamid,
+    });
     if (teams && teams.length > 0) {
       res.status(400);
       throw new Error("Already a part of this team");
@@ -136,9 +144,17 @@ const sendRequest = expressAsyncHandler(async (req, res) => {
     } else {
       const team = await Team.findById(teamid);
       const user = await User.findById(userid);
-      await Team.updateOne({ _id: teamid }, { $push: { requests_received: { userId: userid, userName: user.name } } });
-      await User.updateOne({ _id: userid }, { $push: { requests_sent: { teamId: team._id, teamName: team.name } } });
-      res.json({status: "Success", requests: user.requests_sent});
+      await Team.updateOne(
+        { _id: teamid },
+        {
+          $push: { requests_received: { userId: userid, userName: user.name } },
+        }
+      );
+      await User.updateOne(
+        { _id: userid },
+        { $push: { requests_sent: { teamId: team._id, teamName: team.name } } }
+      );
+      res.json({ status: "Success", requests: user.requests_sent });
     }
   } catch (error) {
     res.status(400);
@@ -156,22 +172,37 @@ const joinTeamById = expressAsyncHandler(async (req, res) => {
     const teamid = req.body.teamid;
     const password = req.body.password;
     if (teamid && password) {
-      const teams = await User.find({ _id: userid, teams: { teamId : teamid } });
+      const teams = await User.find({ _id: userid, teams: { teamId: teamid } });
       if (teams && teams.length > 0) {
         res.status(400);
         throw new Error("Already a part of this team");
       } else {
-        const sentRequests = await User.find({ _id: userid, requests_sent: { teamId : teamid } });
+        const sentRequests = await User.find({
+          _id: userid,
+          requests_sent: { teamId: teamid },
+        });
         const team = await Team.findById(teamid);
         if (team.matchPassword(password)) {
           const user = await User.findById(userid);
           if (sentRequests) {
-            await Team.updateOne({ _id: teamid }, { $pull: { requests_received: { userId: userid } } });
-            await User.updateOne({ _id: userid }, { $pull: { requests_sent: { teamId : teamid } } });
+            await Team.updateOne(
+              { _id: teamid },
+              { $pull: { requests_received: { userId: userid } } }
+            );
+            await User.updateOne(
+              { _id: userid },
+              { $pull: { requests_sent: { teamId: teamid } } }
+            );
           }
-          await Team.updateOne({ _id: teamid }, { $push: { members: { userId: userid, userName: user.name } } });
-          await User.updateOne({ _id: userid }, { $push: { teams: { teamId: team._id, teamName: team.name } } });
-          res.json({status: "Success", requests: user.teams});
+          await Team.updateOne(
+            { _id: teamid },
+            { $push: { members: { userId: userid, userName: user.name } } }
+          );
+          await User.updateOne(
+            { _id: userid },
+            { $push: { teams: { teamId: team._id, teamName: team.name } } }
+          );
+          res.json({ status: "Success", requests: user.teams });
         } else {
           res.status(401);
           throw new Error("Invalid password");
@@ -220,12 +251,33 @@ const handleRequest = expressAsyncHandler(async (req, res) => {
     const user = await User.findById(userid);
     if (team && user) {
       if (status === "accept") {
-        await Team.updateOne({ _id: teamid }, { $push: { members: { userId: userid, userName: user.name } }, $pull: { requests_received: { userId: userid } } }, { new: true });
-        await User.updateOne({ _id: userid }, { $push: { teams: { teamId: team._id, teamName: team.name } }, $pull: { requests_sent: { teamId : teamid } } }, { new: true });
+        await Team.updateOne(
+          { _id: teamid },
+          {
+            $push: { members: { userId: userid, userName: user.name } },
+            $pull: { requests_received: { userId: userid } },
+          },
+          { new: true }
+        );
+        await User.updateOne(
+          { _id: userid },
+          {
+            $push: { teams: { teamId: team._id, teamName: team.name } },
+            $pull: { requests_sent: { teamId: teamid } },
+          },
+          { new: true }
+        );
         res.json({ status: "Success", requests: team.requests_received });
       } else if (status === "reject") {
-        await Team.updateOne({ _id: teamid }, { $pull: { requests_received: { userId: userid } } });
-        await User.updateOne({ _id: userid }, { $pull: { requests_sent: { teamId : teamid } } }, { new: true });
+        await Team.updateOne(
+          { _id: teamid },
+          { $pull: { requests_received: { userId: userid } } }
+        );
+        await User.updateOne(
+          { _id: userid },
+          { $pull: { requests_sent: { teamId: teamid } } },
+          { new: true }
+        );
         res.json({ status: "Success", requests: team.requests_received });
       } else {
         res.status(400);
@@ -251,8 +303,15 @@ const removeMember = expressAsyncHandler(async (req, res) => {
     const userid = req.body.userid;
     const team = await Team.findById(teamid);
     if (team) {
-      await Team.updateOne({ _id: teamid }, { $pull: { members: { userId: userid } } }, { new: true });
-      await User.updateOne({ _id: userid }, { $pull: { teams: { teamId : teamid } } });
+      await Team.updateOne(
+        { _id: teamid },
+        { $pull: { members: { userId: userid } } },
+        { new: true }
+      );
+      await User.updateOne(
+        { _id: userid },
+        { $pull: { teams: { teamId: teamid } } }
+      );
       res.json({ status: "Member removed", members: team.members });
     } else {
       res.status(400);
@@ -275,10 +334,13 @@ const editDetails = expressAsyncHandler(async (req, res) => {
     if (team) {
       team.name = req.body.name || team.name;
       team.description = req.body.description || team.description;
-      team.events_participating = req.body.events_participating || team.events_participating;
+      team.events_participating =
+        req.body.events_participating || team.events_participating;
       if (req.body.preferences) {
-        team.preferences.languages = req.body.preferences.languages || team.preferences.languages;
-        team.preferences.skills = req.body.preferences.skills || team.preferences.skills;
+        team.preferences.languages =
+          req.body.preferences.languages || team.preferences.languages;
+        team.preferences.skills =
+          req.body.preferences.skills || team.preferences.skills;
       }
       Team.findByIdAndUpdate(
         { _id: team._id },
@@ -332,7 +394,7 @@ const updatePassword = expressAsyncHandler(async (req, res) => {
             res.json({
               name: teamRes.name,
               description: teamRes.description,
-              events_participating: teamRes.events_participating
+              events_participating: teamRes.events_participating,
             });
           }
         );

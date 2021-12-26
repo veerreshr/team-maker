@@ -11,6 +11,9 @@ import {
   GET_FILTER_TEAMS_REQUEST,
   GET_FILTER_TEAMS_SUCCESS,
   GET_FILTER_TEAMS_FAIL,
+  GET_TEAMS_FROM_SEARCH_REQUEST,
+  GET_TEAMS_FROM_SEARCH_SUCCESS,
+  GET_TEAMS_FROM_SEARCH_FAIL,
 } from "../constants/teamConstants";
 
 export const createTeamReducer = (state = {}, action) => {
@@ -56,6 +59,19 @@ export const filterTeamsReducer = (state = {}, action) => {
     case GET_FILTER_TEAMS_SUCCESS:
       return { loading: false, teams: action.payload };
     case GET_FILTER_TEAMS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const searchForTeamsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_TEAMS_FROM_SEARCH_REQUEST:
+      return { loading: true };
+    case GET_TEAMS_FROM_SEARCH_SUCCESS:
+      return { loading: false, teams: action.payload };
+    case GET_TEAMS_FROM_SEARCH_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

@@ -4,17 +4,16 @@ import bcrypt from "bcryptjs";
 // const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const teamSchema = mongoose.Schema(
-  { 
+  {
     name: {
       type: String,
       required: true,
-      maxlength:30,
+      maxlength: 30,
     },
     description: {
-      type:String,
-      trim:true,
-      required:true,
-      maxlength:1000,
+      type: String,
+      trim: true,
+      maxlength: 1000,
     },
     password: {
       type: String,
@@ -22,22 +21,25 @@ const teamSchema = mongoose.Schema(
     },
     events_participating: [{ type: String }],
     preferences: {
-        languages:{
-            type:Array,
-            default:[],
-            required: true,
-        },
-        skills:{
-              type:Array,
-              default:[],
-              required: true,
-          },
+      languages: {
+        type: Array,
+        default: [],
+        required: true,
+      },
+      skills: {
+        type: Array,
+        default: [],
+        required: true,
+      },
     },
-    members:  [
+    members: [
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
+          ref: "User",
+        },
+        photo: {
+          type: String,
         },
         userName: {
           type: String,
@@ -53,10 +55,10 @@ const teamSchema = mongoose.Schema(
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
+          ref: "User",
         },
         userName: {
-          type: String
+          type: String,
         },
       },
     ],
@@ -64,10 +66,10 @@ const teamSchema = mongoose.Schema(
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
+          ref: "User",
         },
         userName: {
-          type: String
+          type: String,
         },
       },
     ],

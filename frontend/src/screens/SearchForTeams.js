@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -12,8 +12,18 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import InfoIcon from "@mui/icons-material/Info";
+import { useDispatch, useSelector } from "react-redux";
+import { searchForTeamsAction } from "./../actions/teamActions";
+import Loader from "./../components/Loader";
 
-function SearchComponent() {
+function SearchComponent({ history }) {
+  const [teamname, setTeamname] = useState("");
+  const handleSearch = (e) => {
+    history.push("/teams/" + teamname);
+  };
+  const handleSearchByKeyDown = (e) => {
+    if (e.keyCode === 13) handleSearch();
+  };
   return (
     <Paper
       elevation={3}
@@ -30,13 +40,16 @@ function SearchComponent() {
           <TextField
             id="search-for-teams"
             label="Search"
-            placeholder="Search by event name...."
+            placeholder="Search by team name...."
             variant="outlined"
             fullWidth
             size="small"
+            value={teamname}
+            onChange={(e) => setTeamname(e.target.value)}
+            onKeyDown={handleSearchByKeyDown}
             InputProps={{
               endAdornment: (
-                <InputAdornment>
+                <InputAdornment onClick={handleSearch}>
                   <IconButton>
                     <SearchIcon />
                   </IconButton>
@@ -60,10 +73,20 @@ function SearchComponent() {
   );
 }
 
-export default function SearchForTeams() {
+export default function SearchForTeams({ match, history }) {
+  const teamName = match.params.teamName ? match.params.teamName : "";
+  const dispatch = useDispatch();
+  const { loading, error, teams } = useSelector(
+    (state) => state.teamsSection?.searchedTeams
+  );
+  // const { loading, error, products, page, pages } = productList;
+  useEffect(() => {
+    dispatch(searchForTeamsAction(teamName));
+  }, [dispatch, teamName]);
   return (
     <>
-      <SearchComponent />
+      <Loader loading={loading} />
+      <SearchComponent history={history} />
       <Paper
         elevation={3}
         sx={{
@@ -74,15 +97,15 @@ export default function SearchForTeams() {
           padding: 1,
         }}
       >
-        <TeamCardComponent />
-        <TeamCardComponent />
-        <TeamCardComponent />
-        <TeamCardComponent />
+        {teams &&
+          teams.map((t) => (
+            <TeamCardComponent name={t.name} desc={t.desc} admins={t.admins} />
+          ))}
       </Paper>
     </>
   );
 }
-function TeamCardComponent() {
+function TeamCardComponent({ name, desc, admins }) {
   return (
     <Paper
       elevation={3}
@@ -97,29 +120,29 @@ function TeamCardComponent() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={10}>
           <Typography variant="h6" component="h6" gutterBottom>
-            Team Zero
+            {name}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+            {desc}
           </Typography>
 
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="subtitle2" gutterBottom component="div">
               Admins :
             </Typography>
-            <Avatar sx={{ width: 28, height: 28, fontSize: 16 }}>H</Avatar>
-            <Avatar sx={{ width: 28, height: 28, fontSize: 16 }}>N</Avatar>
-            <Avatar sx={{ width: 28, height: 28, fontSize: 16 }}>OP</Avatar>
-            <Avatar sx={{ width: 28, height: 28, fontSize: 16 }}>H</Avatar>
-            <Avatar sx={{ width: 28, height: 28, fontSize: 16 }}>H</Avatar>
+            {admins.map((admin) => (
+              <a
+                href={`/u/${admin.username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Avatar
+                  sx={{ width: 28, height: 28, fontSize: 16 }}
+                  src={admin.photo}
+                  alt={admin.username}
+                />
+              </a>
+            ))}
           </Stack>
         </Grid>
         <Grid item xs={12} md={2}>
