@@ -15,6 +15,9 @@ import {
   GET_TEAMS_FROM_SEARCH_REQUEST,
   GET_TEAMS_FROM_SEARCH_SUCCESS,
   GET_TEAMS_FROM_SEARCH_FAIL,
+  SEND_REQUEST_TO_JOIN_TEAM_FAIL,
+  SEND_REQUEST_TO_JOIN_TEAM_SUCCESS,
+  SEND_REQUEST_TO_JOIN_TEAM_REQUEST,
 } from "../constants/teamConstants";
 import { toast } from "react-toastify";
 
@@ -199,3 +202,44 @@ export const searchForTeamsAction = (name) => async (dispatch, getState) => {
     toast.error(errorMessage);
   }
 };
+
+export const sendRequestToJoinTeamAction =
+  (teamid) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: SEND_REQUEST_TO_JOIN_TEAM_REQUEST,
+      });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/teams/sendrequest",
+        { teamid },
+        config
+      );
+
+      dispatch({
+        type: SEND_REQUEST_TO_JOIN_TEAM_SUCCESS,
+        payload: data,
+      });
+
+      toast.success("Request sent successfully");
+    } catch (error) {
+      const errorMessage =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: SEND_REQUEST_TO_JOIN_TEAM_FAIL,
+        payload: errorMessage,
+      });
+      toast.error(errorMessage);
+    }
+  };

@@ -14,6 +14,9 @@ import {
   GET_TEAMS_FROM_SEARCH_REQUEST,
   GET_TEAMS_FROM_SEARCH_SUCCESS,
   GET_TEAMS_FROM_SEARCH_FAIL,
+  SEND_REQUEST_TO_JOIN_TEAM_REQUEST,
+  SEND_REQUEST_TO_JOIN_TEAM_SUCCESS,
+  SEND_REQUEST_TO_JOIN_TEAM_FAIL,
 } from "../constants/teamConstants";
 
 export const createTeamReducer = (state = {}, action) => {
@@ -72,6 +75,19 @@ export const searchForTeamsReducer = (state = {}, action) => {
     case GET_TEAMS_FROM_SEARCH_SUCCESS:
       return { loading: false, teams: action.payload };
     case GET_TEAMS_FROM_SEARCH_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const sendRequestToJoinTeamReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SEND_REQUEST_TO_JOIN_TEAM_REQUEST:
+      return { loading: true };
+    case SEND_REQUEST_TO_JOIN_TEAM_SUCCESS:
+      return { loading: false, teams: action.payload };
+    case SEND_REQUEST_TO_JOIN_TEAM_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
