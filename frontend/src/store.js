@@ -11,6 +11,7 @@ import {
   myTeamsReducer,
   teamViewReducer,
   searchForTeamsReducer,
+  sendRequestToJoinTeamReducer,
 } from "./reducers/teamReducers";
 import {
   userLoginReducer,
@@ -49,6 +50,7 @@ const reducer = combineReducers({
   teamsSection: combineReducers({
     createTeam: createTeamReducer,
     searchedTeams: searchForTeamsReducer,
+    requestsSent: sendRequestToJoinTeamReducer,
   }),
   myteams: myTeamsReducer,
   teamview: teamViewReducer,

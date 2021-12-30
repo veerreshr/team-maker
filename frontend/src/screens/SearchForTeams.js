@@ -15,6 +15,46 @@ import InfoIcon from "@mui/icons-material/Info";
 import { useDispatch, useSelector } from "react-redux";
 import { searchForTeamsAction } from "./../actions/teamActions";
 import Loader from "./../components/Loader";
+import { sendRequestToJoinTeamAction } from "../actions/teamActions";
+
+export default function SearchForTeams({ match, history }) {
+  const teamName = match.params.teamName ? match.params.teamName : "";
+  const dispatch = useDispatch();
+  const { loading, error, teams } = useSelector(
+    (state) => state.teamsSection?.searchedTeams
+  );
+  // const { loading, error, products, page, pages } = productList;
+  useEffect(() => {
+    dispatch(searchForTeamsAction(teamName));
+  }, [dispatch, teamName]);
+  return (
+    <>
+      <Loader loading={loading} />
+      <SearchComponent history={history} />
+      <Paper
+        elevation={3}
+        sx={{
+          margin: {
+            xs: 1,
+            md: 3,
+          },
+          padding: 1,
+        }}
+      >
+        {teams &&
+          teams.map((t) => (
+            <TeamCardComponent
+              key={t.id}
+              id={t.id}
+              name={t.name}
+              desc={t.desc}
+              admins={t.admins}
+            />
+          ))}
+      </Paper>
+    </>
+  );
+}
 
 function SearchComponent({ history }) {
   const [teamname, setTeamname] = useState("");
@@ -73,39 +113,12 @@ function SearchComponent({ history }) {
   );
 }
 
-export default function SearchForTeams({ match, history }) {
-  const teamName = match.params.teamName ? match.params.teamName : "";
+function TeamCardComponent({ id, name, desc, admins }) {
   const dispatch = useDispatch();
-  const { loading, error, teams } = useSelector(
-    (state) => state.teamsSection?.searchedTeams
-  );
-  // const { loading, error, products, page, pages } = productList;
-  useEffect(() => {
-    dispatch(searchForTeamsAction(teamName));
-  }, [dispatch, teamName]);
-  return (
-    <>
-      <Loader loading={loading} />
-      <SearchComponent history={history} />
-      <Paper
-        elevation={3}
-        sx={{
-          margin: {
-            xs: 1,
-            md: 3,
-          },
-          padding: 1,
-        }}
-      >
-        {teams &&
-          teams.map((t) => (
-            <TeamCardComponent name={t.name} desc={t.desc} admins={t.admins} />
-          ))}
-      </Paper>
-    </>
-  );
-}
-function TeamCardComponent({ name, desc, admins }) {
+  const sendRequestHandler = () => {
+    dispatch(sendRequestToJoinTeamAction(id));
+  };
+
   return (
     <Paper
       elevation={3}
@@ -152,6 +165,7 @@ function TeamCardComponent({ name, desc, admins }) {
             fullWidth
             size="small"
             sx={{ mb: 1 }}
+            onClick={sendRequestHandler}
           >
             Send Request
           </Button>

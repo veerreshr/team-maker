@@ -110,6 +110,7 @@ const searchTeam = expressAsyncHandler(async (req, res) => {
         }
       });
       teams.push({
+        id: match._id,
         name: match.name,
         desc: match.description,
         admins: admins,
@@ -130,32 +131,50 @@ const sendRequest = expressAsyncHandler(async (req, res) => {
   try {
     const userid = req.user._id;
     const teamid = req.body.teamid;
-    const teams = await User.find({ _id: userid, teams: { teamId: teamid } });
-    const sentRequests = await User.find({
-      _id: userid,
-      "requests_sent.teamId": teamid,
-    });
-    if (teams && teams.length > 0) {
+    const teams = await User.find(
+      { _id: userid },
+      { teams: { $elemMatch: { teamId: teamid } } }
+    );
+    if (teams[0]?.teams && teams[0]?.teams?.length > 0) {
       res.status(400);
       throw new Error("Already a part of this team");
-    } else if (sentRequests && sentRequests.length > 0) {
+    }
+    const requests_sent = await User.find(
+      {
+        _id: userid,
+      },
+      {
+        requests_sent: { $elemMatch: { teamId: teamid } },
+      }
+    );
+    if (
+      requests_sent[0]?.requests_sent &&
+      requests_sent[0]?.requests_sent?.length > 0
+    ) {
       res.status(400);
       throw new Error("Already sent a request to this team");
-    } else {
-      const team = await Team.findById(teamid);
-      const user = await User.findById(userid);
-      await Team.updateOne(
-        { _id: teamid },
-        {
-          $push: { requests_received: { userId: userid, userName: user.name } },
-        }
-      );
-      await User.updateOne(
-        { _id: userid },
-        { $push: { requests_sent: { teamId: team._id, teamName: team.name } } }
-      );
-      res.json({ status: "Success", requests: user.requests_sent });
     }
+    const team = await Team.findById(teamid);
+    const user = await User.findById(userid);
+    await Team.updateOne(
+      { _id: teamid },
+      {
+        $push: {
+          requests_received: { userId: userid, userName: user.username },
+        },
+      }
+    );
+    await User.updateOne(
+      { _id: userid },
+      { $push: { requests_sent: { teamId: team._id, teamName: team.name } } }
+    );
+    res.json({
+      status: "Success",
+      requests: [
+        ...user.requests_sent,
+        { teamId: team._id, teamName: team.name },
+      ],
+    });
   } catch (error) {
     res.status(400);
     throw new Error("Something went wrong :\n" + error);
@@ -196,7 +215,7 @@ const joinTeamById = expressAsyncHandler(async (req, res) => {
           }
           await Team.updateOne(
             { _id: teamid },
-            { $push: { members: { userId: userid, userName: user.name } } }
+            { $push: { members: { userId: userid, userName: user.username } } }
           );
           await User.updateOne(
             { _id: userid },
@@ -254,7 +273,7 @@ const handleRequest = expressAsyncHandler(async (req, res) => {
         await Team.updateOne(
           { _id: teamid },
           {
-            $push: { members: { userId: userid, userName: user.name } },
+            $push: { members: { userId: userid, userName: user.username } },
             $pull: { requests_received: { userId: userid } },
           },
           { new: true }
