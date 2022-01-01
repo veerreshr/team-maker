@@ -1,95 +1,107 @@
 import React, { useState } from "react";
-import { createTeamAction } from "../actions/teamActions";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AddIcon from "@mui/icons-material/Add";
+import { createTeamAction } from "./../actions/teamActions";
 import { useDispatch } from "react-redux";
 
-function CreateTeam({ history }) {
+function CreateTeam() {
   const dispatch = useDispatch();
-  const [eventName, setEventName] = useState("");
-  const [teamName, setTeamName] = useState("");
-  const [teamDesc, setTeamDesc] = useState("");
-  const [languages, setLanguages] = useState("");
-  const [skills, setSkills] = useState("");
-  const createTeamHandler = (e) => {
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      createTeamAction(
-        eventName,
-        teamName,
-        teamDesc,
-        languages,
-        skills,
-        history
-      )
-    );
+    const data = new FormData(e.currentTarget);
+    const events = data.get("events").split(",");
+    dispatch(createTeamAction(data.get("name"), events, data.get("password")));
   };
   return (
-    <div className="container mt-5">
-      <form>
-        <div className="my-1">
-          <label className="form-label">Enter Event Name</label>
-          <input
-            className="form-control p-3"
-            type="text"
-            placeholder="Some Event Name"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-          />
-        </div>
-        <div className="my-1">
-          <label className="form-label">Team Name</label>
-          <input
-            className="form-control p-3"
-            type="text"
-            value={teamName}
-            placeholder="Ex: Team Hackers"
-            onChange={(e) => setTeamName(e.target.value)}
-          />
-        </div>
-        <div className="my-1">
-          <label className="form-label">Team Description</label>
-          <input
-            className="form-control p-3"
-            type="text"
-            value={teamDesc}
-            placeholder="Write about your team. This is what defines how good is your team."
-            onChange={(e) => setTeamDesc(e.target.value)}
-          />
-        </div>
-        <div className="my-1">
-          <label className="form-label">
-            Language Prefernces -<em>Enter space separated languages</em>
-          </label>
-          <input
-            className="form-control p-3"
-            type="text"
-            value={languages}
-            placeholder="Ex: English,Hindi,Telugu"
-            onChange={(e) => setLanguages(e.target.value)}
-          />
-        </div>
-        <div className="my-1">
-          <label className="form-label">
-            Skill Preferences - Enter space separated skills
-          </label>
-          <input
-            className="form-control p-3"
-            type="text"
-            value={skills}
-            placeholder="Ex: Leadership,HTML,CSS"
-            onChange={(e) => setSkills(e.target.value)}
-          />
-        </div>
-        <div className="my-1">
-          <button
-            className="btn btn-primary mt-4 w-100"
-            type="button"
-            onClick={createTeamHandler}
-          >
-            Create Team
-          </button>
-        </div>
-      </form>
-    </div>
+    <Box
+      sx={{
+        my: 8,
+        mx: 4,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Avatar sx={{ m: 1, bgcolor: "secondary.main", width: 70, height: 70 }}>
+        <AddCircleIcon fontSize="large" />
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Create a Team
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="name"
+          label="Team Name"
+          name="name"
+          autoComplete="name"
+          autoFocus
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="events"
+          label="Event Names"
+          name="events"
+          autoComplete="events"
+          helperText="Enter comma separated event names that you are participating in. Ex: hack1,hack2...."
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          id="password"
+          autoComplete="current-password"
+          type={showPassword ? "text" : "password"}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          startIcon={<AddIcon />}
+        >
+          Create a Team
+        </Button>
+      </Box>
+    </Box>
   );
 }
 
