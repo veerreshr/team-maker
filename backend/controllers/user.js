@@ -715,9 +715,9 @@ const rejectRequest = expressAsyncHandler(async (req, res) => {
 // @access  Private
 
 const getMyTeams = expressAsyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  if (user) {
-    res.json(user.teams);
+  const teams = await User.findById(req.user._id, {_id: 0, teams: 1});
+  if (teams) {
+    res.json(teams?.teams);
   } else {
     res.status(404);
     throw new Error("User not found");
@@ -748,8 +748,8 @@ const cancelRequestSent = expressAsyncHandler(async (req, res) => {
   const team = await Team.findById(teamid);
   const user = await User.findById(userid);
   if (team && user) {
-    await Team.updateOne({ _id: teamid }, { $pull: { requests_received: { userId: userid } } }, { new: true });
-    await User.updateOne({ _id: userid }, { $pull: { requests_sent: { teamId: teamid } } }, { new: true },
+    await Team.findByIdAndUpdate(teamid, { $pull: { requests_received: { userId: userid } } }, { new: true });
+    await User.findByIdAndUpdate(userid, { $pull: { requests_sent: { teamId: teamid } } }, { new: true },
       (err, userRes) => {
         if (err) {
           res.status(400);

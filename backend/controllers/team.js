@@ -164,17 +164,13 @@ const sendRequest = expressAsyncHandler(async (req, res) => {
         },
       }
     );
-    await User.updateOne(
-      { _id: userid },
-      { $push: { requests_sent: { teamId: team._id, teamName: team.name } } }
+    await User.findByIdAndUpdate( userid,
+      { $push: { requests_sent: { teamId: team._id, teamName: team.name } } },
+      { new: true },
+      (err, userRes) => {
+        res.json({ requests: userRes.requests_sent });
+      }
     );
-    res.json({
-      status: "Success",
-      requests: [
-        ...user.requests_sent,
-        { teamId: team._id, teamName: team.name },
-      ],
-    });
   } catch (error) {
     res.status(400);
     throw new Error("Something went wrong :\n" + error);
@@ -191,14 +187,14 @@ const joinTeamById = expressAsyncHandler(async (req, res) => {
     const teamid = req.body.teamid;
     const password = req.body.password;
     if (teamid && password) {
-      const teams = await User.find({ _id: userid, teams: { teamId: teamid } });
+      const teams = await User.find({ _id: userid }, { teams: { $elemMatch: { teamId: teamid } } });
       if (teams && teams.length > 0) {
         res.status(400);
         throw new Error("Already a part of this team");
       } else {
         const sentRequests = await User.find({
           _id: userid,
-          requests_sent: { teamId: teamid },
+          requests_sent: { $elemMatch: { teamId: teamid } },
         });
         const team = await Team.findById(teamid);
         if (team.matchPassword(password)) {
@@ -270,34 +266,25 @@ const handleRequest = expressAsyncHandler(async (req, res) => {
     const user = await User.findById(userid);
     if (team && user) {
       if (status === "accept") {
-        await Team.updateOne(
-          { _id: teamid },
-          {
-            $push: { members: { userId: userid, userName: user.username } },
-            $pull: { requests_received: { userId: userid } },
-          },
-          { new: true }
-        );
-        await User.updateOne(
-          { _id: userid },
-          {
-            $push: { teams: { teamId: team._id, teamName: team.name } },
-            $pull: { requests_sent: { teamId: teamid } },
-          },
-          { new: true }
-        );
-        res.json({ status: "Success", requests: team.requests_received });
+        await User.findByIdAndUpdate(userid, { $push: { teams: { teamId: team._id, teamName: team.name } }, $pull: { requests_sent: { teamId: teamid } } }, { new: true });
+        await Team.findByIdAndUpdate(teamid, { $push: { members: { userId: userid, userName: user.username } }, $pull: { requests_received: { userId: userid } } }, { new: true },
+          (err, teamRes) => {
+            if (err) {
+              res.status(400);
+              throw new Error("Update Unsuccessful");
+            }
+            res.json(teamRes.requests_received);
+          });
       } else if (status === "reject") {
-        await Team.updateOne(
-          { _id: teamid },
-          { $pull: { requests_received: { userId: userid } } }
-        );
-        await User.updateOne(
-          { _id: userid },
-          { $pull: { requests_sent: { teamId: teamid } } },
-          { new: true }
-        );
-        res.json({ status: "Success", requests: team.requests_received });
+        await User.findByIdAndUpdate(userid, { $pull: { requests_sent: { teamId : teamid } } }, { new: true });
+        await Team.findByIdAndUpdate(teamid, { $pull: { requests_received: { userId: userid } } }, { new: true },
+          (err, teamRes) => {
+            if (err) {
+              res.status(400);
+              throw new Error("Update Unsuccessful");
+            }
+            res.json(teamRes.requests_received);
+          });
       } else {
         res.status(400);
         throw new Error("Invalid status");
@@ -320,21 +307,20 @@ const removeMember = expressAsyncHandler(async (req, res) => {
   try {
     const teamid = req.body.teamid;
     const userid = req.body.userid;
-    const team = await Team.findById(teamid);
+    const team = await Team.findOne({ _id: teamid, 'members.userId': userid });
     if (team) {
-      await Team.updateOne(
-        { _id: teamid },
-        { $pull: { members: { userId: userid } } },
-        { new: true }
-      );
-      await User.updateOne(
-        { _id: userid },
-        { $pull: { teams: { teamId: teamid } } }
-      );
-      res.json({ status: "Member removed", members: team.members });
+      await User.findByIdAndUpdate(userid, { $pull: { teams: { teamId : teamid } } });
+      await Team.findByIdAndUpdate(teamid, { $pull: { members: { userId: userid } } }, { new: true },
+        (err, teamRes) => {
+          if (err) {
+            res.status(400);
+            throw new Error("Update Unsuccessful");
+          }
+          res.json(teamRes.members);
+        });
     } else {
       res.status(400);
-      throw new Error("Invalid team");
+      throw new Error("Details doesn't match");
     }
   } catch (error) {
     res.status(400);
