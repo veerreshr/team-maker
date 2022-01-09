@@ -26,18 +26,19 @@ const protect = expressAsyncHandler(async (req, res, next) => {
   }
 });
 
-
 const teamAdmin = expressAsyncHandler(async (req, res, next) => {
   if (req.user) {
-    const teamid = req.body.teamid;
-    const isAdmin = await Team.find({ _id: teamid, members: { $elemMatch: { userId: req.user._id, role: "admin" } } });
+    const teamid = req.body.teamid || req.query.teamid;
+    const isAdmin = await Team.find({
+      _id: teamid,
+      members: { $elemMatch: { userId: req.user._id, role: "admin" } },
+    });
     if (isAdmin && isAdmin.length > 0) next();
     else {
       res.status(401);
       throw new Error("Not authorized as an admin");
     }
-  }
-  else {
+  } else {
     res.status(401);
     throw new Error("Not authorized");
   }

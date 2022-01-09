@@ -5,9 +5,9 @@ import {
   GET_MY_TEAMS_REQUEST,
   GET_MY_TEAMS_SUCCESS,
   GET_MY_TEAMS_FAIL,
-  GET_TEAM_VIEW_REQUEST,
-  GET_TEAM_VIEW_SUCCESS,
-  GET_TEAM_VIEW_FAIL,
+  GET_TEAM_BY_ID_REQUEST,
+  GET_TEAM_BY_ID_SUCCESS,
+  GET_TEAM_BY_ID_FAIL,
   GET_FILTER_TEAMS_REQUEST,
   GET_FILTER_TEAMS_SUCCESS,
   GET_FILTER_TEAMS_FAIL,
@@ -17,6 +17,12 @@ import {
   SEND_REQUEST_TO_JOIN_TEAM_REQUEST,
   SEND_REQUEST_TO_JOIN_TEAM_SUCCESS,
   SEND_REQUEST_TO_JOIN_TEAM_FAIL,
+  GET_TEAM_REQUESTS_REQUEST,
+  GET_TEAM_REQUESTS_SUCCESS,
+  GET_TEAM_REQUESTS_FAIL,
+  CHANGE_TEAM_PASSWORD_REQUEST,
+  CHANGE_TEAM_PASSWORD_SUCCESS,
+  CHANGE_TEAM_PASSWORD_FAIL,
 } from "../constants/teamConstants";
 
 export const createTeamReducer = (state = {}, action) => {
@@ -43,13 +49,13 @@ export const myTeamsReducer = (state = {}, action) => {
       return state;
   }
 };
-export const teamViewReducer = (state = {}, action) => {
+export const getTeamByIdReducer = (state = {}, action) => {
   switch (action.type) {
-    case GET_TEAM_VIEW_REQUEST:
+    case GET_TEAM_BY_ID_REQUEST:
       return { loading: true };
-    case GET_TEAM_VIEW_SUCCESS:
+    case GET_TEAM_BY_ID_SUCCESS:
       return { loading: false, team: action.payload };
-    case GET_TEAM_VIEW_FAIL:
+    case GET_TEAM_BY_ID_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
@@ -88,6 +94,19 @@ export const sendRequestToJoinTeamReducer = (state = {}, action) => {
     case SEND_REQUEST_TO_JOIN_TEAM_SUCCESS:
       return { loading: false, teams: action.payload };
     case SEND_REQUEST_TO_JOIN_TEAM_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const getTeamRequestsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_TEAM_REQUESTS_REQUEST:
+      return { loading: true };
+    case GET_TEAM_REQUESTS_SUCCESS:
+      return { loading: false, requests: action.payload };
+    case GET_TEAM_REQUESTS_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
