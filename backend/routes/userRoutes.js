@@ -30,7 +30,6 @@ import {
   cancelRequestSent,
   deleteUser,
   getUserProfileByUsername,
-  updateUser,
   getTeamById,
 } from "../controllers/user.js";
 import { admin, protect } from "../middleware/authMiddleware.js";
@@ -104,7 +103,5 @@ router.post("/register", registerUser);
 router.get("/logout", logout);
 router.route("/profile/projects").get(getProjects).put(protect, updateProjects);
 router.route("/profile/projects/:id").delete(protect, deleteProjects);
-
-router.put("/:UserId", updateUser);
 
 export default router;
