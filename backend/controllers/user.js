@@ -650,28 +650,6 @@ const getUserProfileByUsername = (req, res) => {
   });
 };
 
-const updateUser = (req, res) => {
-  //Model.findOneAndReplace({ _id: id }, update, options, callback).
-  User.findByIdAndUpdate(
-    { _id: req.profile._id },
-    { $set: req.body },
-    { new: true, UseFindAndModify: false },
-    (err, user) => {
-      if (err) {
-        return res.status(400).res.json({
-          error: "You are not authorized to update",
-        });
-      }
-      //Hide senstive infomration from user browser (salt,encry_password)
-      // user.salt=undefined;
-      // user.encry_password=undefined;
-      // user.createdAt=undefined;
-      // user.updatedAt=undefined;
-      res.json(user);
-    }
-  );
-};
-
 // @desc    Get user's sent requests
 // @route   GET /api/users/getrequests
 // @access  Private
@@ -865,6 +843,5 @@ export {
   cancelRequestSent,
   deleteUser,
   getUserProfileByUsername,
-  updateUser,
   getTeamById,
 };
