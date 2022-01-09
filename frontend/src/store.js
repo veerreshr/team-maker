@@ -9,9 +9,10 @@ import {
   createTeamReducer,
   filterTeamsReducer,
   myTeamsReducer,
-  teamViewReducer,
+  getTeamByIdReducer,
   searchForTeamsReducer,
   sendRequestToJoinTeamReducer,
+  getTeamRequestsReducer,
 } from "./reducers/teamReducers";
 import {
   userLoginReducer,
@@ -51,9 +52,10 @@ const reducer = combineReducers({
     createTeam: createTeamReducer,
     searchedTeams: searchForTeamsReducer,
     requestsSent: sendRequestToJoinTeamReducer,
+    myteams: myTeamsReducer,
+    selectedTeamDetails: getTeamByIdReducer,
+    teamRequests: getTeamRequestsReducer,
   }),
-  myteams: myTeamsReducer,
-  teamview: teamViewReducer,
   filteredteams: filterTeamsReducer,
 });
 

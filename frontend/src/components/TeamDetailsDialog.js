@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -14,12 +14,26 @@ import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import CheckIcon from "@mui/icons-material/Check";
 import Fab from "@mui/material/Fab";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getTeamRequests,
+  handleRequests,
+  removeMember,
+} from "./../actions/teamActions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function TeamDetailsDialog({ open, handleClose }) {
+export default function TeamDetailsDialog({ open, handleClose, history }) {
+  const { loading, error, team } = useSelector(
+    (state) => state.teamsSection?.selectedTeamDetails
+  );
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    history.push(`/editTeam/${team?.id}`);
+  };
   return (
     <Dialog
       fullScreen
@@ -38,11 +52,13 @@ export default function TeamDetailsDialog({ open, handleClose }) {
             <CloseIcon />
           </IconButton>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Team Zero
+            {team?.teamName}
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleClose}>
-            Edit
-          </Button>
+          {team?.isAdmin && team?.id && (
+            <Button autoFocus color="inherit" onClick={handleEdit}>
+              Edit
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <Box
@@ -55,22 +71,11 @@ export default function TeamDetailsDialog({ open, handleClose }) {
       >
         <Paper elevation={3} sx={{ padding: 2, my: 1 }}>
           <Typography variant="body1">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-            blanditiis tenetur unde suscipit, quam beatae rerum inventore
-            consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-            fugiat deleniti? Eum quasi quidem quibusdam. Lorem ipsum dolor sit
-            amet, consectetur adipisicing elit. Quos blanditiis tenetur unde
-            suscipit, quam beatae rerum inventore consectetur, neque doloribus,
-            cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi
-            quidem quibusdam.Lorem ipsum dolor sit amet, consectetur adipisicing
-            elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum
-            inventore consectetur, neque doloribus, cupiditate numquam
-            dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-            blanditiis tenetur unde suscipit, quam beatae rerum inventore
-            consectetur, neque doloribus, cupiditate numquam dignissimos laborum
-            fugiat deleniti? Eum quasi quidem quibusdam.Lorem ipsum dolor sit
-            amet, consectetur adipisicing elit.
+            {team?.description ? (
+              team?.description
+            ) : (
+              <i>No description provided.</i>
+            )}
           </Typography>
         </Paper>
         <Paper elevation={3} sx={{ padding: 2, my: 1 }}>
@@ -78,8 +83,9 @@ export default function TeamDetailsDialog({ open, handleClose }) {
             Participating Events:
           </Typography>
           <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-            <Chip label="Hack 1" />
-            <Chip label="Hack 2" />
+            {team?.eventsParticipating?.map((eventName) => (
+              <Chip label={eventName} />
+            ))}
           </Stack>
         </Paper>
         <Paper elevation={3} sx={{ padding: 2, my: 1 }}>
@@ -87,29 +93,56 @@ export default function TeamDetailsDialog({ open, handleClose }) {
             Members
           </Typography>
           <Grid container spacing={1}>
-            <TeamMemberCard />
-            <TeamMemberCard />
-            <TeamMemberCard />
-            <TeamMemberCard />
-            <TeamMemberCard />
+            {team?.members?.map((member) => (
+              <TeamMemberCard
+                key={member?.userName}
+                teamid={team?.id}
+                isAdmin={team?.isAdmin}
+                member={member}
+              />
+            ))}
           </Grid>
         </Paper>
+        <TeamRequestsComponent teamId={team?.id} />
+      </Box>
+    </Dialog>
+  );
+}
+
+function TeamRequestsComponent({ teamId }) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (teamId) {
+      dispatch(getTeamRequests(teamId));
+    }
+  }, [dispatch, teamId]);
+
+  const { loading, error, requests } = useSelector(
+    (state) => state.teamsSection?.teamRequests
+  );
+  return (
+    <>
+      {!loading && !error && (
         <Paper elevation={3} sx={{ padding: 2, my: 1 }}>
           <Typography variant="h6" component="h6" sx={{ mb: 1 }}>
             Requests
           </Typography>
           <Grid container spacing={1}>
-            <TeamRequestCard />
-            <TeamRequestCard />
-            <TeamRequestCard />
-            <TeamRequestCard />
+            {requests?.map((request) => (
+              <TeamRequestCard key={teamId} teamid={teamId} request={request} />
+            ))}
           </Grid>
         </Paper>
-      </Box>
-    </Dialog>
+      )}
+    </>
   );
 }
-function TeamRequestCard() {
+
+function TeamRequestCard({ teamid, request }) {
+  const dispatch = useDispatch();
+  const onClickHandler = (status) => {
+    dispatch(handleRequests({ teamid, status, userid: request?.userId }));
+  };
   return (
     <Grid item xs={12} md={4}>
       <Paper sx={{ padding: 2 }} elevation={2}>
@@ -120,7 +153,7 @@ function TeamRequestCard() {
           alignItems="center"
         >
           <Typography variant="body1" component="div">
-            Veeresh
+            {request.userName}
           </Typography>
           <Box>
             <Button
@@ -129,6 +162,9 @@ function TeamRequestCard() {
               aria-label="accept request"
               sx={{ mr: 1, borderRadius: 24 }}
               variant="contained"
+              onClick={() => {
+                onClickHandler("accept");
+              }}
             >
               <CheckIcon />
             </Button>
@@ -138,6 +174,9 @@ function TeamRequestCard() {
               color="error"
               sx={{ borderRadius: 24 }}
               variant="contained"
+              onClick={() => {
+                onClickHandler("reject");
+              }}
             >
               <CloseIcon />
             </Button>
@@ -148,7 +187,11 @@ function TeamRequestCard() {
   );
 }
 
-function TeamMemberCard() {
+function TeamMemberCard({ teamid, isAdmin, member }) {
+  const dispatch = useDispatch();
+  const handleRemove = () => {
+    dispatch(removeMember({ teamid, userid: member?.userId }));
+  };
   return (
     <Grid item xs={12} md={4}>
       <Paper sx={{ padding: 2 }} elevation={2}>
@@ -160,21 +203,23 @@ function TeamMemberCard() {
         >
           <Box>
             <Typography variant="body1" component="div">
-              Veeresh
+              {member.userName}
             </Typography>
             <Typography variant="caption" component="div">
-              Admin
+              {member.role}
             </Typography>
           </Box>
-
-          <Button
-            variant="outlined"
-            startIcon={<CloseIcon />}
-            size="small"
-            color="error"
-          >
-            Remove
-          </Button>
+          {isAdmin && (
+            <Button
+              variant="outlined"
+              startIcon={<CloseIcon />}
+              size="small"
+              color="error"
+              onClick={handleRemove}
+            >
+              Remove
+            </Button>
+          )}
         </Stack>
       </Paper>
     </Grid>

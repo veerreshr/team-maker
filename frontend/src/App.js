@@ -4,7 +4,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import NavBar from "./components/NavBar";
 import CreateTeam from "./screens/CreateTeam";
-import TeamView from "./screens/TeamView";
+// import TeamView from "./screens/TeamView";
 import AboutTeam from "./screens/AboutTeam";
 import MyTeams from "./screens/MyTeams";
 import AddEvent from "./screens/AddEvent";
@@ -49,9 +49,10 @@ function App() {
             component={SearchForTeams}
             exact
           />
-          <ProtectedRoute path="/teams/:id" component={TeamView} exact />
+          {/* <ProtectedRoute path="/teams/:id" component={TeamView} exact /> */}
           <ProtectedRoute path="/aboutteam/:id" component={AboutTeam} exact />
           <ProtectedRoute path="/myTeams" component={MyTeams} exact />
+          <ProtectedRoute path="/myTeams/:teamId" component={MyTeams} exact />
           <ProtectedRoute path="/requests" component={Requests} exact />
           <ProtectedRoute path="/addevent" component={AddEvent} exact />
           <Route component={PageNotFound} />

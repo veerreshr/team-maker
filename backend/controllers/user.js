@@ -697,8 +697,15 @@ const rejectRequest = expressAsyncHandler(async (req, res) => {
     const team = await Team.findById(teamid);
     const user = await User.findById(userid);
     if (team && user) {
-      await Team.updateOne({ _id: teamid }, { $pull: { requests_sent: { userId: userid } } });
-      await User.updateOne({ _id: userid }, { $pull: { requests_received: { teamId: teamid } } }, { new: true });
+      await Team.updateOne(
+        { _id: teamid },
+        { $pull: { requests_sent: { userId: userid } } }
+      );
+      await User.updateOne(
+        { _id: userid },
+        { $pull: { requests_received: { teamId: teamid } } },
+        { new: true }
+      );
       res.json(user.requests_received);
     } else {
       res.status(400);
@@ -715,7 +722,7 @@ const rejectRequest = expressAsyncHandler(async (req, res) => {
 // @access  Private
 
 const getMyTeams = expressAsyncHandler(async (req, res) => {
-  const teams = await User.findById(req.user._id, {_id: 0, teams: 1});
+  const teams = await User.findById(req.user._id, { _id: 0, teams: 1 });
   if (teams) {
     res.json(teams?.teams);
   } else {
@@ -729,9 +736,20 @@ const getMyTeams = expressAsyncHandler(async (req, res) => {
 // @access  Private
 
 const getTeamById = expressAsyncHandler(async (req, res) => {
+  const userId = req.user._id;
   const team = await Team.findById(`${req.query.teamid}`);
   if (team) {
-    res.json({teamName: team.name, description: team.description, eventsParticipating : team.events_participating, members: team.members});
+    const isAdmin = team.members?.some(
+      (member) => member.role == "admin" && `${member.userId}` == userId
+    );
+    res.json({
+      id: team._id,
+      teamName: team.name,
+      description: team.description,
+      eventsParticipating: team.events_participating,
+      members: team.members,
+      isAdmin: isAdmin,
+    });
   } else {
     res.status(404);
     throw new Error("Team not found");
@@ -748,8 +766,15 @@ const cancelRequestSent = expressAsyncHandler(async (req, res) => {
   const team = await Team.findById(teamid);
   const user = await User.findById(userid);
   if (team && user) {
-    await Team.findByIdAndUpdate(teamid, { $pull: { requests_received: { userId: userid } } }, { new: true });
-    await User.findByIdAndUpdate(userid, { $pull: { requests_sent: { teamId: teamid } } }, { new: true },
+    await Team.findByIdAndUpdate(
+      teamid,
+      { $pull: { requests_received: { userId: userid } } },
+      { new: true }
+    );
+    await User.findByIdAndUpdate(
+      userid,
+      { $pull: { requests_sent: { teamId: teamid } } },
+      { new: true },
       (err, userRes) => {
         if (err) {
           res.status(400);
