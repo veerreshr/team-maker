@@ -27,6 +27,7 @@ import {
   getCertificationReducer,
   getAwardsAndCertificationsReducer,
   getProjectsReducer,
+  getRequestsReducer,
 } from "./reducers/userReducers";
 
 const reducer = combineReducers({
@@ -44,6 +45,7 @@ const reducer = combineReducers({
     awardsAndAchievements: getAwardsAndCertificationsReducer,
     projects: getProjectsReducer,
   }),
+  requests: getRequestsReducer,
   eventSection: combineReducers({
     events: getEventsReducer,
     scrappedEvents: getScrappedEventsReducer,

@@ -658,7 +658,7 @@ const updateUser = (req, res) => {
     { new: true, UseFindAndModify: false },
     (err, user) => {
       if (err) {
-        return resp.status(400).res.json({
+        return res.status(400).res.json({
           error: "You are not authorized to update",
         });
       }
@@ -761,7 +761,7 @@ const getTeamById = expressAsyncHandler(async (req, res) => {
 // @access  Private
 
 const cancelRequestSent = expressAsyncHandler(async (req, res) => {
-  const teamid = req.body.teamid;
+  const teamid = req.query.teamid;
   const userid = req.user._id;
   const team = await Team.findById(teamid);
   const user = await User.findById(userid);
@@ -771,7 +771,7 @@ const cancelRequestSent = expressAsyncHandler(async (req, res) => {
       { $pull: { requests_received: { userId: userid } } },
       { new: true }
     );
-    await User.findByIdAndUpdate(
+    User.findByIdAndUpdate(
       userid,
       { $pull: { requests_sent: { teamId: teamid } } },
       { new: true },
@@ -780,7 +780,7 @@ const cancelRequestSent = expressAsyncHandler(async (req, res) => {
           res.status(400);
           throw new Error("Update Unsuccessful");
         }
-        res.json({ status: "Success", requests: userRes.requests_sent });
+        res.json(userRes.requests_sent);
       }
     );
   } else {
