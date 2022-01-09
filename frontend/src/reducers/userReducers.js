@@ -49,6 +49,9 @@ import {
   GET_PROJECT_FAIL,
   GET_PROJECT_UPDATE_SUCCESS,
   GET_PROJECT_UPDATE_FAIL,
+  GET_REQUESTS_REQUEST,
+  GET_REQUESTS_SUCCESS,
+  GET_REQUESTS_FAIL,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -327,6 +330,19 @@ export const getProjectsReducer = (
       };
     case GET_PROJECT_FAIL:
       return { loading: false, error: action.payload, updateSuccess: false };
+    default:
+      return state;
+  }
+};
+
+export const getRequestsReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_REQUESTS_REQUEST:
+      return { loading: true };
+    case GET_REQUESTS_SUCCESS:
+      return { loading: false, requests: action.payload };
+    case GET_REQUESTS_FAIL:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

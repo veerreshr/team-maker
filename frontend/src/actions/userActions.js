@@ -49,7 +49,11 @@ import {
   GET_PROJECT_FAIL,
   GET_PROJECT_UPDATE_SUCCESS,
   GET_PROJECT_UPDATE_FAIL,
+  GET_REQUESTS_REQUEST,
+  GET_REQUESTS_SUCCESS,
+  GET_REQUESTS_FAIL,
 } from "../constants/userConstants";
+import { toast } from "react-toastify";
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -892,5 +896,81 @@ export const deleteProject = (id) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message,
     });
+  }
+};
+
+//--------------------------------------Requests------------------------------------------------
+
+export const getRequests = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_REQUESTS_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users/getrequests`, config);
+
+    dispatch({
+      type: GET_REQUESTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const errorMessage =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: GET_REQUESTS_FAIL,
+      payload: errorMessage,
+    });
+    toast.error(errorMessage);
+  }
+};
+
+export const cancelRequest = (teamid) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_REQUESTS_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.delete(
+      `/api/users/cancelrequest?teamid=${teamid}`,
+      config
+    );
+
+    dispatch({
+      type: GET_REQUESTS_SUCCESS,
+      payload: data,
+    });
+    toast.success("Request Successfully Cancelled");
+  } catch (error) {
+    const errorMessage =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: GET_REQUESTS_FAIL,
+      payload: errorMessage,
+    });
+    toast.error(errorMessage);
   }
 };
