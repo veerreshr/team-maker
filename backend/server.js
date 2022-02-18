@@ -124,7 +124,7 @@ io.on("connection", function (socket) {
         const offset = 0;
         const limit = 30;
         const messages = await Chat.find({ teamId: teamId })
-          // .sort({ createdAt: -1 })
+          .sort({ createdAt: -1 })
           .skip(offset)
           .limit(limit);
         io.to(teamId).emit("initialMessages", messages);

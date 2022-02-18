@@ -111,7 +111,7 @@ function ChatComponent({ teamId, history, socket }) {
         scrollToBottom();
       });
       socket.on("initialMessages", (data) => {
-        setMessages(data);
+        setMessages(data?.reverse());
         scrollToBottom();
       });
     }
