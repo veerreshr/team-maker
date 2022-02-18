@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -14,8 +14,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMyTeamsAction } from "../actions/teamActions";
 import Loader from "./../components/Loader";
 import { getTeamById } from "./../actions/teamActions";
+import io from "socket.io-client";
 
 export default function MyTeams({ history, match }) {
+  const [socket, setSocket] = useState(null);
+  const setupSocket = () => {
+    const userInfoFromStorage = localStorage.getItem("userInfo")
+      ? JSON.parse(localStorage.getItem("userInfo"))
+      : null;
+    const { token } = userInfoFromStorage;
+    const newSocket = io("ws://localhost:5000", {
+      withCredentials: true,
+      auth: {
+        token: token,
+      },
+    });
+    newSocket.on("connect", () => {
+      console.log("connected");
+    });
+    newSocket.on("disconnect", () => {
+      console.log("disconnected");
+    });
+    setSocket(newSocket);
+  };
+  useEffect(() => {
+    setupSocket();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -27,19 +52,29 @@ export default function MyTeams({ history, match }) {
     >
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
-          <TeamListComponent history={history} />
+          {<TeamListComponent history={history} />}
         </Grid>
         <Grid item xs={12} md={9}>
-          <ChatComponent teamId={match.params.teamId} history={history} />
+          {socket && (
+            <ChatComponent
+              teamId={match.params.teamId}
+              history={history}
+              socket={socket}
+            />
+          )}
         </Grid>
       </Grid>
     </Box>
   );
 }
-function ChatComponent({ teamId, history }) {
+function ChatComponent({ teamId, history, socket }) {
   const dispatch = useDispatch();
-
+  const [messages, setMessages] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+  const chatRef = useRef({});
+  chatRef.current = messages;
+  const messagesEndRef = useRef(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -48,7 +83,7 @@ function ChatComponent({ teamId, history }) {
   const handleClose = () => {
     setOpen(false);
   };
-  const [value, setValue] = React.useState("");
+
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -56,12 +91,46 @@ function ChatComponent({ teamId, history }) {
   const { loading, error, team } = useSelector(
     (state) => state.teamsSection?.selectedTeamDetails
   );
+  const { username } = useSelector((state) => state.userLogin?.userInfo);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
+    scrollToBottom();
     if (teamId) {
       dispatch(getTeamById(teamId));
+      socket.emit("join", teamId);
+      socket.emit("getInitialMessages", teamId);
+      socket.on("joined", (id) => {
+        console.log("joined : " + id);
+      });
+      socket.on("newMessage", (data) => {
+        setMessages([...chatRef.current, data]);
+        scrollToBottom();
+      });
+      socket.on("initialMessages", (data) => {
+        setMessages(data);
+        scrollToBottom();
+      });
     }
-  }, [teamId, dispatch]);
+    return () => {
+      socket.emit("leave", teamId);
+      socket.off("joined");
+      socket.off("newMessage");
+      socket.off("initialMessages");
+    };
+  }, [teamId]);
+
+  const sendMessage = () => {
+    socket.emit("message", {
+      teamId: teamId,
+      message: value,
+    });
+    setValue("");
+  };
+
   return (
     <>
       <Loader loading={loading} />
@@ -107,41 +176,14 @@ function ChatComponent({ teamId, history }) {
                 overflowY: "scroll",
               }}
             >
-              <Box sx={{ mt: "auto" }}></Box>
-              <Grid container sx={{ my: 1 }}>
-                <Grid item xs={8} md={7}>
-                  <Typography variant="caption" component="div">
-                    Veeresh :
-                  </Typography>
-                  <Paper elevation={2} sx={{ padding: 1 }}>
-                    <Typography variant="body2">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Quos blanditiis tenetur unde suscipit, quam beatae rerum
-                      inventore consectetur, neque doloribus, cupiditate numquam
-                      dignissimos laborum fugiat deleniti? Eum quasi quidem
-                      quibusdam.
-                    </Typography>
-                  </Paper>
-                </Grid>
-              </Grid>
-
-              <Grid container sx={{ my: 1 }}>
-                <Grid item xs={4} md={5}></Grid>
-                <Grid item xs={8} md={7}>
-                  <Typography variant="caption" component="div">
-                    Veeresh :
-                  </Typography>
-                  <Paper elevation={2} sx={{ padding: 1 }}>
-                    <Typography variant="body2">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Quos blanditiis tenetur unde suscipit, quam beatae rerum
-                      inventore consectetur, neque doloribus, cupiditate numquam
-                      dignissimos laborum fugiat deleniti? Eum quasi quidem
-                      quibusdam.
-                    </Typography>
-                  </Paper>
-                </Grid>
-              </Grid>
+              {messages?.map((msg) => (
+                <ChatMessage
+                  username={msg?.username}
+                  message={msg?.content?.message}
+                  side={msg?.username === username ? "right" : "left"}
+                />
+              ))}
+              <div ref={messagesEndRef} />
             </Box>
             <Box>
               <Paper
@@ -159,6 +201,11 @@ function ChatComponent({ teamId, history }) {
                       maxRows={4}
                       value={value}
                       onChange={handleChange}
+                      onKeyUp={(e) => {
+                        if (e.keyCode === 13) {
+                          sendMessage();
+                        }
+                      }}
                       fullWidth
                     />
                   </Grid>
@@ -169,6 +216,7 @@ function ChatComponent({ teamId, history }) {
                       aria-label="send"
                       component="span"
                       variant="contained"
+                      onClick={sendMessage}
                     >
                       <SendIcon />
                     </Button>
@@ -347,6 +395,23 @@ function ChatComponent({ teamId, history }) {
         </Box>
       )}
     </>
+  );
+}
+
+function ChatMessage({ username, message, side }) {
+  //TODO : Add media_link and meme type
+  return (
+    <Grid container sx={{ my: 1 }}>
+      {side === "right" && <Grid item xs={4} md={5}></Grid>}
+      <Grid item xs={8} md={7}>
+        <Typography variant="caption" component="div">
+          {username} :
+        </Typography>
+        <Paper elevation={2} sx={{ padding: 1 }}>
+          <Typography variant="body2">{message}</Typography>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 
