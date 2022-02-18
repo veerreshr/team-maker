@@ -66,7 +66,7 @@ const server = app.listen(
 );
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000"], //TODO: change to production
+    origin: ["http://localhost:3000", "https://connect-team.herokuapp.com"], //TODO: change to production
     credentials: true,
     methods: ["GET", "POST"],
   },
