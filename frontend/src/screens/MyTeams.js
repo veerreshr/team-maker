@@ -23,7 +23,7 @@ export default function MyTeams({ history, match }) {
       ? JSON.parse(localStorage.getItem("userInfo"))
       : null;
     const { token } = userInfoFromStorage;
-    const newSocket = io("ws://localhost:5000", {
+    const newSocket = io("/", {
       withCredentials: true,
       auth: {
         token: token,
