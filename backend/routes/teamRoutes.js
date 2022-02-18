@@ -1,4 +1,5 @@
 import express from "express";
+import { getMessages } from "../controllers/chat.js";
 import {
   createTeam,
   searchTeam,
@@ -18,12 +19,9 @@ import {
 import { protect, teamAdmin, admin } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-// router.param('TeamId', getTeamByID)
-
 // route to trigger the capture
 // router.get('/:TeamId', getTeam)
 
-//createTeam Route
 router.post("/createteam", protect, createTeam);
 router.get("/searchteam", protect, searchTeam);
 router.post("/sendrequest", protect, sendRequest);
@@ -39,5 +37,7 @@ router.get("/getmyteams", protect, getMyTeams);
 
 //getTeamDetails Route
 router.get("/:id", protect, getTeamByID);
+
+router.get("/chat/:id", protect, getMessages);
 
 export default router;

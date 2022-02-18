@@ -17,6 +17,7 @@ import EditProfile from "./screens/EditProfile";
 import SearchForTeams from "./screens/SearchForTeams";
 import Requests from "./screens/Requests";
 import EditTeam from "./screens/EditTeam";
+import React from "react";
 
 function App() {
   const theme = createTheme({
@@ -29,16 +30,19 @@ function App() {
     //   },
     // },
   });
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        {/* <NavBar /> */}
         <Route path="/*" component={NavBar} />
         <Switch>
           <Route path="/u/:username" component={ProfileScreen} exact />
           <Route path="/landing" component={LandingScreen} />
-          <Route path="/login" component={LoginScreen} />
-          <Route path="/register" component={RegisterScreen} />
+          <Route path="/login" render={(props) => <LoginScreen {...props} />} />
+          <Route
+            path="/register"
+            render={(props) => <RegisterScreen {...props} />}
+          />
           <ProtectedRoute path="/" component={HomeScreen} exact />
           <ProtectedRoute path="/editprofile" component={EditProfile} exact />
           <ProtectedRoute path="/createTeam" component={CreateTeam} exact />
@@ -51,8 +55,16 @@ function App() {
           />
           {/* <ProtectedRoute path="/teams/:id" component={TeamView} exact /> */}
           <ProtectedRoute path="/aboutteam/:id" component={AboutTeam} exact />
-          <ProtectedRoute path="/myTeams" component={MyTeams} exact />
-          <ProtectedRoute path="/myTeams/:teamId" component={MyTeams} exact />
+          <ProtectedRoute
+            path="/myTeams"
+            render={(props) => <MyTeams {...props} />}
+            exact
+          />
+          <ProtectedRoute
+            path="/myTeams/:teamId"
+            render={(props) => <MyTeams {...props} />}
+            exact
+          />
           <ProtectedRoute path="/requests" component={Requests} exact />
           <ProtectedRoute path="/addevent" component={AddEvent} exact />
           <Route component={PageNotFound} />

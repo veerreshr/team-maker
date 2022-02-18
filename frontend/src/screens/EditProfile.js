@@ -28,6 +28,8 @@ import {
 import Message from "./../components/Message";
 import Loader from "./../components/Loader";
 import Chip from "@mui/material/Chip";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function EditProfile({ history }) {
   const [value, setValue] = React.useState(0);
@@ -150,6 +152,27 @@ function BasicInformation({ id }) {
     dispatch(updateBasicInformation(toUpdateData));
   };
 
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post("/api/upload", formData, config);
+      setPhoto(data?.photoURL);
+      // setPhoto(data);
+    } catch (error) {
+      toast.error("Error uploading Image");
+      console.error(error);
+    }
+  };
+
   return (
     <Paper sx={{ padding: "1em", margin: "0.5em 0" }}>
       <Loader loading={loading || updateLoading} />
@@ -184,6 +207,18 @@ function BasicInformation({ id }) {
               margin: "auto",
             }}
           />
+          <label htmlFor="contained-button-file">
+            <input
+              accept="image/png, image/jpg, image/jpeg"
+              id="contained-button-file"
+              style={{ display: "none" }}
+              onChange={uploadFileHandler}
+              type="file"
+            />
+            <Button variant="contained" component="span">
+              Upload
+            </Button>
+          </label>
           <TextField
             InputLabelProps={{ shrink: true }}
             required
