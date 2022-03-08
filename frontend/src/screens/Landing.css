@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  font-family: "Glory", "Roboto Condensed", sans-serif;
+  color: white;
+  overflow-x: hidden;
+}
+h1 {
+  font-size: 4rem;
+}
+p {
+  font-size: 1.5rem;
+}
+
+section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 400px;
+  padding: 100px 10vw;
+}
+.blue {
+  background: #1976d2;
+}
+
+/* Curved bg with plain CSS */
+
+.curve {
+  position: absolute;
+  height: 225px;
+  width: 100%;
+  bottom: 0;
+}
+.curve::before {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 100% 50%;
+  width: 55%;
+  height: 100%;
+  background: white;
+  transform: translate(85%, 60%);
+}
+.curve::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 100% 50%;
+  width: 55%;
+  height: 100%;
+  background: #1976d2;
+  transform: translate(-4%, 40%);
+  z-index: -1;
+}
