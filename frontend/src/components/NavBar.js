@@ -191,7 +191,7 @@ export default function PrimarySearchAppBar({ history }) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
@@ -210,7 +210,7 @@ export default function PrimarySearchAppBar({ history }) {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -290,7 +290,7 @@ export default function PrimarySearchAppBar({ history }) {
               )}
               <Box sx={{ flexGrow: 1 }} />
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <IconButton
+                {/* <IconButton
                   size="large"
                   aria-label="show 4 new mails"
                   color="inherit"
@@ -307,7 +307,12 @@ export default function PrimarySearchAppBar({ history }) {
                   <Badge badgeContent={17} color="error">
                     <NotificationsIcon />
                   </Badge>
-                </IconButton>
+                </IconButton> */}
+                <p>
+                  {loggedIn && userInfo.username.length > 16
+                    ? `${userInfo?.username.substring(0, 16)}...`
+                    : userInfo?.username}
+                </p>
                 <IconButton
                   size="large"
                   edge="end"
