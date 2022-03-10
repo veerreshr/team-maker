@@ -164,7 +164,7 @@ const sendRequest = expressAsyncHandler(async (req, res) => {
         },
       }
     );
-    await User.findByIdAndUpdate(
+    User.findByIdAndUpdate(
       userid,
       { $push: { requests_sent: { teamId: team._id, teamName: team.name } } },
       { new: true },
