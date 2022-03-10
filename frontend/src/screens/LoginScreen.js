@@ -62,6 +62,11 @@ export default function LoginScreen({ location, history }) {
     event.preventDefault();
   };
 
+  const testLogin = (event) => {
+    event.preventDefault();
+    dispatch(login("tester1@test.com", "test"));
+  };
+
   return (
     <>
       <Loader loading={loading} />
@@ -126,8 +131,12 @@ export default function LoginScreen({ location, history }) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
+              <Link
+                sx={{ cursor: "pointer" }}
+                onClick={testLogin}
+                variant="body2"
+              >
+                Test Login?
               </Link>
             </Grid>
             <Grid item>
