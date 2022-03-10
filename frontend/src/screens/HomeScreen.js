@@ -258,23 +258,3 @@ function EventCard({ name, photo, desc, startDate, url }) {
     </Card>
   );
 }
-
-// <Card>
-//   <CardHeader
-//     avatar={
-//       <Avatar sx={{ bgcolor: "red" }} aria-label="team-logo">
-//         A
-//       </Avatar>
-//     }
-//     action={
-//       <IconButton aria-label="settings">
-//         <ChatIcon />
-//       </IconButton>
-//     }
-//     title="Team Avengers"
-//     subheader={`vivek: thats a nice ideavivek: thats a nice ideavivek:
-//       thats a nice ideavivek: thats a nice ideavivek: thats a
-//       nice ideavivek: thats a nice ideavivek: thats a nice
-//       idea`.substring(0, 35)}
-//   />
-// </Card>
