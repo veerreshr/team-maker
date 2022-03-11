@@ -1,21 +1,16 @@
-💡💡 **We are currently working on this. Thank you for checking this out.** 💡💡
+
 
 <h1><img src="https://user-images.githubusercontent.com/59141533/131732817-23a34498-10d3-4024-9519-d064a67a8482.png" width=50px height=50px />Team Maker</h1> 
 
-A platform to find and connect with  team members  for your next Big Project .
+[![Team Maker Thumbnail](https://user-images.githubusercontent.com/59141533/157925006-ed5b167a-fd18-4629-bf5a-2f0e59178b42.png)](https://www.loom.com/share/2079f9206a6d4b31a29a9f1f829bae25)
+A platform to find and connect with  team members  for your next Big Project based on events and other filters .
+
 
 ## Badges
 
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 
   
-## Demo
-Video Demos : 
-[Video 1](https://youtu.be/MoachkHIS8Q)
-
-Live link :
-https://connect-team.herokuapp.com/
-
 <!-- ## Screenshots
 
 ![App Screenshot](https://res.cloudinary.com/dcgefz04y/image/upload/v1624793593/Screenshot_275_oibipb.png) -->
@@ -41,7 +36,7 @@ https://connect-team.herokuapp.com/
 
 **Database:** MongoDB
 
-**Others:** Socket.io
+**Others:** Socket.io, AWS S3
 
 
 
@@ -101,8 +96,8 @@ npm run dev
 - [x] Landing Page
 - [x] User Profile
 - [x] Event Section
-- [ ] Team Filtering
-- [ ] Chat Implementation
+- [x] Team Filtering
+- [x] Chat Implementation
 - [ ] Dockerize the application
 - [ ] Implement Testing 
 - [ ] Voice/Video call Implementation(Optional)
