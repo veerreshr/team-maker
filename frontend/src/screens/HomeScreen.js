@@ -22,6 +22,7 @@ import Tab from "@mui/material/Tab";
 import { getEventsAction } from "./../actions/eventActions";
 import Loader from "./../components/Loader";
 import Message from "./../components/Message";
+import dayjs from "dayjs";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -115,6 +116,7 @@ function HomeScreen({ history }) {
                       desc={event.desc}
                       startDate={event.startDate}
                       url={event.url}
+                      history={history}
                     />
                   ))}
               </CardContent>
@@ -165,7 +167,7 @@ function HomeScreen({ history }) {
 
 export default HomeScreen;
 
-function EventCard({ name, photo, desc, startDate, url }) {
+function EventCard({ name, photo, desc, startDate, url, history }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -199,7 +201,7 @@ function EventCard({ name, photo, desc, startDate, url }) {
               color="text.secondary"
               component="div"
             >
-              Start Date : {startDate}
+              Start Time : {dayjs(startDate).format("hh:mm A, DD MMM YYYY")}
             </Typography>
             <Box
               sx={{
@@ -209,12 +211,17 @@ function EventCard({ name, photo, desc, startDate, url }) {
               }}
             >
               <Tooltip title="Create Team">
-                <IconButton aria-label="Create Team">
+                <IconButton
+                  aria-label="Create Team"
+                  onClick={() => {
+                    history?.push(`/createTeam?eventName=${name}`);
+                  }}
+                >
                   <AddCircleIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Join Team">
-                <IconButton aria-label="Join Team">
+                <IconButton aria-label="Join Team" disabled>
                   <GroupAddIcon />
                 </IconButton>
               </Tooltip>

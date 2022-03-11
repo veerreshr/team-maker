@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchForTeamsAction } from "./../actions/teamActions";
 import Loader from "./../components/Loader";
 import { sendRequestToJoinTeamAction } from "../actions/teamActions";
+import { ReactComponent as NoTeamsFound } from "../assets/no-teams-found.svg";
+import Box from "@mui/material/Box";
 
 export default function SearchForTeams({ match, history }) {
   const teamName = match.params.teamName ? match.params.teamName : "";
@@ -41,7 +43,7 @@ export default function SearchForTeams({ match, history }) {
           padding: 1,
         }}
       >
-        {teams &&
+        {teams && teams.length > 0 ? (
           teams.map((t) => (
             <TeamCardComponent
               key={t.id}
@@ -50,7 +52,21 @@ export default function SearchForTeams({ match, history }) {
               desc={t.desc}
               admins={t.admins}
             />
-          ))}
+          ))
+        ) : (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              p: 4,
+            }}
+          >
+            <NoTeamsFound width="43%" />
+          </Box>
+        )}
       </Paper>
     </>
   );

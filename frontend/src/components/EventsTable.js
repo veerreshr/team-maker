@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import Message from "./Message";
 import { getScrappedEventsAction } from "../actions/eventActions";
-
+import dayjs from "dayjs";
 const styles = (theme) => ({
   flexContainer: {
     display: "flex",
@@ -48,7 +48,7 @@ const styles = (theme) => ({
 class MuiVirtualizedTable extends React.PureComponent {
   static defaultProps = {
     headerHeight: 48,
-    rowHeight: 48,
+    rowHeight: 60,
   };
 
   getRowClassName = ({ index }) => {
@@ -73,7 +73,11 @@ class MuiVirtualizedTable extends React.PureComponent {
               [classes.noClick]: onRowClick == null,
             })}
             variant="body"
-            style={{ height: rowHeight }}
+            style={{
+              height: rowHeight,
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
             align={
               (columnIndex != null && columns[columnIndex].numeric) || false
                 ? "right"
@@ -96,7 +100,9 @@ class MuiVirtualizedTable extends React.PureComponent {
                 : "left"
             }
           >
-            {cellData}
+            {columnIndex === 1
+              ? dayjs(cellData).format("hh:mm A, DD MMM YYYY")
+              : cellData}
           </TableCell>
         )}
       </>
@@ -221,7 +227,6 @@ export default function ReactVirtualizedTable() {
                 width: 200,
                 label: "Website",
                 dataKey: "url",
-                numeric: true,
               },
             ]}
           />

@@ -280,7 +280,7 @@ export default function PrimarySearchAppBar({ history }) {
                     <SearchIcon />
                   </SearchIconWrapper>
                   <StyledInputBase
-                    placeholder="Search…"
+                    placeholder="Search by Team Name" //TODO: Change to just search upon adding all filters
                     inputProps={{ "aria-label": "search" }}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -404,8 +404,8 @@ function menuList(
           <SearchIcon />
         </SearchIconWrapper>
         <StyledInputBase
-          placeholder="Search by Event name"
-          inputProps={{ "aria-label": "search by event name" }}
+          placeholder="Search by Team Name"
+          inputProps={{ "aria-label": "search by team name" }}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleSearchByKeyDown}

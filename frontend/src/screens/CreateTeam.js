@@ -13,10 +13,17 @@ import AddIcon from "@mui/icons-material/Add";
 import { createTeamAction } from "./../actions/teamActions";
 import { useDispatch } from "react-redux";
 
-function CreateTeam() {
+function CreateTeam({ location: { search } }) {
+  const eventNameQuery = new URLSearchParams(search).get("eventName");
+
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const [teamName, setTeamName] = useState("");
+  const [events, setEvents] = useState(eventNameQuery ? eventNameQuery : "");
+  const [password, setPassword] = useState("");
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -26,9 +33,8 @@ function CreateTeam() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const events = data.get("events").split(",");
-    dispatch(createTeamAction(data.get("name"), events, data.get("password")));
+    const eventList = events.split(",");
+    dispatch(createTeamAction(teamName, eventList, password));
   };
   return (
     <Box
@@ -56,6 +62,8 @@ function CreateTeam() {
           name="name"
           autoComplete="name"
           autoFocus
+          value={teamName}
+          onChange={(e) => setTeamName(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -66,6 +74,8 @@ function CreateTeam() {
           name="events"
           autoComplete="events"
           helperText="Enter comma separated event names that you are participating in. Ex: hack1,hack2...."
+          value={events}
+          onChange={(e) => setEvents(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -76,6 +86,8 @@ function CreateTeam() {
           id="password"
           autoComplete="current-password"
           type={showPassword ? "text" : "password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

@@ -46,7 +46,7 @@ function Experience({ experiences }) {
                     <Typography variant="h5" component="h5">
                       {e.title}
                     </Typography>
-                    <Typography color="textSecondary">Amazon, India</Typography>
+                    <Typography color="textSecondary">{e.company}</Typography>
                     <Typography variant="body2" component="p">
                       {e.description}
                     </Typography>

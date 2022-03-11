@@ -21,14 +21,14 @@ import React from "react";
 
 function App() {
   const theme = createTheme({
-    // palette: {
-    //   primary: {
-    //     main: "#a6d4fa",
-    //   },
-    //   secondary: {
-    //     main: "#fff",
-    //   },
-    // },
+    palette: {
+      primary: {
+        main: "#34495e",
+      },
+      secondary: {
+        main: "#bdc3c7",
+      },
+    },
   });
 
   return (
