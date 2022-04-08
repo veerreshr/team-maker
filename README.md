@@ -111,9 +111,6 @@ npm run dev
 - [@KshitijDarekar](https://github.com/KshitijDarekar)
 - [@veerreshr](https://github.com/veerreshr)
   
-## Acknowledgements
-
- - [Socket.io Documentation](http://socket.io/)
 
 ## Support
 
