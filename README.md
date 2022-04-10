@@ -2,21 +2,24 @@
 
 <h1><img src="https://user-images.githubusercontent.com/59141533/131732817-23a34498-10d3-4024-9519-d064a67a8482.png" width=50px height=50px />Team Maker</h1> 
 
+
 [![Team Maker Thumbnail](https://user-images.githubusercontent.com/59141533/157925006-ed5b167a-fd18-4629-bf5a-2f0e59178b42.png)](https://www.loom.com/share/2079f9206a6d4b31a29a9f1f829bae25)
-A platform to find and connect with  team members  for your next Big Project based on events and other filters .
-
-
-## Badges
 
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 
-  
+[Live Link](https://connect-team.herokuapp.com/) | [Demo](https://www.loom.com/share/2079f9206a6d4b31a29a9f1f829bae25)
+
+# The problem Team Maker solves
+
+A real time Problems that we have faced while finding a team to participate in hackathon. Finding a random teammate or a team, and synchronizing our abilities in the best way possible which is really hard to do with people we don’t know anything about
+
+
 <!-- ## Screenshots
 
 ![App Screenshot](https://res.cloudinary.com/dcgefz04y/image/upload/v1624793593/Screenshot_275_oibipb.png) -->
 
   
-## Features
+# Features
 
 - User and Admin Authentication.
 - Creation of Teams.
@@ -90,6 +93,7 @@ Start the server
 npm run dev
 ```
   
+Also refer [Contributing-gitflow](https://github.com/veerreshr/team-maker/blob/main/CONTRIBUTING-gitflow.md) for more information 
 ## Roadmap
 
 - [ ] Add ESLint
@@ -101,16 +105,7 @@ npm run dev
 - [ ] Dockerize the application
 - [ ] Implement Testing 
 - [ ] Voice/Video call Implementation(Optional)
-- [ ] Kanban Boards( optional )
-
-
-  
-## Authors
-
-- [@Eakanath1](https://github.com/Eakanath1)
-- [@KshitijDarekar](https://github.com/KshitijDarekar)
-- [@veerreshr](https://github.com/veerreshr)
-  
+- [ ] Kanban Boards( optional )  
 
 ## Support
 
