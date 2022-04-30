@@ -11,7 +11,8 @@
 
 # The problem Team Maker solves
 
-A real time Problems that we have faced while finding a team to participate in hackathon. Finding a random teammate or a team, and synchronizing our abilities in the best way possible which is really hard to do with people we don’t know anything about
+A real-world issue we've encountered while looking for a team to participate in a hackathon is finding a random teammate or team and synchronising our abilities as best we can, which is extremely difficult to do with people we don't know anything about. Team Maker attempts to address this issue by allowing users to search for teams using multiple filters and learn about one another via user portfolios.
+
 
 
 <!-- ## Screenshots
