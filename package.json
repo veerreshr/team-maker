@@ -18,7 +18,7 @@
     "homepage": "https://github.com/veerreshr/team-maker#readme",
     "devDependencies": {
         "concurrently": "^5.3.0",
-        "nodemon": "^2.0.6"
+        "nodemon": "^2.0.20"
     },
     "dependencies": {
         "aws-sdk": "^2.1075.0",
